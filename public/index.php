@@ -1,6 +1,9 @@
-<?php 
+<?php
 
-require "./Router.php";
+require_once "../vendor/autoload.php";
+
+use Arco\HttpNotFoundException;
+use Arco\Router;
 
 $router = new Router();
 
