@@ -1,6 +1,7 @@
 <?php 
 
 require "./HttpMethod.php";
+require "./HttpNotFoundException.php";
 
 class Router {
     protected array $routes = [];
@@ -15,7 +16,11 @@ class Router {
         $method = $_SERVER["REQUEST_METHOD"];
         $uri = $_SERVER["REQUEST_URI"];
 
-        $action = $this->routes[$method][$uri];
+        $action = $this->routes[$method][$uri] ?? null;
+
+        if(is_null($action)) {
+            throw new HttpNotFoundException();
+        }
 
         return $action;
     }
