@@ -8,11 +8,21 @@
             "Arco\\": "src/Arco"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Arco\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "tests": "phpunit --color=always --testdox -v tests/"
+    },
     "authors": [
         {
             "name": "aldearco",
             "email": "albertodelarco@outlook.com"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
 }
