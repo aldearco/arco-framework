@@ -4,36 +4,33 @@ use Arco\Http\Request;
 use Arco\Routing\Router;
 use Arco\Server\PhpNativeServer;
 use Arco\Http\HttpNotFoundException;
+use Arco\Http\Response;
 
 require_once "../vendor/autoload.php";
 
 $router = new Router();
 
-$router->get('/test', function () {
-    return "GET OK";
+$router->get('/test', function (Request $request) {
+    $response = new Response();
+    $response->setHeader('Content-Type', 'application/json');
+    $response->setContent(json_encode(["message" => "GET OK"]));
+    return $response;
 });
 
-$router->post('/test', function () {
+$router->post('/test', function (Request $request) {
     return "POST OK";
 });
 
-$router->put('/test', function () {
-    return "PUT OK";
-});
-
-$router->patch('/test', function () {
-    return "PATCH OK";
-});
-
-$router->delete('/test', function () {
-    return "DELETE OK";
-});
-
+$server = new PhpNativeServer();
 try {
-    $route = $router->resolve(new Request(new PhpNativeServer()));
+    $request = new Request($server);
+    $route = $router->resolve($request);
     $action = $route->action();
-    print($action());
+    $response = $action($request);
+    $server->sendResponse($response);
 } catch (HttpNotFoundException $e) {
-    print("Not found");
-    http_response_code(404);
+    $response = new Response();
+    $response->setStatus(404);
+    $response->setContent("No found");
+    $server->sendResponse($response);
 }
