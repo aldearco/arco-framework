@@ -1,6 +1,9 @@
 <?php 
 
-namespace Arco;
+namespace Arco\Http;
+
+use Arco\Server\Server;
+use Arco\Http\HttpMethod;
 
 class Request {
     protected string $uri;

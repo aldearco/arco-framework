@@ -1,6 +1,8 @@
 <?php 
 
-namespace Arco;
+namespace Arco\Server;
+
+use Arco\Http\HttpMethod;
 
 interface Server {
     public function requestUri(): string;

@@ -1,6 +1,6 @@
 <?php 
 
-namespace Arco;
+namespace Arco\Routing;
 
 class Route {
     protected string $uri;

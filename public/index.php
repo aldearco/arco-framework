@@ -1,11 +1,11 @@
 <?php
 
-require_once "../vendor/autoload.php";
+use Arco\Http\Request;
+use Arco\Routing\Router;
+use Arco\Server\PhpNativeServer;
+use Arco\Http\HttpNotFoundException;
 
-use Arco\HttpNotFoundException;
-use Arco\PhpNativeServer;
-use Arco\Request;
-use Arco\Router;
+require_once "../vendor/autoload.php";
 
 $router = new Router();
 

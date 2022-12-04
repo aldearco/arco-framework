@@ -2,10 +2,10 @@
 
 namespace Arco\Tests;
 
-use Arco\Router;
-use Arco\Server;
-use Arco\Request;
-use Arco\HttpMethod;
+use Arco\Http\Request;
+use Arco\Server\Server;
+use Arco\Routing\Router;
+use Arco\Http\HttpMethod;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase {

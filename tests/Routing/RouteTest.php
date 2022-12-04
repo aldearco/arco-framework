@@ -2,7 +2,7 @@
 
 namespace Arco\Tests;
 
-use Arco\Route;
+use Arco\Routing\Route;
 use PHPUnit\Framework\TestCase;
 
 class RouteTest extends TestCase {

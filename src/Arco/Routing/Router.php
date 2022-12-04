@@ -1,8 +1,11 @@
 <?php 
 
-namespace Arco;
+namespace Arco\Routing;
 
 use Closure;
+use Arco\Http\Request;
+use Arco\Http\HttpMethod;
+use Arco\Http\HttpNotFoundException;
 
 class Router {
     protected array $routes = [];

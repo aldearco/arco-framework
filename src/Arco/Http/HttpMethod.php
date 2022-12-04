@@ -1,6 +1,6 @@
 <?php 
 
-namespace Arco;
+namespace Arco\Http;
 
 enum HttpMethod: string {
     case GET = "GET";

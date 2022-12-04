@@ -1,6 +1,8 @@
 <?php 
 
-namespace Arco;
+namespace Arco\Server;
+
+use Arco\Http\HttpMethod;
 
 class PhpNativeServer implements Server {
     public function requestUri(): string {
