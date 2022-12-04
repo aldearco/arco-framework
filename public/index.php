@@ -3,9 +3,9 @@
 require_once "../vendor/autoload.php";
 
 use Arco\HttpNotFoundException;
+use Arco\PhpNativeServer;
 use Arco\Request;
 use Arco\Router;
-use Arco\Server;
 
 $router = new Router();
 
@@ -30,7 +30,7 @@ $router->delete('/test', function () {
 });
 
 try {
-    $route = $router->resolve(new Request(new Server()));
+    $route = $router->resolve(new Request(new PhpNativeServer()));
     $action = $route->action();
     print($action());
 } catch (HttpNotFoundException $e) {
