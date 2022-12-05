@@ -105,12 +105,18 @@ class Request {
     }
 
     /**
-     * Get POST data.
+     * Get all POST data as key-value or get only specific value by providing
+     * a `$key`.
      *
-     * @return array
+     * @return array|string|null Null if the key doesn't exist, the value of
+     * the key if it is present or all the data if no key was provided.
      */
-    public function data(): array {
-        return $this->data;
+    public function data(?string $key = null): array|string|null {
+        if (is_null($key)) {
+            return $this->data;
+        }
+
+        return $this->data[$key] ?? null;
     }
 
     /**
@@ -125,12 +131,18 @@ class Request {
     }
 
     /**
-     * Get all query parameters.
+     * Get all query params as key-value or get only specific value by providing
+     * a `$key`.
      *
-     * @return array
+     * @return array|string|null Null if the key doesn't exist, the value of
+     * the key if it is present or all the query params if no key was provided.
      */
-    public function query(): array {
-        return $this->query;
+    public function query(?string $key = null): array|string|null {
+        if (is_null($key)) {
+            return $this->query;
+        }
+
+        return $this->query[$key] ?? null;
     }
 
     /**
@@ -145,11 +157,19 @@ class Request {
     }
 
     /**
-     * Get all route parameters.
+     * Get all route params as key-value or get only specific value by providing
+     * a `$key`.
      *
-     * @return array
+     * @return array|string|null Null if the key doesn't exist, the value of
+     * the key if it is present or all the route params if no key was provided.
      */
-    public function routeParameters(?string $key = null): array {
-        return $this->route->parseParameters($this->uri);
+    public function routeParameters(?string $key = null): array|string|null {
+        $parameters = $this->route->parseParameters($this->uri);
+
+        if (is_null($key)) {
+            return $parameters;
+        }
+
+        return $parameters[$key] ?? null;
     }
 }
