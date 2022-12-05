@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Arco\Tests\Routing;
 
@@ -40,27 +40,27 @@ class RouteTest extends TestCase {
     public function routesWithParameters() {
         return [
             [
-                "/test/{test}", 
-                "/test/1", 
+                "/test/{test}",
+                "/test/1",
                 ["test" => 1]
             ],
             [
-                "/users/{user}", 
-                "/users/2", 
+                "/users/{user}",
+                "/users/2",
                 ["user" => 2]
             ],
             [
-                "/test/{test}", 
-                "/test/string", 
+                "/test/{test}",
+                "/test/string",
                 ["test" => "string"]
             ],
             [
-                "/test/nested/{test}", 
-                "/test/nested/5", 
+                "/test/nested/{test}",
+                "/test/nested/5",
                 ["test" => 5]
             ],
             [
-                "/test/{param}/long/{test}/with/{multiple}/params", 
+                "/test/{param}/long/{test}/with/{multiple}/params",
                 "/test/yellow/long/5/with/12345/params",
                 ["param" => "yellow", "test" => 5, "multiple" => 12345]
             ],

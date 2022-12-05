@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Arco\Server;
 
@@ -41,14 +41,14 @@ class PhpNativeServer implements Server {
      * @inheritDoc
      */
     public function sendResponse(Response $response) {
-        // PHP sends Content-Type by default, but it has to be removed if the response has no content. 
+        // PHP sends Content-Type by default, but it has to be removed if the response has no content.
         // Content-Type can't be removed if unless is set to some value before
         header("Content-Type: None");
         header_remove("Content-Type");
 
         $response->prepare();
         http_response_code($response->status());
-        foreach($response->headers() as $header => $value) {
+        foreach ($response->headers() as $header => $value) {
             header("$header: $value");
         }
         print($response->content());

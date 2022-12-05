@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Arco\Http;
 
@@ -115,7 +115,7 @@ class Response {
      * @return void
      */
     public function prepare() {
-        if(is_null($this->content)) {
+        if (is_null($this->content)) {
             $this->removeHeader("Content-Type");
             $this->removeHeader("Content-Length");
         } else {

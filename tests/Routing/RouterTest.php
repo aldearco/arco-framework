@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Arco\Tests\Routing;
 
@@ -38,11 +38,11 @@ class RouterTest extends TestCase {
 
         $router = new Router();
 
-        foreach($routes as $uri => $action) {
+        foreach ($routes as $uri => $action) {
             $router->get($uri, $action);
         }
 
-        foreach($routes as $uri => $action) {
+        foreach ($routes as $uri => $action) {
             $route = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
             $this->assertEquals($uri, $route->uri());
             $this->assertEquals($action, $route->action());
@@ -51,16 +51,16 @@ class RouterTest extends TestCase {
 
     public function test_resolve_multiple_basic_routes_with_callback_action_for_different_http_methods() {
         $routes = [
-            [HttpMethod::GET, "/test", fn () => "get"], 
-            [HttpMethod::POST, "/test", fn () => "post"], 
-            [HttpMethod::PUT, "/test", fn () => "put"], 
-            [HttpMethod::PATCH, "/test", fn () => "patch"], 
-            [HttpMethod::DELETE, "/test", fn () => "delete"], 
+            [HttpMethod::GET, "/test", fn () => "get"],
+            [HttpMethod::POST, "/test", fn () => "post"],
+            [HttpMethod::PUT, "/test", fn () => "put"],
+            [HttpMethod::PATCH, "/test", fn () => "patch"],
+            [HttpMethod::DELETE, "/test", fn () => "delete"],
 
-            [HttpMethod::GET, "/random/nested/get", fn () => "get"], 
-            [HttpMethod::POST, "/random/post", fn () => "post"], 
-            [HttpMethod::PUT, "/some/put/something", fn () => "put"], 
-            [HttpMethod::PATCH, "/some/patch", fn () => "patch"], 
+            [HttpMethod::GET, "/random/nested/get", fn () => "get"],
+            [HttpMethod::POST, "/random/post", fn () => "post"],
+            [HttpMethod::PUT, "/some/put/something", fn () => "put"],
+            [HttpMethod::PATCH, "/some/patch", fn () => "patch"],
             [HttpMethod::DELETE, "/d", fn () => "delete"],
         ];
 

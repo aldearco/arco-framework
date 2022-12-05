@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Arco\Http;
 
@@ -65,5 +65,23 @@ class Request {
      */
     public function method(): HttpMethod {
         return $this->method;
+    }
+
+    /**
+     * Get POST data.
+     *
+     * @return array
+     */
+    public function data(): array {
+        return $this->data;
+    }
+
+    /**
+     * Get all query parameters.
+     *
+     * @return array
+     */
+    public function query(): array {
+        return $this->query;
     }
 }
