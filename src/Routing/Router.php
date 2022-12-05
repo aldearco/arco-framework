@@ -8,7 +8,7 @@ use Arco\Http\HttpMethod;
 use Arco\Http\HttpNotFoundException;
 
 /**
- * HTTP routes.
+ * HTTP router.
  */
 class Router {
     /**
@@ -18,6 +18,9 @@ class Router {
      */
     protected array $routes = [];
 
+    /**
+     * Create a new router.
+     */
     public function __construct() {
         foreach (HttpMethod::cases() as $method) {
             $this->routes[$method->value] = [];
@@ -25,19 +28,19 @@ class Router {
     }
 
     /**
-     * Resolve the route of the `$request`
+     * Resolve the route of the `$request`.
      *
      * @param Request $request
      * @return Route
      * @throws HttpNotFoundException when route is not found
      */
-    public function resolve (Request $request): Route {
+    public function resolve(Request $request): Route {
         foreach ($this->routes[$request->method()->value] as $route) {
             if ($route->matches($request->uri())) {
                 return $route;
             }
         }
-        
+
         throw new HttpNotFoundException();
     }
 
@@ -60,7 +63,7 @@ class Router {
      * @param \Closure $action
      * @return void
      */
-    public function get(string $uri, Closure $action) {
+    public function get(string $uri, \Closure $action) {
         $this->registerRoute(HttpMethod::GET, $uri, $action);
     }
 
@@ -107,5 +110,4 @@ class Router {
     public function delete(string $uri, Closure $action) {
         $this->registerRoute(HttpMethod::DELETE, $uri, $action);
     }
-
 }
