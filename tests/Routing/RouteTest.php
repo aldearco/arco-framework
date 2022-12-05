@@ -1,6 +1,6 @@
 <?php 
 
-namespace Arco\Tests;
+namespace Arco\Tests\Routing;
 
 use Arco\Routing\Route;
 use PHPUnit\Framework\TestCase;

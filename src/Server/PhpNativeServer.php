@@ -5,23 +5,41 @@ namespace Arco\Server;
 use Arco\Http\HttpMethod;
 use Arco\Http\Response;
 
+/**
+ * PHP native server that uses `$_SERVER` global.
+ */
 class PhpNativeServer implements Server {
+    /**
+     * @inheritDoc
+     */
     public function requestUri(): string {
         return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function requestMethod(): HttpMethod {
         return HttpMethod::from($_SERVER["REQUEST_METHOD"]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function postData(): array {
         return $_POST;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function queryParams(): array {
         return $_GET;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function sendResponse(Response $response) {
         // PHP sends Content-Type by default, but it has to be removed if the response has no content. 
         // Content-Type can't be removed if unless is set to some value before
