@@ -45,6 +45,13 @@ class Request {
     protected array $query;
 
     /**
+     * HTTP request headers.
+     *
+     * @var array
+     */
+    protected array $headers = [];
+
+    /**
      * Get the request URI.
      *
      * @return string
@@ -101,6 +108,22 @@ class Request {
      */
     public function setMethod(HttpMethod $method): self {
         $this->method = $method;
+        return $this;
+    }
+
+    public function headers(?string $key = null): array|string|null {
+        if (is_null($key)) {
+            return $this->headers;
+        }
+
+        return $this->headers[strtolower($key)] ?? null;
+    }
+
+    public function setHeaders(array $headers): self {
+        foreach ($headers as $header => $value) {
+            $this->headers[strtolower($header)] = $value;
+        }
+
         return $this;
     }
 
