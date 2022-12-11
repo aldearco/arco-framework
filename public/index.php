@@ -28,7 +28,7 @@ class AuthMiddleware implements Middleware {
             return Response::json(["message" => "Not authenticated"])->setStatus(401);
         }
 
-        return $next;
+        return $next($request);
     }
 }
 
