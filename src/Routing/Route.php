@@ -2,8 +2,6 @@
 
 namespace Arco\Routing;
 
-use Arco\App;
-use Arco\Container\Container;
 use Closure;
 
 /**
@@ -127,6 +125,6 @@ class Route {
     }
 
     public static function get(string $uri, Closure $action): Route {
-        return Container::resolve(App::class)->router->get($uri, $action);
+        return app()->router->get($uri, $action);
     }
 }

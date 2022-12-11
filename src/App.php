@@ -2,7 +2,6 @@
 
 namespace Arco;
 
-use Arco\Container\Container;
 use Arco\Http\Request;
 use Arco\Http\Response;
 use Arco\Server\Server;
@@ -22,7 +21,7 @@ class App {
     public View $viewEngine;
 
     public static function bootstrap() {
-        $app = Container::singleton(self::class);
+        $app = singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();
         $app->request = $app->server->getRequest();

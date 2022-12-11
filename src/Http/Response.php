@@ -2,9 +2,6 @@
 
 namespace Arco\Http;
 
-use Arco\App;
-use Arco\Container\Container;
-
 /**
  * HTTP response that will be sent to the client.
  */
@@ -166,7 +163,7 @@ class Response {
     }
 
     public static function view(string $view, array $params = [], string $layout = null): self {
-        $content = Container::resolve(App::class)->viewEngine->render($view, $params, $layout);
+        $content = app()->viewEngine->render($view, $params, $layout);
 
         return (new self())
             ->setContentType("text/html")
