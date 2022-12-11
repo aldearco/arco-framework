@@ -2,6 +2,9 @@
 
 namespace Arco\Http;
 
+use Arco\App;
+use Arco\Container\Container;
+
 /**
  * HTTP response that will be sent to the client.
  */
@@ -160,5 +163,13 @@ class Response {
         return (new self())
             ->setStatus(302)
             ->setHeader("Location", $uri);
+    }
+
+    public static function view(string $view): self {
+        $content = Container::resolve(App::class)->viewEngine->render($view);
+
+        return (new self())
+            ->setContentType("text/html")
+            ->setContent($content);
     }
 }

@@ -9,6 +9,8 @@ use Arco\Server\Server;
 use Arco\Routing\Router;
 use Arco\Server\PhpNativeServer;
 use Arco\Http\HttpNotFoundException;
+use Arco\View\ArrowVulcan;
+use Arco\View\View;
 
 class App {
     public Router $router;
@@ -17,11 +19,14 @@ class App {
 
     public Server $server;
 
+    public View $viewEngine;
+
     public static function bootstrap() {
         $app = Container::singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();
         $app->request = $app->server->getRequest();
+        $app->viewEngine = new ArrowVulcan(__DIR__."/../views");
 
         return $app;
     }
