@@ -111,6 +111,12 @@ class Request {
         return $this;
     }
 
+    /**
+     * Get HTTP request headers as key-value or get only specific value by provinding a `$key`.
+     *
+     * @param string|null $key
+     * @return array|string|null
+     */
     public function headers(?string $key = null): array|string|null {
         if (is_null($key)) {
             return $this->headers;
@@ -119,6 +125,12 @@ class Request {
         return $this->headers[strtolower($key)] ?? null;
     }
 
+    /**
+     * Set HTTP request headers.
+     *
+     * @param array $headers
+     * @return self
+     */
     public function setHeaders(array $headers): self {
         foreach ($headers as $header => $value) {
             $this->headers[strtolower($header)] = $value;
@@ -128,8 +140,7 @@ class Request {
     }
 
     /**
-     * Get all POST data as key-value or get only specific value by providing
-     * a `$key`.
+     * Get all POST data as key-value or get only specific value by providing a `$key`.
      *
      * @return array|string|null Null if the key doesn't exist, the value of
      * the key if it is present or all the data if no key was provided.

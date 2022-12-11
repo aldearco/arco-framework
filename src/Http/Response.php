@@ -50,7 +50,7 @@ class Response {
     /**
      * Get response HTTP headers.
      *
-     * @return array<string, string>
+     * @return array<string, string>|string|null
      */
     public function headers(string $key = null): array|string|null {
         if (is_null($key)) {
