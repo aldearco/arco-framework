@@ -8,7 +8,7 @@ class Email implements ValidationRule {
     }
 
     public function isValid(string $field, array $data): bool {
-        $email = strtolower(trim($data[$field]));
+        $email = strtolower(trim((string) $data[$field]));
 
         $split = explode("@", $email);
 
