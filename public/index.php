@@ -42,7 +42,7 @@ Route::get("/html", fn (Request $request) => view("home", ["user" => "Manolo"]))
 Route::post("/validate", fn (Request $request) => json($request->validate([
     "test" => Rule::required(),
     "num" => Rule::number(),
-    "email" => [Rule::required(), Rule::email()]
+    "email" => ['required', 'email']
 ], [
     "email" => [
         Required::class => "Email es obligatorio premoh"
