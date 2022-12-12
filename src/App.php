@@ -8,8 +8,10 @@ use Arco\Server\Server;
 use Arco\Routing\Router;
 use Arco\Server\PhpNativeServer;
 use Arco\Http\HttpNotFoundException;
+use Arco\Validation\Exceptions\ValidationException;
 use Arco\View\ArrowVulcan;
 use Arco\View\View;
+use Throwable;
 
 class App {
     public Router $router;
@@ -35,8 +37,19 @@ class App {
             $response = $this->router->resolve($this->request);
             $this->server->sendResponse($response);
         } catch (HttpNotFoundException $e) {
-            $response = Response::text("Not found")->setStatus(404);
-            $this->server->sendResponse($response);
+            $this->abort(Response::text("Not found")->setStatus(404));
+        } catch (ValidationException $e) {
+            $this->abort(json($e->errors())->setStatus(422));
+        } catch (Throwable $e) {
+            $response = json([
+                "message" => $e->getMessage(),
+                "trace" => $e->getTrace()
+            ]);
+            $this->abort($response);
         }
+    }
+
+    public function abort(Response $response) {
+        $this->server->sendResponse($response);
     }
 }

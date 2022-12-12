@@ -5,6 +5,8 @@ use Arco\Http\Request;
 use Arco\Http\Response;
 use Arco\Routing\Route;
 use Arco\Http\Middleware;
+use Arco\Validation\Rule;
+use Arco\Validation\Rules\Required;
 
 require_once "../vendor/autoload.php";
 
@@ -36,5 +38,15 @@ Route::get("/middlewares", fn (Request $request) => json(["message" => "ok"]))
 ->setMiddlewares([AuthMiddleware::class]);
 
 Route::get("/html", fn (Request $request) => view("home", ["user" => "Manolo"]));
+
+Route::post("/validate", fn (Request $request) => json($request->validate([
+    "test" => Rule::required(),
+    "num" => Rule::number(),
+    "email" => [Rule::required(), Rule::email()]
+], [
+    "email" => [
+        Required::class => "Email es obligatorio premoh"
+    ]
+])));
 
 $app->run();

@@ -4,6 +4,7 @@ namespace Arco\Http;
 
 use Arco\Http\HttpMethod;
 use Arco\Routing\Route;
+use Arco\Validation\Validator;
 
 /**
  * HTTP request.
@@ -205,5 +206,11 @@ class Request {
         }
 
         return $parameters[$key] ?? null;
+    }
+
+    public function validate(array $rules, array $messages = []): array {
+        $validator = new Validator($this->data);
+
+        return $validator->validate($rules, $messages);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Arco\Http;
 
-use Exception;
+use Arco\Exceptions\ArrowRejected;
 
 /**
  * HTTP 404 Not Found.
  */
-class HttpNotFoundException extends Exception {
+class HttpNotFoundException extends ArrowRejected {
     //
 }

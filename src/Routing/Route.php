@@ -127,4 +127,8 @@ class Route {
     public static function get(string $uri, Closure $action): Route {
         return app()->router->get($uri, $action);
     }
+
+    public static function post(string $uri, Closure $action): Route {
+        return app()->router->post($uri, $action);
+    }
 }
