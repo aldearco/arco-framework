@@ -4,6 +4,7 @@ namespace Arco\Tests\Validation;
 
 use PHPUnit\Framework\TestCase;
 use Arco\Validation\Rules\Email;
+use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
@@ -107,6 +108,26 @@ class ValidationRulesTest extends TestCase {
      */
     public function test_less_than($value, $check, $expected) {
         $rule = new LessThan($value);
+        $data = ["test" => $check];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function greaterThanData() {
+        return [
+            [5, 5, false],
+            [5, 6, true],
+            [5, 3, false],
+            [5, null, false],
+            [5, "", false],
+            [5, "test", false],
+        ];
+    }
+
+    /**
+     * @dataProvider greaterThanData
+     */
+    public function test_greater_than($value, $check, $expected) {
+        $rule = new GreaterThan($value);
         $data = ["test" => $check];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
