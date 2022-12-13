@@ -2,6 +2,7 @@
 
 namespace Arco\Validation;
 
+use Arco\Validation\Rules\Confirmed;
 use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\LessThan;
@@ -34,6 +35,10 @@ class Rule {
 
     public static function greaterThan(int|float $value): ValidationRule {
         return new GreaterThan($value);
+    }
+
+    public static function confirmed(): ValidationRule {
+        return new Confirmed();
     }
 
     public static function requiredWhen(

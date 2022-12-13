@@ -2,6 +2,7 @@
 
 namespace Arco\Tests\Validation;
 
+use Arco\Validation\Rules\Confirmed;
 use PHPUnit\Framework\TestCase;
 use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\GreaterThan;
@@ -129,6 +130,29 @@ class ValidationRulesTest extends TestCase {
     public function test_greater_than($value, $check, $expected) {
         $rule = new GreaterThan($value);
         $data = ["test" => $check];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function confirmedData() {
+        return [
+            ["test", "test", true],
+            ["12345", "12345", true],
+            ["1235", "12345", false],
+            ["netflix", "netlix", false],
+            [null, "12345", false],
+            ["", null, false]
+        ];
+    }
+
+    /**
+     * @dataProvider confirmedData
+     */
+    public function test_confirmed($value, $confirmation, $expected) {
+        $rule = new Confirmed();
+        $data = [
+            "test" => $value,
+            "test_confirmation" => $confirmation
+        ];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
 
