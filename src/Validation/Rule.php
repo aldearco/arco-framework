@@ -2,12 +2,13 @@
 
 namespace Arco\Validation;
 
-use Arco\Validation\Rules\Confirmed;
+use Arco\Validation\Rules\Min;
 use Arco\Validation\Rules\Email;
-use Arco\Validation\Rules\GreaterThan;
-use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Number;
+use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
+use Arco\Validation\Rules\Confirmed;
+use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Rules\ValidationRule;
@@ -39,6 +40,10 @@ class Rule {
 
     public static function confirmed(): ValidationRule {
         return new Confirmed();
+    }
+
+    public static function min(int|float $value): ValidationRule {
+        return new Min($value);
     }
 
     public static function requiredWhen(

@@ -8,6 +8,7 @@ use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\LessThan;
+use Arco\Validation\Rules\Min;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
@@ -153,6 +154,26 @@ class ValidationRulesTest extends TestCase {
             "test" => $value,
             "test_confirmation" => $confirmation
         ];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function minData() {
+        return [
+            ["hol", 5, false],
+            ["holasoyalberto", 6, true],
+            ["", 3, false],
+            ["5", 5, false],
+            ["0123456789", 9, true],
+            [5, 5, false],
+        ];
+    }
+
+    /**
+     * @dataProvider minData
+     */
+    public function test_min($value, $min, $expected) {
+        $rule = new Min($min);
+        $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
 
