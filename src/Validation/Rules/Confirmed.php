@@ -8,6 +8,7 @@ class Confirmed implements ValidationRule {
     }
 
     public function isValid(string $field, array $data): bool {
-        return $data[$field] === $data["{$field}_confirmation"];
+        return isset($data["{$field}_confirmation"])
+            && $data[$field] === $data["{$field}_confirmation"];
     }
 }
