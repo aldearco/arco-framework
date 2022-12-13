@@ -9,6 +9,7 @@ use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
 use Arco\Validation\Rules\GreaterThan;
+use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Rules\ValidationRule;
@@ -44,6 +45,10 @@ class Rule {
 
     public static function min(int|float $value): ValidationRule {
         return new Min($value);
+    }
+
+    public static function max(int|float $value): ValidationRule {
+        return new Max($value);
     }
 
     public static function requiredWhen(

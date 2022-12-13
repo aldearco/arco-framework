@@ -8,6 +8,7 @@ use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\LessThan;
+use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\RequiredWhen;
@@ -173,6 +174,26 @@ class ValidationRulesTest extends TestCase {
      */
     public function test_min($value, $min, $expected) {
         $rule = new Min($min);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function maxData() {
+        return [
+            ["test", 5, true],
+            ["holasoyalberto", 6, false],
+            ["", 3, true],
+            ["5", 5, true],
+            ["0123456789", 9, false],
+            [5, 5, true],
+        ];
+    }
+
+    /**
+     * @dataProvider maxData
+     */
+    public function test_max($value, $max, $expected) {
+        $rule = new Max($max);
         $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
