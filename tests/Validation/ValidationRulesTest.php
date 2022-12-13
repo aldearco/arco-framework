@@ -2,10 +2,14 @@
 
 namespace Arco\Tests\Validation;
 
+use Arco\Validation\Rules\Confirmed;
 use PHPUnit\Framework\TestCase;
 use Arco\Validation\Rules\Email;
+use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\LessThan;
+use Arco\Validation\Rules\Max;
+use Arco\Validation\Rules\Min;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
@@ -108,6 +112,89 @@ class ValidationRulesTest extends TestCase {
     public function test_less_than($value, $check, $expected) {
         $rule = new LessThan($value);
         $data = ["test" => $check];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function greaterThanData() {
+        return [
+            [5, 5, false],
+            [5, 6, true],
+            [5, 3, false],
+            [5, null, false],
+            [5, "", false],
+            [5, "test", false],
+        ];
+    }
+
+    /**
+     * @dataProvider greaterThanData
+     */
+    public function test_greater_than($value, $check, $expected) {
+        $rule = new GreaterThan($value);
+        $data = ["test" => $check];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function confirmedData() {
+        return [
+            ["test", "test", true],
+            ["12345", "12345", true],
+            ["1235", "12345", false],
+            ["netflix", "netlix", false],
+            [null, "12345", false],
+            ["", null, false]
+        ];
+    }
+
+    /**
+     * @dataProvider confirmedData
+     */
+    public function test_confirmed($value, $confirmation, $expected) {
+        $rule = new Confirmed();
+        $data = [
+            "test" => $value,
+            "test_confirmation" => $confirmation
+        ];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function minData() {
+        return [
+            ["hol", 5, false],
+            ["holasoyalberto", 6, true],
+            ["", 3, false],
+            ["5", 5, false],
+            ["0123456789", 9, true],
+            [5, 5, false],
+        ];
+    }
+
+    /**
+     * @dataProvider minData
+     */
+    public function test_min($value, $min, $expected) {
+        $rule = new Min($min);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function maxData() {
+        return [
+            ["test", 5, true],
+            ["holasoyalberto", 6, false],
+            ["", 3, true],
+            ["5", 5, true],
+            ["0123456789", 9, false],
+            [5, 5, true],
+        ];
+    }
+
+    /**
+     * @dataProvider maxData
+     */
+    public function test_max($value, $max, $expected) {
+        $rule = new Max($max);
+        $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
 

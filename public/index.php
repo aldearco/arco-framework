@@ -6,6 +6,7 @@ use Arco\Http\Response;
 use Arco\Routing\Route;
 use Arco\Http\Middleware;
 use Arco\Validation\Rule;
+use Arco\Validation\Rules\Confirmed;
 use Arco\Validation\Rules\Required;
 
 require_once "../vendor/autoload.php";
