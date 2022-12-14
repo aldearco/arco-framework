@@ -2,16 +2,17 @@
 
 namespace Arco;
 
+use Throwable;
+use Arco\View\View;
 use Arco\Http\Request;
 use Arco\Http\Response;
 use Arco\Server\Server;
 use Arco\Routing\Router;
+use Arco\Validation\Rule;
+use Arco\View\ArrowVulcan;
 use Arco\Server\PhpNativeServer;
 use Arco\Http\HttpNotFoundException;
 use Arco\Validation\Exceptions\ValidationException;
-use Arco\View\ArrowVulcan;
-use Arco\View\View;
-use Throwable;
 
 class App {
     public Router $router;
@@ -28,6 +29,7 @@ class App {
         $app->server = new PhpNativeServer();
         $app->request = $app->server->getRequest();
         $app->viewEngine = new ArrowVulcan(__DIR__."/../views");
+        Rule::loadDefaultRules();
 
         return $app;
     }
@@ -42,10 +44,11 @@ class App {
             $this->abort(json($e->errors())->setStatus(422));
         } catch (Throwable $e) {
             $response = json([
+                "error" => $e::class,
                 "message" => $e->getMessage(),
                 "trace" => $e->getTrace()
             ]);
-            $this->abort($response);
+            $this->abort($response->setStatus(500));
         }
     }
 

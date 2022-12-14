@@ -31,7 +31,7 @@ class Validator {
             if (count($fieldUnderValidationError) > 0) {
                 $errors[$field] = $fieldUnderValidationError;
             } else {
-                $validated[$field] = $this->data[$field];
+                $validated[$field] = isset($this->data[$field]) ? $this->data[$field] : null;
             }
         }
 

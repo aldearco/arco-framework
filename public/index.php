@@ -38,15 +38,15 @@ class AuthMiddleware implements Middleware {
 Route::get("/middlewares", fn (Request $request) => json(["message" => "ok"]))
 ->setMiddlewares([AuthMiddleware::class]);
 
-Route::get("/html", fn (Request $request) => view("home", ["user" => "Manolo"]));
+Route::get("/html", fn (Request $request) => view("home", ["user" => var_dump(PHP_VERSION_ID)]));
 
 Route::post("/validate", fn (Request $request) => json($request->validate([
-    "test" => Rule::required(),
-    "num" => Rule::number(),
-    "email" => ['required', 'email']
+    "test" => ['required'],
+    "num" => ['number'],
+    "email" => ['required_with:num']
 ], [
     "email" => [
-        Required::class => "Email es obligatorio premoh"
+        "email" => "Email es obligatorio premoh"
     ]
 ])));
 
