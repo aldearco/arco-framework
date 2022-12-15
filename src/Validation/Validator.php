@@ -4,13 +4,28 @@ namespace Arco\Validation;
 
 use Arco\Validation\Exceptions\ValidationException;
 
+/**
+ * Validation API of this framework
+ */
 class Validator {
+    /**
+     * Array of data that will passed to validation process
+     *
+     * @var array
+     */
     protected array $data;
 
     public function __construct(array $data) {
         $this->data = $data;
     }
 
+    /**
+     * Validate array of data. For example in a request or other bundle of data.
+     *
+     * @param array $validationRules Array of `"field" => ["rules"]`
+     * @param array $messages (Optional) You can load custom message for each field that you want to validate.
+     * @return array
+     */
     public function validate(array $validationRules, array $messages = []): array {
         $validated = [];
         $errors = [];

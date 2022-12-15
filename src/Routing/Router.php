@@ -45,6 +45,12 @@ class Router {
         throw new HttpNotFoundException();
     }
 
+    /**
+     * Resolve the requested route and execute middlewares if setted
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function resolve(Request $request): Response {
         $route = $this->resolveRoute($request);
         $request->setRoute($route);
@@ -57,6 +63,14 @@ class Router {
         return $action($request);
     }
 
+    /**
+     * Run all middlewares setted for a route
+     *
+     * @param Request $request
+     * @param array $middlewares Setted middlewares
+     * @param mixed $target Final action of the route
+     * @return Response
+     */
     protected function runMiddlewares(Request $request, array $middlewares, $target): Response {
         if (count($middlewares) == 0) {
             return $target($request);

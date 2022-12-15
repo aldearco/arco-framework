@@ -208,6 +208,13 @@ class Request {
         return $parameters[$key] ?? null;
     }
 
+    /**
+     * Execute the Validation API using the data of this actual request
+     *
+     * @param array $rules All rules for expected fields. `"field" => ["rules"]`
+     * @param array $messages Array of custom messages if the rule is not valid
+     * @return array
+     */
     public function validate(array $rules, array $messages = []): array {
         $validator = new Validator($this->data);
 
