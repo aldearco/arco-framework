@@ -2,6 +2,8 @@
 
 namespace Arco;
 
+use Arco\Database\Drivers\DatabaseDriver;
+use Arco\Database\Drivers\PDODriver;
 use Arco\Http\HttpMethod;
 use Throwable;
 use Arco\View\View;
@@ -28,6 +30,8 @@ class App {
 
     public Session $session;
 
+    public DatabaseDriver $database;
+
     public static function bootstrap() {
         $app = singleton(self::class);
         $app->router = new Router();
@@ -35,6 +39,8 @@ class App {
         $app->request = $app->server->getRequest();
         $app->viewEngine = new ArrowVulcan(__DIR__."/../views");
         $app->session = new Session(new PhpNativeSessionStorage());
+        $app->database = new PDODriver();
+        $app->database->connect("mysql", "localhost", 3306, "curso_framework", "root", "");
         Rule::loadDefaultRules();
 
         return $app;
@@ -49,6 +55,8 @@ class App {
     public function terminate(Response $response) {
         $this->prepareNextRequest();
         $this->server->sendResponse($response);
+        $this->database->close();
+        exit();
     }
 
     public function run() {

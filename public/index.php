@@ -1,13 +1,14 @@
 <?php
 
 use Arco\App;
+use Arco\Database\DB;
 use Arco\Http\Request;
 use Arco\Http\Response;
 use Arco\Routing\Route;
 use Arco\Http\Middleware;
 use Arco\Validation\Rule;
-use Arco\Validation\Rules\Confirmed;
 use Arco\Validation\Rules\Required;
+use Arco\Validation\Rules\Confirmed;
 
 require_once "../vendor/autoload.php";
 
@@ -60,6 +61,15 @@ Route::get("/form", fn (Request $request) => view("form"));
 Route::post("/form", function (Request $request) {
 
     return json($request->validate(["email" => "email", "name" => "required"]));
+});
+
+Route::post("/user", function (Request $request) {
+    DB::statement("INSERT INTO users (name, email) VALUES (?, ?)", [$request->data("name"), $request->data("email")]);
+    return json(["message" => "ok"]);
+});
+
+Route::get("/users", function (Request $request) {
+    return json(DB::statement("SELECT * FROM users"));
 });
 
 $app->run();
