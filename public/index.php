@@ -97,4 +97,19 @@ Route::get("/user/where-first", function (Request $request) {
     return json(User::find(4)->toArray());
 });
 
+Route::post('/users/{id}/update', function (Request $request) {
+    $user = User::find($request->routeParameters('id'));
+
+    $user->name = $request->data('name');
+    $user->email = $request->data('email');
+
+    return json($user->update()->toArray());
+});
+
+Route::delete('/users/{id}/delete', function (Request $request) {
+    $user = User::find($request->routeParameters('id'));
+
+    return json($user->delete()->toArray());
+});
+
 $app->run();

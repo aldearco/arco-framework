@@ -85,6 +85,31 @@ abstract class Model {
         return $this;
     }
 
+    public function update(): static {
+        if ($this->insertTimestamps) {
+            $this->attributes["updated_at"] = date("Y-m-d H:m:s");
+        }
+
+        $databaseColumns = array_keys($this->attributes);
+        $bind = implode(",", array_map(fn ($c) => "$c = ?", $databaseColumns));
+        $id = $this->attributes[$this->primaryKey];
+
+        self::$driver->statement(
+            "UPDATE $this->table SET $bind WHERE $this->primaryKey = $id",
+            array_values($this->attributes)
+        );
+
+        return $this;
+    }
+
+    public function delete(): static {
+        self::$driver->statement(
+            "DELETE FROM $this->table WHERE $this->primaryKey = {$this->attributes[$this->primaryKey]}"
+        );
+
+        return $this;
+    }
+
     public static function create(array $attributes): static {
         return (new static())->massAssign($attributes)->save();
     }
