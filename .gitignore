@@ -1,3 +1,4 @@
 /vendor
 composer.lock
+/database/migrations
 .php-cs-fixer.cache
