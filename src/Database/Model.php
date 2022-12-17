@@ -119,7 +119,7 @@ abstract class Model {
         $rows = self::$driver->statement("SELECT * FROM $model->table LIMIT 1");
 
         if (count($rows) == 0) {
-            return $model;
+            return null;
         }
 
         return $model->setAttributes($rows[0]);
@@ -133,7 +133,7 @@ abstract class Model {
         );
 
         if (count($rows) == 0) {
-            return $model;
+            return null;
         }
 
         return $model->setAttributes($rows[0]);
@@ -184,7 +184,7 @@ abstract class Model {
         );
 
         if (count($rows) == 0) {
-            return $model;
+            return null;
         }
 
         return $model->setAttributes($rows[0]);
