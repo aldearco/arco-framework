@@ -50,4 +50,12 @@ Route::post("/validate", fn (Request $request) => json($request->validate([
     ]
 ])));
 
+Route::get("/session", function (Request $request) {
+    session()->remove("test");
+    return json([
+        "id" => session()->id(),
+        "test" =>session()->get("test", "por defecto")
+    ]);
+});
+
 $app->run();

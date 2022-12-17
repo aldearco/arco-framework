@@ -12,6 +12,8 @@ use Arco\Validation\Rule;
 use Arco\View\ArrowVulcan;
 use Arco\Server\PhpNativeServer;
 use Arco\Http\HttpNotFoundException;
+use Arco\Session\PhpNativeSessionStorage;
+use Arco\Session\Session;
 use Arco\Validation\Exceptions\ValidationException;
 
 class App {
@@ -23,12 +25,15 @@ class App {
 
     public View $viewEngine;
 
+    public Session $session;
+
     public static function bootstrap() {
         $app = singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();
         $app->request = $app->server->getRequest();
         $app->viewEngine = new ArrowVulcan(__DIR__."/../views");
+        $app->session = new Session(new PhpNativeSessionStorage());
         Rule::loadDefaultRules();
 
         return $app;
