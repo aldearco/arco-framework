@@ -2,17 +2,18 @@
 
 namespace Arco\Tests\Validation;
 
-use Arco\Validation\Rules\Confirmed;
-use PHPUnit\Framework\TestCase;
-use Arco\Validation\Rules\Email;
-use Arco\Validation\Rules\GreaterThan;
-use Arco\Validation\Rules\Number;
-use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
+use PHPUnit\Framework\TestCase;
+use Arco\Validation\Rules\Email;
+use Arco\Validation\Rules\Number;
+use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
+use Arco\Validation\Rules\Confirmed;
+use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
+use Arco\Validation\Exceptions\RuleParseException;
 
 class ValidationRulesTest extends TestCase {
     public function emails() {
@@ -215,5 +216,12 @@ class ValidationRulesTest extends TestCase {
     public function test_required_when($other, $operator, $compareWith, $data, $field, $expected) {
         $rule = new RequiredWhen($other, $operator, $compareWith);
         $this->assertEquals($expected, $rule->isValid($field, $data));
+    }
+
+    public function test_required_when_throws_parse_rule_exception_when_operator_is_invalid() {
+        $rule = new RequiredWhen("other", "|||", "test");
+        $data = ["other" => 5, "test" => 1];
+        $this->expectException(RuleParseException::class);
+        $rule->isValid("test", $data);
     }
 }
