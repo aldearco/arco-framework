@@ -5,6 +5,7 @@ use Arco\Database\DB;
 use Arco\Http\Request;
 use Arco\Http\Response;
 use Arco\Routing\Route;
+use Arco\Database\Model;
 use Arco\Http\Middleware;
 use Arco\Validation\Rule;
 use Arco\Validation\Rules\Required;
@@ -70,6 +71,19 @@ Route::post("/user", function (Request $request) {
 
 Route::get("/users", function (Request $request) {
     return json(DB::statement("SELECT * FROM users"));
+});
+
+class User extends Model {
+    
+}
+
+Route::post("/user/model", function (Request $request) {
+    $user = new User();
+    $user->name = $request->data("name");
+    $user->email = $request->data("email");
+    $user->save();
+
+    return json(["message" => "ok"]);
 });
 
 $app->run();

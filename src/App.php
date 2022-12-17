@@ -2,21 +2,22 @@
 
 namespace Arco;
 
-use Arco\Database\Drivers\DatabaseDriver;
-use Arco\Database\Drivers\PDODriver;
-use Arco\Http\HttpMethod;
 use Throwable;
 use Arco\View\View;
 use Arco\Http\Request;
 use Arco\Http\Response;
 use Arco\Server\Server;
+use Arco\Database\Model;
 use Arco\Routing\Router;
+use Arco\Http\HttpMethod;
+use Arco\Session\Session;
 use Arco\Validation\Rule;
 use Arco\View\ArrowVulcan;
 use Arco\Server\PhpNativeServer;
+use Arco\Database\Drivers\PDODriver;
 use Arco\Http\HttpNotFoundException;
+use Arco\Database\Drivers\DatabaseDriver;
 use Arco\Session\PhpNativeSessionStorage;
-use Arco\Session\Session;
 use Arco\Validation\Exceptions\ValidationException;
 
 class App {
@@ -41,6 +42,7 @@ class App {
         $app->session = new Session(new PhpNativeSessionStorage());
         $app->database = new PDODriver();
         $app->database->connect("mysql", "localhost", 3306, "curso_framework", "root", "");
+        Model::setDatabaseDriver($app->database);
         Rule::loadDefaultRules();
 
         return $app;
