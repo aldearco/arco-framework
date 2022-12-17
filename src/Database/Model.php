@@ -61,6 +61,10 @@ abstract class Model {
     }
 
     public function toArray() {
+        if (count($this->attributes) == 0) {
+            return [];
+        }
+
         return array_filter(
             $this->attributes,
             fn ($attr) => !in_array($attr, $this->hidden)
@@ -90,7 +94,7 @@ abstract class Model {
         $rows = self::$driver->statement("SELECT * FROM $model->table LIMIT 1");
 
         if (count($rows) == 0) {
-            return null;
+            return $model;
         }
 
         return $model->setAttributes($rows[0]);
@@ -104,7 +108,7 @@ abstract class Model {
         );
 
         if (count($rows) == 0) {
-            return null;
+            return $model;
         }
 
         return $model->setAttributes($rows[0]);
@@ -145,5 +149,19 @@ abstract class Model {
         }
 
         return $models;
+    }
+
+    public static function firstWhere(string $column, mixed $value): ?static {
+        $model = new static();
+        $rows = self::$driver->statement(
+            "SELECT * FROM $model->table WHERE $column = ?",
+            [$value]
+        );
+
+        if (count($rows) == 0) {
+            return $model;
+        }
+
+        return $model->setAttributes($rows[0]);
     }
 }

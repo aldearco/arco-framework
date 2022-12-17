@@ -90,7 +90,11 @@ Route::post("/user/model", function (Request $request) {
 });
 
 Route::get("/user/query", function (Request $request) {
-    return json(array_map(fn ($m) => $m->toArray(), User::all()));
+    return json(array_map(fn ($m) => $m->toArray(), User::where("name", "Manolo")));
+});
+
+Route::get("/user/where-first", function (Request $request) {
+    return json(User::find(4)->toArray());
 });
 
 $app->run();
