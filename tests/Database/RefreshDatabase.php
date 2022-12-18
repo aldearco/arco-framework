@@ -5,11 +5,12 @@ namespace Arco\Tests\Database;
 use PDOException;
 use Arco\Database\Model;
 use Arco\Database\Drivers\PDODriver;
+use Arco\Database\Drivers\DatabaseDriver;
 
 trait RefreshDatabase {
     protected function setUp(): void {
         if (is_null($this->driver)) {
-            $this->driver = new PDODriver();
+            $this->driver = singleton(DatabaseDriver::class, PDODriver::class);
             Model::setDatabaseDriver($this->driver);
             try {
                 $this->driver->connect("mysql", "localhost", 3306, "curso_framework_tests", "root", "");

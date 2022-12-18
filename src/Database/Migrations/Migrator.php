@@ -9,6 +9,7 @@ class Migrator {
         private string $migrationsDirectory,
         private string $templatesDirectory,
         private DatabaseDriver $driver,
+        private bool $logProgress = true,
     ) {
         $this->migrationsDirectory = $migrationsDirectory;
         $this->templatesDirectory = $templatesDirectory;
@@ -16,7 +17,9 @@ class Migrator {
     }
 
     private function log(string $message) {
-        print($message . PHP_EOL);
+        if ($this->logProgress) {
+            print($message . PHP_EOL);
+        }
     }
 
     private function createMigrationsTableIfNotExists() {
@@ -102,6 +105,6 @@ class Migrator {
 
         file_put_contents("$this->migrationsDirectory/$fileName", $template);
 
-        print("Migration file created: $fileName");
+        return $fileName;
     }
 }
