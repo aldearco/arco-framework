@@ -40,7 +40,7 @@ class App {
         $app->request = $app->server->getRequest();
         $app->viewEngine = new ArrowVulcan(__DIR__."/../views");
         $app->session = new Session(new PhpNativeSessionStorage());
-        $app->database = new PDODriver();
+        $app->database = singleton(DatabaseDriver::class, PDODriver::class);
         $app->database->connect("mysql", "localhost", 3306, "curso_framework", "root", "");
         Model::setDatabaseDriver($app->database);
         Rule::loadDefaultRules();

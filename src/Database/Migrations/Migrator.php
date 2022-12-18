@@ -2,13 +2,46 @@
 
 namespace Arco\Database\Migrations;
 
+use Arco\Database\Drivers\DatabaseDriver;
+
 class Migrator {
     public function __construct(
-        private string $migrationDirectory,
+        private string $migrationsDirectory,
         private string $templatesDirectory,
+        private DatabaseDriver $driver,
     ) {
-        $this->migrationDirectory = $migrationDirectory;
+        $this->migrationsDirectory = $migrationsDirectory;
         $this->templatesDirectory = $templatesDirectory;
+        $this->driver = $driver;
+    }
+
+    private function log(string $message) {
+        print($message . PHP_EOL);
+    }
+
+    private function createMigrationsTableIfNotExists() {
+        $this->driver->statement(
+            "CREATE TABLE IF NOT EXISTS migrations (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(256))"
+        );
+    }
+
+    public function migrate() {
+        $this->createMigrationsTableIfNotExists();
+        $migrated = $this->driver->statement("SELECT * FROM migrations");
+        $migrations = glob("$this->migrationsDirectory/*.php");
+
+        if (count($migrated) >= count($migrations)) {
+            $this->log("Nothing to migrate");
+            return;
+        }
+
+        foreach (array_slice($migrations, count($migrated)) as $file) {
+            $migration = require $file;
+            $migration->up();
+            $name = basename($file);
+            $this->driver->statement("INSERT INTO migrations (name) VALUES (?)", [$name]);
+            $this->log("Migrated => $name");
+        }
     }
 
     public function make(string $migrationName) {
@@ -30,7 +63,7 @@ class Migrator {
         $date = date("Y_m_d");
         $id = 0;
 
-        foreach (glob("$this->migrationDirectory/*.php") as $file) {
+        foreach (glob("$this->migrationsDirectory/*.php") as $file) {
             if (str_starts_with(basename($file), $date)) {
                 $id++;
             }
@@ -38,7 +71,7 @@ class Migrator {
 
         $fileName = sprintf("%s_%06d_%s.php", $date, $id, $migrationName);
 
-        file_put_contents("$this->migrationDirectory/$fileName", $template);
+        file_put_contents("$this->migrationsDirectory/$fileName", $template);
 
         print("Migration file created: $fileName");
     }
