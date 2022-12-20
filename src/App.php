@@ -2,6 +2,7 @@
 
 namespace Arco;
 
+use Arco\Config\Config;
 use Throwable;
 use Arco\View\View;
 use Arco\Http\Request;
@@ -19,8 +20,11 @@ use Arco\Http\HttpNotFoundException;
 use Arco\Database\Drivers\DatabaseDriver;
 use Arco\Session\PhpNativeSessionStorage;
 use Arco\Validation\Exceptions\ValidationException;
+use Dotenv\Dotenv;
 
 class App {
+    public static string $root;
+
     public Router $router;
 
     public Request $request;
@@ -33,7 +37,10 @@ class App {
 
     public DatabaseDriver $database;
 
-    public static function bootstrap() {
+    public static function bootstrap(string $root) {
+        self::$root = $root;
+        Dotenv::createImmutable($root)->load();
+        Config::load("$root/config");
         $app = singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();

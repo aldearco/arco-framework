@@ -13,7 +13,7 @@ use Arco\Validation\Rules\Confirmed;
 
 require_once "../vendor/autoload.php";
 
-$app = App::bootstrap();
+$app = App::bootstrap(__DIR__ . "/..");
 
 $app->router->get('/test/{param}', function (Request $request) {
     return json($request->routeParameters());
@@ -111,5 +111,7 @@ Route::delete('/users/{id}/delete', function (Request $request) {
 
     return json($user->delete()->toArray());
 });
+
+Route::get("/dbhost", fn (Request $request) => Response::text(config("database.port")));
 
 $app->run();
