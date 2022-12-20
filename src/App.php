@@ -2,9 +2,8 @@
 
 namespace Arco;
 
+use Dotenv\Dotenv;
 use Arco\Config\Config;
-use Throwable;
-use Arco\View\View;
 use Arco\Http\Request;
 use Arco\Http\Response;
 use Arco\Server\Server;
@@ -12,15 +11,11 @@ use Arco\Database\Model;
 use Arco\Routing\Router;
 use Arco\Http\HttpMethod;
 use Arco\Session\Session;
-use Arco\Validation\Rule;
-use Arco\View\ArrowVulcan;
-use Arco\Server\PhpNativeServer;
-use Arco\Database\Drivers\PDODriver;
 use Arco\Http\HttpNotFoundException;
 use Arco\Database\Drivers\DatabaseDriver;
-use Arco\Session\PhpNativeSessionStorage;
+use Arco\Session\SessionStorage;
 use Arco\Validation\Exceptions\ValidationException;
-use Dotenv\Dotenv;
+use Throwable;
 
 class App {
     public static string $root;
@@ -31,28 +26,60 @@ class App {
 
     public Server $server;
 
-    public View $viewEngine;
-
     public Session $session;
 
     public DatabaseDriver $database;
 
     public static function bootstrap(string $root) {
         self::$root = $root;
-        Dotenv::createImmutable($root)->load();
-        Config::load("$root/config");
         $app = singleton(self::class);
-        $app->router = new Router();
-        $app->server = new PhpNativeServer();
-        $app->request = $app->server->getRequest();
-        $app->viewEngine = new ArrowVulcan(__DIR__."/../views");
-        $app->session = new Session(new PhpNativeSessionStorage());
-        $app->database = singleton(DatabaseDriver::class, PDODriver::class);
-        $app->database->connect("mysql", "localhost", 3306, "curso_framework", "root", "");
-        Model::setDatabaseDriver($app->database);
-        Rule::loadDefaultRules();
+        return $app
+            ->loadConfig()
+            ->runServiceProviders("boot")
+            ->setHttpHandlers()
+            ->setUpDatabaseConnection()
+            ->runServiceProviders("runtime");
 
         return $app;
+    }
+
+    protected function loadConfig(): self {
+        Dotenv::createImmutable(self::$root)->load();
+        Config::load(self::$root."/config");
+
+        return $this;
+    }
+
+    protected function runServiceProviders(string $type): self {
+        foreach (config("providers.$type", []) as $provider) {
+            $provider = new $provider();
+            $provider->registerServices();
+        }
+        return $this;
+    }
+
+    protected function setHttpHandlers(): self {
+        $this->router = singleton(Router::class);
+        $this->server = app(Server::class);
+        $this->request = $this->server->getRequest();
+        $this->session = singleton(Session::class, fn () => new Session(app(SessionStorage::class)));
+
+        return $this;
+    }
+
+    protected function setUpDatabaseConnection(): self {
+        $this->database = app(DatabaseDriver::class);
+        $this->database->connect(
+            config("database.connection"),
+            config("database.host"),
+            config("database.port"),
+            config("database.database"),
+            config("database.username"),
+            config("database.password"),
+        );
+        Model::setDatabaseDriver($this->database);
+
+        return $this;
     }
 
     public function prepareNextRequest() {

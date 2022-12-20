@@ -1,7 +1,7 @@
 <?php 
 
 return [
-    "engine" => "ArrowVulcan",
+    "engine" => "arrow-vulcan",
     "path" => resourcesDirectory() . "/views"
 
 ];
