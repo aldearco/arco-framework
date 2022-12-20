@@ -2,6 +2,7 @@
 
 namespace Arco\Providers;
 
+use Arco\View\View;
 use Arco\View\ArrowVulcan;
 
 class ViewServiceProvider implements ServiceProvider {
