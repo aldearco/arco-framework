@@ -14,7 +14,7 @@ function app($class = App::class) {
 }
 
 /**
- * Store class instances in the app 
+ * Store class instances in the app
  *
  * @param string $class
  * @param string|callable|null|null $build
@@ -44,7 +44,7 @@ function config(string $configuration, $default = null) {
 }
 
 /**
- * Get app's resources directory 
+ * Get app's resources directory
  *
  * @return string
  */

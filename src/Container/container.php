@@ -11,7 +11,7 @@ class Container {
     private static array $instances = [];
 
     /**
-     * Store class instances in the app 
+     * Store class instances in the app
      *
      * @param string $class
      * @param string|callable|null|null $build

@@ -13,7 +13,7 @@ abstract class Model {
     protected ?string $table = null;
 
     /**
-     * Name of the primary key. 
+     * Name of the primary key.
      *
      * @var string Default `"id"`
      */
@@ -82,6 +82,14 @@ abstract class Model {
      */
     public function __get($name) {
         return $this->attributes[$name];
+    }
+
+    public function __sleep() {
+        foreach ($this->hidden as $hide) {
+            unset($this->attributes[$hide]);
+        }
+
+        return array_keys(get_object_vars($this));
     }
 
     /**
