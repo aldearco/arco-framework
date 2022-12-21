@@ -5,8 +5,16 @@ namespace Arco\Database\Drivers;
 use PDO;
 
 class PDODriver implements DatabaseDriver {
+    /**
+     * Native PHP PDO pointer
+     *
+     * @var PDO|null
+     */
     protected ?PDO $pdo;
 
+    /**
+     * @inheritDoc
+     */
     public function connect(
         string $protocol,
         string $host,
@@ -20,10 +28,16 @@ class PDODriver implements DatabaseDriver {
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function close() {
         $this->pdo = null;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function statement(string $query, array $bind = []): mixed {
         $statement = $this->pdo->prepare($query);
         $statement->execute($bind);

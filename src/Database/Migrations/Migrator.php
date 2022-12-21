@@ -16,18 +16,34 @@ class Migrator {
         $this->driver = $driver;
     }
 
+    /**
+     * Show log in the CLI
+     *
+     * @param string $message
+     * @return void
+     */
     private function log(string $message) {
         if ($this->logProgress) {
             print($message . PHP_EOL);
         }
     }
 
+    /**
+     * Create migrations table if not exists
+     *
+     * @return void
+     */
     private function createMigrationsTableIfNotExists() {
         $this->driver->statement(
             "CREATE TABLE IF NOT EXISTS migrations (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(256))"
         );
     }
 
+    /**
+     * Execute all migration files in the migrations directory
+     *
+     * @return void
+     */
     public function migrate() {
         $this->createMigrationsTableIfNotExists();
         $migrated = $this->driver->statement("SELECT * FROM migrations");
@@ -47,6 +63,12 @@ class Migrator {
         }
     }
 
+    /**
+     * Rollback migrations
+     *
+     * @param integer|null $steps
+     * @return void
+     */
     public function rollback(?int $steps = null) {
         $this->createMigrationsTableIfNotExists();
         $migrated = $this->driver->statement("SELECT * FROM migrations");
@@ -76,6 +98,12 @@ class Migrator {
         }
     }
 
+    /**
+     * Create a migration file in the migrations directory
+     *
+     * @param string $migrationName
+     * @return void
+     */
     public function make(string $migrationName) {
         $migrationName = snake_case($migrationName);
 
