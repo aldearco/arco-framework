@@ -2,7 +2,6 @@
 
 namespace Arco\Auth;
 
-use Arco\Auth\Authenticatable;
 use Arco\Auth\Authenticators\Authenticator;
 
 class Auth {

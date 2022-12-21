@@ -7,6 +7,7 @@ return [
         Arco\Providers\SessionStorageServiceProvider::class,
         Arco\Providers\ViewServiceProvider::class,
         Arco\Providers\AuthenticatorServiceProvider::class,
+        Arco\Providers\HasherServiceProvider::class,
     ],
     "runtime" => [
         App\Providers\RuleServiceProvider::class,
