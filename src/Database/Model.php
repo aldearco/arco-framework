@@ -5,20 +5,60 @@ namespace Arco\Database;
 use Arco\Database\Drivers\DatabaseDriver;
 
 abstract class Model {
+    /**
+     * Name of the table
+     *
+     * @var string|null
+     */
     protected ?string $table = null;
 
+    /**
+     * Name of the primary key. 
+     *
+     * @var string Default `"id"`
+     */
     protected string $primaryKey = "id";
 
+    /**
+     * Hidden attributes
+     *
+     * @var array
+     */
     protected array $hidden = [];
 
+    /**
+     * Fillable and public attributes
+     *
+     * @var array
+     */
     protected array $fillable = [];
 
+    /**
+     * All object attributes
+     *
+     * @var array
+     */
     protected array $attributes = [];
 
+    /**
+     * Define if insert `created_at` and `updated_at` rows
+     *
+     * @var boolean Default `true`
+     */
     protected bool $insertTimestamps = true;
 
+    /**
+     * Database Driver pointer
+     *
+     * @var DatabaseDriver|null
+     */
     private static ?DatabaseDriver $driver = null;
 
+    /**
+     * Set Database Driver given by the app provider
+     *
+     * @param DatabaseDriver $driver
+     */
     public static function setDatabaseDriver(DatabaseDriver $driver) {
         self::$driver = $driver;
     }
@@ -30,14 +70,26 @@ abstract class Model {
         }
     }
 
+    /**
+     * Set attribute
+     */
     public function __set($name, $value) {
         $this->attributes[$name] = $value;
     }
 
+    /**
+     * Get attribute
+     */
     public function __get($name) {
         return $this->attributes[$name];
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param array $attributes
+     * @return static
+     */
     protected function setAttributes(array $attributes): static {
         foreach ($attributes as $key => $value) {
             $this->__set($key, $value);
@@ -46,6 +98,12 @@ abstract class Model {
         return $this;
     }
 
+    /**
+     * Masive assignation of attributes used when you create new model
+     *
+     * @param array $attributes
+     * @return static
+     */
     protected function massAssign(array $attributes): static {
         if (count($this->fillable) == 0) {
             throw new \Error("Model ". static::class . " does not have fillable attributes");
@@ -60,6 +118,11 @@ abstract class Model {
         return $this;
     }
 
+    /**
+     * Turn object models into array
+     *
+     * @return void
+     */
     public function toArray() {
         if (count($this->attributes) == 0) {
             return [];
@@ -110,10 +173,21 @@ abstract class Model {
         return $this;
     }
 
+    /**
+     * Static method to create
+     *
+     * @param array $attributes
+     * @return static
+     */
     public static function create(array $attributes): static {
         return (new static())->massAssign($attributes)->save();
     }
 
+    /**
+     * Get the first
+     *
+     * @return static|null
+     */
     public static function first(): ?static {
         $model = new static();
         $rows = self::$driver->statement("SELECT * FROM $model->table LIMIT 1");
@@ -125,6 +199,12 @@ abstract class Model {
         return $model->setAttributes($rows[0]);
     }
 
+    /**
+     * Find by the model primary key
+     *
+     * @param integer|string $id
+     * @return static|null
+     */
     public static function find(int|string $id): ?static {
         $model = new static();
         $rows = self::$driver->statement(
@@ -139,6 +219,11 @@ abstract class Model {
         return $model->setAttributes($rows[0]);
     }
 
+    /**
+     * Get all form table
+     *
+     * @return array
+     */
     public static function all(): array {
         $model = new static();
         $rows = self::$driver->statement("SELECT * FROM $model->table");
@@ -156,6 +241,13 @@ abstract class Model {
         return $models;
     }
 
+    /**
+     * Get matched by value and column
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return array
+     */
     public static function where(string $column, mixed $value): array {
         $model = new static();
         $rows = self::$driver->statement(
@@ -176,6 +268,13 @@ abstract class Model {
         return $models;
     }
 
+    /**
+     * Get the first matched by column and value
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return static|null
+     */
     public static function firstWhere(string $column, mixed $value): ?static {
         $model = new static();
         $rows = self::$driver->statement(
