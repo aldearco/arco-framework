@@ -84,11 +84,22 @@ class Route {
         return $this->middlewares;
     }
 
+    /**
+     * Set middleware for the route
+     *
+     * @param array $middlewares
+     * @return self
+     */
     public function setMiddlewares(array $middlewares): self {
         $this->middlewares = array_map(fn ($middleware) => new $middleware(), $middlewares);
         return $this;
     }
 
+    /**
+     * Check if route has middlewares
+     *
+     * @return boolean
+     */
     public function hasMiddlewares(): bool {
         return count($this->middlewares) > 0;
     }
@@ -124,28 +135,69 @@ class Route {
         return array_combine($this->parameters, array_slice($arguments, 1));
     }
 
+    /**
+     * Load routes from routes directory files
+     *
+     * @param string $routesDirectory
+     * @return void
+     */
     public static function load(string $routesDirectory) {
         foreach (glob("$routesDirectory/*.php") as $routes) {
             require_once $routes;
         }
     }
 
+    /**
+     * Store HTTP Method GET route in the App Router container
+     *
+     * @param string $uri
+     * @param Closure $action
+     * @return Route
+     */
     public static function get(string $uri, Closure $action): Route {
         return app()->router->get($uri, $action);
     }
 
+    /**
+     * Store HTTP Method POST route in the App Router container
+     *
+     * @param string $uri
+     * @param Closure $action
+     * @return Route
+     */
     public static function post(string $uri, Closure $action): Route {
         return app()->router->post($uri, $action);
     }
 
+    /**
+     * Store HTTP Method PUT route in the App Router container
+     *
+     * @param string $uri
+     * @param Closure $action
+     * @return Route
+     */
     public static function put(string $uri, Closure $action): Route {
         return app()->router->put($uri, $action);
     }
 
+    /**
+     * Store HTTP Method PATCH route in the App Router container
+     *
+     * @param string $uri
+     * @param Closure $action
+     * @return Route
+     */
     public static function patch(string $uri, Closure $action): Route {
         return app()->router->patch($uri, $action);
     }
 
+    /**
+     * Store HTTP Method DELETE route in the App Router container
+     *
+     * @param string $uri
+     * @param Closure $action
+     * @return Route
+     */
     public static function delete(string $uri, Closure $action): Route {
         return app()->router->delete($uri, $action);
     }

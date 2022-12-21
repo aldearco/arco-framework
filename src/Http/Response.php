@@ -164,6 +164,14 @@ class Response {
             ->setHeader("Location", $uri);
     }
 
+    /**
+     * Return an HTML view
+     *
+     * @param string $view
+     * @param array $params
+     * @param string|null $layout
+     * @return self
+     */
     public static function view(string $view, array $params = [], string $layout = null): self {
         $content = app(View::class)->render($view, $params, $layout);
 

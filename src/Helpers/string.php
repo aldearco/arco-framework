@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * Turn any string into snake_case format
+ *
+ * @param string $str
+ * @return string
+ */
 function snake_case(string $str): string {
     $snake_cased = [];
     $skip = [' ', '-', '_', '/', '\\', '|', ',', '^', '\'', '"', '.', ';', ':', '*', '[', ']', '{', '}'];

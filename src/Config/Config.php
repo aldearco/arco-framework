@@ -3,8 +3,18 @@
 namespace Arco\Config;
 
 class Config {
+    /**
+     * Array that stores all app configurations
+     *
+     * @var array
+     */
     private static array $config;
 
+    /**
+     * Load all config from the app config directory files
+     *
+     * @param string $path
+     */
     public static function load(string $path) {
         foreach (glob("$path/*.php") as $config) {
             $key = explode(".", basename($config))[0];
@@ -13,6 +23,12 @@ class Config {
         }
     }
 
+    /**
+     * Get configuration from loaded files
+     *
+     * @param string $configuration Use this structure: `"configKey.key.subKey.etc"`
+     * @param [type] $default If not exists assign this value
+     */
     public static function get(string $configuration, $default = null) {
         $keys = explode(".", $configuration);
         $finalKey = array_pop($keys);
