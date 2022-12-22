@@ -1,10 +1,13 @@
 <?php
 
-namespace Arco\Database;
+namespace Arco\Database\Archer;
 
+use Arco\Database\Archer\About\Relations;
 use Arco\Database\Drivers\DatabaseDriver;
 
 abstract class Model {
+    use Relations;
+
     /**
      * Name of the table
      *
@@ -46,6 +49,13 @@ abstract class Model {
      * @var boolean Default `true`
      */
     protected bool $insertTimestamps = true;
+
+    /**
+     * Define if this model has a primary key autoincrementable
+     *
+     * @var boolean
+     */
+    protected bool $incrementable = true;
 
     /**
      * Database Driver pointer
@@ -93,7 +103,7 @@ abstract class Model {
     }
 
     /**
-     * Undocumented function
+     * Set all attributes for this object
      *
      * @param array $attributes
      * @return static
@@ -104,6 +114,34 @@ abstract class Model {
         }
 
         return $this;
+    }
+
+    /**
+     * Get the primary key for this model
+     */
+    protected function getPrimaryKey() {
+        return $this->primaryKey;
+    }
+
+    /**
+     * Set the value of the primary key in attributes
+     */
+    protected function setId(int|string $id) {
+        $this->__set($this->primaryKey, $id);
+    }
+
+    /**
+     * Get the value of the primary key in attributes
+     */
+    protected function getId() {
+        return $this->__get($this->primaryKey);
+    }
+
+    /**
+     * Get basename class
+     */
+    protected function getBasename() {
+        return basename(str_replace('\\', '/', get_class($this)));
     }
 
     /**
@@ -128,8 +166,6 @@ abstract class Model {
 
     /**
      * Turn object models into array
-     *
-     * @return void
      */
     public function toArray() {
         if (count($this->attributes) == 0) {
@@ -142,16 +178,22 @@ abstract class Model {
         );
     }
 
-    public function save() {
+    public function save(): static {
         if ($this->insertTimestamps) {
             $this->attributes["created_at"] = date("Y-m-d H:m:s");
+            $this->attributes["updated_at"] = null;
         }
         $databaseColumns = implode(",", array_keys($this->attributes));
         $bind = implode(",", array_fill(0, count($this->attributes), "?"));
-        self::$driver->statement(
+        $id = self::$driver->statement(
             "INSERT INTO $this->table ($databaseColumns) VALUES ($bind)",
             array_values($this->attributes)
         );
+
+        // Assign the primary key data
+        if ($this->incrementable) {
+            $this->setId($id);
+        }
 
         return $this;
     }

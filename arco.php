@@ -11,7 +11,7 @@ $driver->connect("mysql", "localhost", 3306, "curso_framework", "root", "");
 
 $migrator = new Migrator(
     __DIR__ . "/database/migrations",
-    __DIR__ . "/templates",
+    __DIR__ . "/resources/templates",
     $driver
 
 );

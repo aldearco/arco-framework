@@ -3,7 +3,7 @@
 namespace Arco\Auth;
 
 use Arco\Auth\Authenticators\Authenticator;
-use Arco\Database\Model;
+use Arco\Database\Archer\Model;
 
 class Authenticatable extends Model {
     public function id(): int|string {

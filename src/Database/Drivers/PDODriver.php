@@ -42,6 +42,10 @@ class PDODriver implements DatabaseDriver {
         $statement = $this->pdo->prepare($query);
         $statement->execute($bind);
 
+        if (preg_match('/^INSERT INTO/', $query)) {
+            return $this->pdo->lastInsertId();
+        }
+
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

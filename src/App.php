@@ -7,7 +7,7 @@ use Arco\Config\Config;
 use Arco\Http\Request;
 use Arco\Http\Response;
 use Arco\Server\Server;
-use Arco\Database\Model;
+use Arco\Database\Archer\Model;
 use Arco\Routing\Router;
 use Arco\Http\HttpMethod;
 use Arco\Session\Session;
