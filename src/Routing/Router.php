@@ -4,9 +4,10 @@ namespace Arco\Routing;
 
 use Closure;
 use Arco\Http\Request;
+use Arco\Http\Response;
 use Arco\Http\HttpMethod;
 use Arco\Http\HttpNotFoundException;
-use Arco\Http\Response;
+use Arco\Container\DependencyInjection;
 
 /**
  * HTTP router.
@@ -61,10 +62,12 @@ class Router {
             $action[0] = $controller;
         }
 
+        $params = DependencyInjection::resolveParameters($action, $request->routeParameters());
+
         return $this->runMiddlewares(
             $request,
             $route->middlewares(),
-            fn () => call_user_func($action, $request)
+            fn () => call_user_func($action, ...$params)
         );
     }
 
