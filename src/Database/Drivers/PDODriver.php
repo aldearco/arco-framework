@@ -31,6 +31,13 @@ class PDODriver implements DatabaseDriver {
     /**
      * @inheritDoc
      */
+    public function lastInsertId() {
+        return $this->pdo->lastInsertId();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function close() {
         $this->pdo = null;
     }
@@ -41,10 +48,6 @@ class PDODriver implements DatabaseDriver {
     public function statement(string $query, array $bind = []): mixed {
         $statement = $this->pdo->prepare($query);
         $statement->execute($bind);
-
-        if (preg_match('/^INSERT INTO/', $query)) {
-            return $this->pdo->lastInsertId();
-        }
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }

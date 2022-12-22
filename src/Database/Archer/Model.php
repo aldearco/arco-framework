@@ -117,7 +117,7 @@ abstract class Model {
     }
 
     /**
-     * Get the primary key for this model
+     * Get the primary key name for this model
      */
     protected function getPrimaryKey() {
         return $this->primaryKey;
@@ -126,14 +126,14 @@ abstract class Model {
     /**
      * Set the value of the primary key in attributes
      */
-    protected function setId(int|string $id) {
-        $this->__set($this->primaryKey, $id);
+    protected function setPrimaryKeyAttribute(int|string $primaryKey) {
+        $this->__set($this->primaryKey, $primaryKey);
     }
 
     /**
      * Get the value of the primary key in attributes
      */
-    protected function getId() {
+    protected function getPrimaryKeyAttribute() {
         return $this->__get($this->primaryKey);
     }
 
@@ -185,14 +185,13 @@ abstract class Model {
         }
         $databaseColumns = implode(",", array_keys($this->attributes));
         $bind = implode(",", array_fill(0, count($this->attributes), "?"));
-        $id = self::$driver->statement(
+        self::$driver->statement(
             "INSERT INTO $this->table ($databaseColumns) VALUES ($bind)",
             array_values($this->attributes)
         );
 
-        // Assign the primary key data
         if ($this->incrementable) {
-            $this->setId($id);
+            $this->setPrimaryKeyAttribute(intval(self::$driver->lastInsertId()));
         }
 
         return $this;

@@ -1,7 +1,7 @@
 <pre>
 <?php 
 foreach ($notes as $note) {
-    var_dump($note->title);
+    var_dump($note);
     echo "</br>";
 }
 ?>

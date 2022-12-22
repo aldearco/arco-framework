@@ -17,6 +17,11 @@ interface DatabaseDriver {
     public function connect(string $protocol, string $host, int $port, string $database, string $username, string $password);
 
     /**
+     * Return last inserted row's id
+     */
+    public function lastInsertId();
+
+    /**
      * Close connection with the Database
      */
     public function close();

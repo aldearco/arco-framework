@@ -13,12 +13,18 @@ trait Relations {
         return self::$relatedInstances[$class];
     }
 
-
+    /**
+     * Create a relationship One to Many of ownership
+     *
+     * @param string $class Instanced class
+     * @param [type] $foreignKey Value for the search in `$class`
+     * @param [type] $localKey Column to search for the value in `$class`
+     */
     public function hasMany(string $class, $foreignKey = null, $localKey = null) {
         $instance = $this->newRelationInstance($class);
 
         if (is_null($foreignKey)) {
-            $foreignKey = $this->getId();
+            $foreignKey = $this->getPrimaryKeyAttribute();
         }
 
         if (is_null($localKey)) {
@@ -28,27 +34,46 @@ trait Relations {
         return $instance::where($localKey, $foreignKey);
     }
 
-    public function belongsTo(string $class, $relatedKey = null) {
-        $instance = $this->newRelationInstance($class);
-
-        if (is_null($relatedKey)) {
-            $relatedKey = snake_case($instance->getBasename())."_".$instance->getPrimaryKey();
-        }
-
-        return $instance::find($this->attributes[$relatedKey]);
-    }
-
-    public function hasOne(string $class, $foreignKey = null, $relatedKey = null) {
+    /**
+     * Create a relationship One to One of propierty
+     *
+     * @param string $class Instanced class
+     * @param [type] $foreignKey Value for the search in `$class`
+     * @param [type] $localKey Column to search for the value in `$class`
+     */
+    public function belongsTo(string $class, $foreignKey = null, $localKey = null) {
         $instance = $this->newRelationInstance($class);
 
         if (is_null($foreignKey)) {
-            $foreignKey = $this->getId();
+            $foreignKeyName = snake_case($instance->getBasename())."_".$instance->getPrimaryKey();
+            $foreignKey = $this->attributes[$foreignKeyName];
         }
 
-        if (is_null($relatedKey)) {
-            $relatedKey = snake_case($instance->getBasename())."_".$this->getPrimaryKey();
+        if (is_null($localKey)) {
+            $localKey = $instance->getPrimaryKey();
         }
 
-        return $instance::find($this->attributes[$relatedKey]);
+        return $instance::firstWhere($localKey, $foreignKey);
+    }
+
+    /**
+     * Create a relationship One to One of ownership
+     *
+     * @param string $class Instanced Class
+     * @param [type] $foreignKey Value for the search in `$class`
+     * @param [type] $localKey Column to search for the value in `$class`
+     */
+    public function hasOne(string $class, $foreignKey = null, $localKey = null) {
+        $instance = $this->newRelationInstance($class);
+
+        if (is_null($foreignKey)) {
+            $foreignKey = $this->getPrimaryKeyAttribute();
+        }
+
+        if (is_null($localKey)) {
+            $localKey = snake_case($this->getBasename())."_".$this->getPrimaryKey();
+        }
+
+        return $instance::firstWhere($localKey, $foreignKey);
     }
 }

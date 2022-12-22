@@ -18,9 +18,9 @@ class Route {
     /**
      * Action associated to this URI.
      *
-     * @var \Closure
+     * @var Closure
      */
-    protected \Closure $action;
+    protected Closure|array $action;
 
     /**
      * Regular expression used to match incoming requests URIs.
@@ -47,9 +47,9 @@ class Route {
      * Create a new route with the given URI and action.
      *
      * @param string $uri
-     * @param \Closure $action
+     * @param Closure $action
      */
-    public function __construct(string $uri, \Closure $action) {
+    public function __construct(string $uri, Closure|array $action) {
         $this->uri = $uri;
         $this->action = $action;
         $this->regex = preg_replace('/\{([a-zA-Z]+)\}/', '([a-zA-Z0-9]+)', $uri);
@@ -69,9 +69,9 @@ class Route {
     /**
      * Action that handles requests to this route URI.
      *
-     * @return \Closure
+     * @return Closure
      */
-    public function action(): \Closure {
+    public function action(): Closure|array {
         return $this->action;
     }
 
@@ -154,7 +154,7 @@ class Route {
      * @param Closure $action
      * @return Route
      */
-    public static function get(string $uri, Closure $action): Route {
+    public static function get(string $uri, Closure|array $action): Route {
         return app()->router->get($uri, $action);
     }
 
@@ -165,7 +165,7 @@ class Route {
      * @param Closure $action
      * @return Route
      */
-    public static function post(string $uri, Closure $action): Route {
+    public static function post(string $uri, Closure|array $action): Route {
         return app()->router->post($uri, $action);
     }
 
@@ -176,7 +176,7 @@ class Route {
      * @param Closure $action
      * @return Route
      */
-    public static function put(string $uri, Closure $action): Route {
+    public static function put(string $uri, Closure|array $action): Route {
         return app()->router->put($uri, $action);
     }
 
@@ -187,7 +187,7 @@ class Route {
      * @param Closure $action
      * @return Route
      */
-    public static function patch(string $uri, Closure $action): Route {
+    public static function patch(string $uri, Closure|array $action): Route {
         return app()->router->patch($uri, $action);
     }
 
@@ -198,7 +198,7 @@ class Route {
      * @param Closure $action
      * @return Route
      */
-    public static function delete(string $uri, Closure $action): Route {
+    public static function delete(string $uri, Closure|array $action): Route {
         return app()->router->delete($uri, $action);
     }
 }
