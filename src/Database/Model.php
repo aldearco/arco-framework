@@ -48,6 +48,13 @@ abstract class Model {
     protected bool $insertTimestamps = true;
 
     /**
+     * Define if this model has a primary key autoincrementable
+     *
+     * @var boolean
+     */
+    protected bool $incrementable = true;
+
+    /**
      * Database Driver pointer
      *
      * @var DatabaseDriver|null
@@ -93,7 +100,7 @@ abstract class Model {
     }
 
     /**
-     * Undocumented function
+     * Set all attributes for this object
      *
      * @param array $attributes
      * @return static
@@ -104,6 +111,13 @@ abstract class Model {
         }
 
         return $this;
+    }
+
+    /**
+     * Set the value of the primary key in attributes
+     */
+    protected function setId(int|string $id) {
+        $this->__set($this->primaryKey, $id);
     }
 
     /**
@@ -128,8 +142,6 @@ abstract class Model {
 
     /**
      * Turn object models into array
-     *
-     * @return void
      */
     public function toArray() {
         if (count($this->attributes) == 0) {
@@ -142,16 +154,22 @@ abstract class Model {
         );
     }
 
-    public function save() {
+    public function save(): static {
         if ($this->insertTimestamps) {
             $this->attributes["created_at"] = date("Y-m-d H:m:s");
+            $this->attributes["updated_at"] = null;
         }
         $databaseColumns = implode(",", array_keys($this->attributes));
         $bind = implode(",", array_fill(0, count($this->attributes), "?"));
-        self::$driver->statement(
+        $id = self::$driver->statement(
             "INSERT INTO $this->table ($databaseColumns) VALUES ($bind)",
             array_values($this->attributes)
         );
+
+        // Assign the primary key data
+        if ($this->incrementable) {
+            $this->setId($id);
+        }
 
         return $this;
     }

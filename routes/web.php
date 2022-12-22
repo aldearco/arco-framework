@@ -10,11 +10,13 @@ Route::get("/", function (Request $request) {
     if (isGuest()) {
         return Response::text("Guest");
     }
-    return Response::text(auth()->name);
+    return Response::json(auth()->toArray());
 });
+
 Route::get("/form", fn (Request $request) => Response::view("form"));
 
 Route::get("/register", fn (Request $request) => Response::view("auth/register"));
+
 Route::post("/register", function (Request $request) {
     $data = $request->validate([
         "email" => ["required", "email"],
@@ -33,11 +35,7 @@ Route::post("/register", function (Request $request) {
 
     $data["password"] = app(Hasher::class)->hash($data["password"]);
 
-    User::create($data);
-
-    $user = User::firstWhere("email", $data["email"]);
-
-    $user->login();
+    User::create($data)->login();
 
     return redirect("/");
 });
