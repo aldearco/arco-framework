@@ -37,6 +37,7 @@ class Session {
         $flash["new"][] = $key;
         $this->storage->set(self::FLASH_KEY, $flash);
     }
+
     public function id(): string {
         return $this->storage->id();
     }

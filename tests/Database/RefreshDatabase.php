@@ -3,7 +3,7 @@
 namespace Arco\Tests\Database;
 
 use PDOException;
-use Arco\Database\Model;
+use Arco\Database\Archer\Model;
 use Arco\Database\Drivers\PDODriver;
 use Arco\Database\Drivers\DatabaseDriver;
 

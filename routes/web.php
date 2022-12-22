@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Note;
 use App\Models\User;
 use Arco\Http\Request;
 use Arco\Crypto\Hasher;
@@ -10,7 +11,7 @@ Route::get("/", function (Request $request) {
     if (isGuest()) {
         return Response::text("Guest");
     }
-    return Response::json(auth()->toArray());
+    return Response::text(auth()->id);
 });
 
 Route::get("/form", fn (Request $request) => Response::view("form"));
@@ -59,6 +60,11 @@ Route::post("/login", function (Request $request) {
     $user->login();
 
     return redirect("/");
+});
+
+Route::get("/note", function ($request) {
+    $user = Note::find(1)->user();
+    return Response::text($user->id);
 });
 
 Route::get("/logout", function ($request) {

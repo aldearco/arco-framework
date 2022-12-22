@@ -1,10 +1,13 @@
 <?php
 
-namespace Arco\Database;
+namespace Arco\Database\Archer;
 
+use Arco\Database\Archer\About\Relations;
 use Arco\Database\Drivers\DatabaseDriver;
 
 abstract class Model {
+    use Relations;
+
     /**
      * Name of the table
      *
@@ -114,10 +117,31 @@ abstract class Model {
     }
 
     /**
+     * Get the primary key for this model
+     */
+    protected function getPrimaryKey() {
+        return $this->primaryKey;
+    }
+
+    /**
      * Set the value of the primary key in attributes
      */
     protected function setId(int|string $id) {
         $this->__set($this->primaryKey, $id);
+    }
+
+    /**
+     * Get the value of the primary key in attributes
+     */
+    protected function getId() {
+        return $this->__get($this->primaryKey);
+    }
+
+    /**
+     * Get basename class
+     */
+    protected function getBasename() {
+        return basename(str_replace('\\', '/', get_class($this)));
     }
 
     /**
