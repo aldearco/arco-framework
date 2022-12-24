@@ -19,6 +19,9 @@ class Storage {
         return app(FileStorageDriver::class)->put($path, $content);
     }
 
+    /**
+     * Create a symbolic link between the public folder and the storage folder.
+     */
     public function link() {
         if (!file_exists('public/storage')) {
             if (PHP_OS === "WINNT") {

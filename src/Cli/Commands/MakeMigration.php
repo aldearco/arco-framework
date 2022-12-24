@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class MakeMigration extends Command {
     protected static $defaultName = "make:migration";
 
-    protected static $defaultDescription = "Create new migration file";
+    protected static $defaultDescription = "Create a new migration file";
 
     protected function configure() {
         $this->addArgument("name", InputArgument::REQUIRED, "migration name");

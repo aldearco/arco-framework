@@ -137,7 +137,7 @@ class Migrator {
 
         file_put_contents("$this->migrationsDirectory/$fileName", $template);
 
-        $this->log("<info>Created migration => $fileName</info>");
+        $this->log("<info>Migration created => $fileName</info>");
 
         return $fileName;
     }

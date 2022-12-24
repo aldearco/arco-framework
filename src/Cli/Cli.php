@@ -2,16 +2,18 @@
 
 namespace Arco\Cli;
 
+use Dotenv\Dotenv;
 use Arco\App;
+use Arco\Cli\Commands\MakeController;
 use Arco\Cli\Commands\MakeMigration;
+use Arco\Cli\Commands\MakeModel;
 use Arco\Cli\Commands\Migrate;
 use Arco\Cli\Commands\MigrateRollback;
+use Arco\Cli\Commands\Serve;
 use Arco\Cli\Commands\StorageLink;
-use Dotenv\Dotenv;
 use Arco\Config\Config;
 use Arco\Database\Migrations\Migrator;
 use Arco\Database\Drivers\DatabaseDriver;
-use Arco\Storage\Storage;
 use Symfony\Component\Console\Application;
 
 class Cli {
@@ -42,8 +44,6 @@ class Cli {
             )
         );
 
-        singleton(Storage::class);
-
         return new self();
     }
 
@@ -55,6 +55,9 @@ class Cli {
             new Migrate(),
             new MigrateRollback(),
             new StorageLink(),
+            new MakeController(),
+            new MakeModel(),
+            new Serve(),
         ]);
 
         $cli->run();
