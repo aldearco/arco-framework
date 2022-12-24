@@ -1,7 +1,7 @@
 <?php 
 
 return [
-    "name" => env("APP_NAME", "Lune"),
+    "name" => env("APP_NAME", "Arco"),
     "env" => env("APP_ENV", "dev"),
-    "name" => env("APP_URL", "localhost:8000"),
+    "url" => env("APP_URL", "localhost:8080"),
 ];

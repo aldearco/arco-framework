@@ -2,7 +2,7 @@
 
 namespace Arco\Http;
 
-use Arco\Http\HttpMethod;
+use Arco\Storage\File;
 use Arco\Routing\Route;
 use Arco\Validation\Validator;
 
@@ -51,6 +51,13 @@ class Request {
      * @var array
      */
     protected array $headers = [];
+
+    /**
+     * Uploaded files.
+     *
+     * @var array<string, \Lune\Storage\File>
+     */
+    protected array $files = [];
 
     /**
      * Get the request URI.
@@ -137,6 +144,27 @@ class Request {
             $this->headers[strtolower($header)] = $value;
         }
 
+        return $this;
+    }
+
+    /**
+     * Get file from request.
+     *
+     * @param string $name
+     * @return File|null
+     */
+    public function file(string $name): ?File {
+        return $this->files[$name] ?? null;
+    }
+
+    /**
+     * Set uploaded files.
+     *
+     * @param array<string, File> $files
+     * @return self
+     */
+    public function setFiles(array $files): self {
+        $this->files = $files;
         return $this;
     }
 

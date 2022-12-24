@@ -30,4 +30,9 @@ Route::get("/note", function (Request $request) {
     ]);
 });
 
+Route::get("/picture", fn () => Response::view("picture"));
 
+Route::post('/picture', function (Request $request) {
+    $url = $request->file('picture')->store();
+    return Response::text($url);
+});

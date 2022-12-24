@@ -8,6 +8,7 @@ return [
         Arco\Providers\ViewServiceProvider::class,
         Arco\Providers\AuthenticatorServiceProvider::class,
         Arco\Providers\HasherServiceProvider::class,
+        Arco\Providers\FileStorageDriverServiceProvider::class,
     ],
     "runtime" => [
         App\Providers\RuleServiceProvider::class,

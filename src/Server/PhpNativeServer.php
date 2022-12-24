@@ -2,14 +2,35 @@
 
 namespace Arco\Server;
 
-use Arco\Http\HttpMethod;
 use Arco\Http\Request;
+use Arco\Storage\File;
 use Arco\Http\Response;
+use Arco\Http\HttpMethod;
 
 /**
  * PHP native server that uses `$_SERVER` global.
  */
 class PhpNativeServer implements Server {
+    /**
+     * Get files from `$_FILES` global.
+     *
+     * @return array<string, \Arco\Storage\File>
+     */
+    protected function uploadedFiles(): array {
+        $files = [];
+        foreach ($_FILES as $key => $file) {
+            if (!empty($file["tmp_name"])) {
+                $files[$key] = new File(
+                    file_get_contents($file["tmp_name"]),
+                    $file["type"],
+                    $file["name"],
+                );
+            }
+        }
+
+        return $files;
+    }
+
     /**
      * @inheritDoc
      */
@@ -19,7 +40,8 @@ class PhpNativeServer implements Server {
             ->setMethod(HttpMethod::from($_SERVER["REQUEST_METHOD"]))
             ->setHeaders(getallheaders())
             ->setPostData($_POST)
-            ->setQueryParameters($_GET);
+            ->setQueryParameters($_GET)
+            ->setFiles($this->uploadedFiles());
     }
 
     /**
