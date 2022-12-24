@@ -18,4 +18,15 @@ class Storage {
     public static function put(string $path, mixed $content): string {
         return app(FileStorageDriver::class)->put($path, $content);
     }
+
+    public function link() {
+        if (!file_exists('public/storage')) {
+            if (PHP_OS === "WINNT") {
+                return exec('mklink /J "public\storage" "..\storage"', $output, $return_var);
+            } else {
+                return symlink('../storage', 'public/storage');
+            }
+        }
+        throw new \Exception("Link already exists.");
+    }
 }

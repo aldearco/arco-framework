@@ -3,8 +3,11 @@
 namespace Arco\Database\Migrations;
 
 use Arco\Database\Drivers\DatabaseDriver;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class Migrator {
+    private ConsoleOutput $output;
+
     public function __construct(
         private string $migrationsDirectory,
         private string $templatesDirectory,
@@ -14,6 +17,7 @@ class Migrator {
         $this->migrationsDirectory = $migrationsDirectory;
         $this->templatesDirectory = $templatesDirectory;
         $this->driver = $driver;
+        $this->output = new ConsoleOutput();
     }
 
     /**
@@ -24,7 +28,7 @@ class Migrator {
      */
     private function log(string $message) {
         if ($this->logProgress) {
-            print($message . PHP_EOL);
+            $this->output->writeln($message);
         }
     }
 
@@ -50,7 +54,7 @@ class Migrator {
         $migrations = glob("$this->migrationsDirectory/*.php");
 
         if (count($migrated) >= count($migrations)) {
-            $this->log("Nothing to migrate");
+            $this->log("<comment>Nothing to migrate</comment>");
             return;
         }
 
@@ -59,7 +63,7 @@ class Migrator {
             $migration->up();
             $name = basename($file);
             $this->driver->statement("INSERT INTO migrations (name) VALUES (?)", [$name]);
-            $this->log("Migrated => $name");
+            $this->log("<info>Migrated => $name</info>");
         }
     }
 
@@ -76,7 +80,7 @@ class Migrator {
         $pending = count($migrated);
 
         if ($pending == 0) {
-            $this->log("Nothing to rollback");
+            $this->log("<comment>Nothing to rollback</comment>");
             return;
         }
 
@@ -91,7 +95,7 @@ class Migrator {
             $migration->down();
             $name = basename($file);
             $this->driver->statement("DELETE FROM migrations WHERE name = ?", [$name]);
-            $this->log("Rollback => $name");
+            $this->log("<info>Rollback => $name</info>");
             if (--$steps == 0) {
                 break;
             }
@@ -132,6 +136,8 @@ class Migrator {
         $fileName = sprintf("%s_%06d_%s.php", $date, $id, $migrationName);
 
         file_put_contents("$this->migrationsDirectory/$fileName", $template);
+
+        $this->log("<info>Created migration => $fileName</info>");
 
         return $fileName;
     }
