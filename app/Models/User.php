@@ -13,8 +13,4 @@ class User extends Authenticatable {
         "email",
         "password"
     ];
-
-    public function contacts() {
-        return $this->hasMany(Contact::class);
-    }
 }
