@@ -1,12 +1,11 @@
 {
-    "name": "aldearco/arco-framework",
+    "name": "aldearco/arco",
     "description": "Simple PHP framework inspired by Laravel",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Arco\\": "src/",
-            "App\\": "app/"
+            "Arco\\": "src/"
         },
         "files": [
             "src/Helpers/app.php",
