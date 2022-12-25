@@ -1,5 +1,5 @@
 {
-    "name": "aldearco/arco",
+    "name": "aldearco/arco-framework",
     "description": "Simple PHP framework inspired by Laravel",
     "type": "library",
     "license": "MIT",
