@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Note;
+use App\Models\Contact;
 use Arco\Auth\Authenticatable;
 
 class User extends Authenticatable {
@@ -14,7 +14,7 @@ class User extends Authenticatable {
         "password"
     ];
 
-    public function notes() {
-        return $this->hasMany(Note::class);
+    public function contacts() {
+        return $this->hasMany(Contact::class);
     }
 }

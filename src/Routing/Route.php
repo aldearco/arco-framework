@@ -76,7 +76,7 @@ class Route {
     }
 
     /**
-     * Get all HTTP midddlewares for this route.
+     * Get all HTTP middlewares for this route.
      *
      * @return \Arco\Http\Middleware[]
      */

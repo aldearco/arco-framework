@@ -1,7 +1,13 @@
-<h1>Home</h1>
-<h2>Hello, <?php echo $user ?></h2>
-<?php 
-foreach (["Mensaje 1", "Mensaje 2"] as $message) {
-    echo "<p>{$message}</p>";
-}
-?>
+<h1>Welcome</h1>
+<?php if (isGuest()): ?>
+<div>
+    <a href="/login">Login</a>
+</div>
+<div>
+    <a href="/register">Register</a>
+</div>
+<?php else: ?>
+    <div>
+    <a href="/contacts">Contacts</a>
+</div>
+<?php endif; ?>
