@@ -2,7 +2,11 @@
 
 namespace Arco\View;
 
+use Arco\View\Fletcher\Spoofing;
+
 class ArrowVulcan implements View {
+    use Spoofing;
+
     protected string $viewsDirectory;
 
     protected string $defaultLayout = "main";
@@ -22,7 +26,9 @@ class ArrowVulcan implements View {
     }
 
     protected function renderView(string $view, array $params = []): string {
-        return $this->phpFileOutput("{$this->viewsDirectory}/{$view}.php", $params);
+        $viewContent = $this->phpFileOutput("{$this->viewsDirectory}/{$view}.php", $params);
+        $viewContent = $this->spoofingParse($viewContent);
+        return $viewContent;
     }
 
     protected function renderLayout(string $layout) {
