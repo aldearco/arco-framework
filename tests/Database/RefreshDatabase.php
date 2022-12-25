@@ -13,7 +13,7 @@ trait RefreshDatabase {
             $this->driver = singleton(DatabaseDriver::class, PDODriver::class);
             Model::setDatabaseDriver($this->driver);
             try {
-                $this->driver->connect("mysql", "localhost", 3306, "curso_framework_tests", "root", "");
+                $this->driver->connect("mysql", "localhost", 3306, "arco_tests", "root", "");
             } catch (PDOException $e) {
                 $this->markTestSkipped("Can't connect to test database: {$e->getMessage()}");
             }
@@ -21,7 +21,7 @@ trait RefreshDatabase {
     }
 
     protected function tearDown(): void {
-        $this->driver->statement("DROP DATABASE IF EXISTS curso_framework_tests");
-        $this->driver->statement("CREATE DATABASE curso_framework_tests");
+        $this->driver->statement("DROP DATABASE IF EXISTS arco_tests");
+        $this->driver->statement("CREATE DATABASE arco_tests");
     }
 }
