@@ -18,7 +18,7 @@ trait Spoofing {
      */
     public function spoofingParse(string $viewContent): string {
         if (preg_match($this->method_match, $viewContent)) {
-            $input = '<input type="text" name="_method" value="$1">';
+            $input = '<input type="hidden" name="_method" value="$1">';
             $viewContent = preg_replace($this->method_match, $input, $viewContent);
         }
 
