@@ -16,16 +16,17 @@ class Serve extends Command {
     protected function configure() {
         $this
             ->addOption("host", null, InputOption::VALUE_OPTIONAL, "Host address", "127.0.0.1")
-            ->addOption("port", null, InputOption::VALUE_OPTIONAL, "Port", "8080");
+            ->addOption("port", null, InputOption::VALUE_OPTIONAL, "Port", "8080")
+            ->addOption("public", null, InputOption::VALUE_OPTIONAL, "Public directory name in the project root", "public");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $host = $input->getOption("host");
         $port = $input->getOption("port");
-        $publicDirectory = App::$root . "/public";
+        $publicDirectory = App::$root . "/" . $input->getOption("public");
 
         $output->writeln("<info>Starting PHP development server on $host:$port</info>");
-        shell_exec("php -S $host:$port $publicDirectory/index.php");
+        shell_exec("cd $publicDirectory/; php -S $host:$port");
 
         return Command::SUCCESS;
     }
