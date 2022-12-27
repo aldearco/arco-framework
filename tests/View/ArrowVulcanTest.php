@@ -34,7 +34,7 @@ class ArrowVulcanTest extends TestCase {
         ';
 
         $content = $this->engine->render("test", compact("parameter1", "parameter2"), "layout");
-        // var_dump($content); die;
+        
         $this->assertEquals(preg_replace("/\s*/", "", $expected), preg_replace("/\s*/", "", $content));
     }
 

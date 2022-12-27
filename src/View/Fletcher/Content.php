@@ -9,6 +9,11 @@ trait Content {
 
     public string $endContentTag = "@endcontent";
 
+    /**
+     * If the `$this->startContentTag` and `$this->endContentTag` tags are set, extract their content and save it in `$this->viewContent`
+     *
+     * @return static
+     */
     public function extractContent(): static {
         $start = strpos($this->viewContent, $this->startContentTag);
 

@@ -21,6 +21,11 @@ trait Links {
 
     public string $scripts;
 
+    /**
+     * If the `$this->startStylesTag` and `$this->endStylesTag` tags are set, extract their content and save it in `$this->styles`
+     *
+     * @return static
+     */
     public function getStyles(): static {
         $start = strpos($this->viewContent, $this->startStylesTag);
 
@@ -46,11 +51,21 @@ trait Links {
         return $this;
     }
 
+    /**
+     * Replace the `$this->stylesTag` tag in `$this->layoutLayout` with the content of `$this->styles`
+     *
+     * @return static
+     */
     public function setStlyes(): static {
         $this->layoutContent = str_replace($this->stylesTag, $this->styles, $this->layoutContent);
         return $this;
     }
 
+    /**
+     * If the `$this->startScriptsTag` and `$this->endScriptsTag` tags are set, extract their content and save it in `$this->scripts`
+     *
+     * @return static
+     */
     public function getScripts(): static {
         $start = strpos($this->viewContent, $this->startScriptsTag);
 
@@ -76,6 +91,11 @@ trait Links {
         return $this;
     }
 
+    /**
+     * Replace the `$this->scriptsTag` tag in `$this->layoutLayout` with the content of `$this->scripts`
+     *
+     * @return static
+     */
     public function setScripts(): static {
         $this->layoutContent = str_replace($this->scriptsTag, $this->scripts, $this->layoutContent);
         return $this;

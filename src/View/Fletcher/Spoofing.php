@@ -11,7 +11,7 @@ trait Spoofing {
     public string $method_match = '/@method->\((PUT|PATCH|DELETE)\)/';
 
     /**
-     * Parse `$viewContent` (PHP or HTML code) if matches `@method->PUT|PATCH|DELETE`
+     * Parse `$this->viewContent` (PHP or HTML code) if matches `@method->(PUT|PATCH|DELETE)`
      *
      * @param string $viewContent
      * @return string
