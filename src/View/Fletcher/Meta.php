@@ -3,7 +3,7 @@
 namespace Arco\View\Fletcher;
 
 trait Meta {
-    public string $defaultTitle = "Hola";
+    public string $titleTag = "@title";
 
     public string $metaTitle;
 
@@ -12,17 +12,19 @@ trait Meta {
     public string $delete_title_directive_regex = '/@title->\([^)]+\)/';
     
 
-    public function getMetaTitle(string $file): bool {
-        if (preg_match($this->title_directive_regex, $file, $matches)) {
+    public function getMetaTitle(): static {
+        if (preg_match($this->title_directive_regex, $this->viewContent, $matches)) {
             $this->metaTitle = $matches[1];
-            return true;
+            $viewContent = preg_replace($this->delete_title_directive_regex, "", $this->viewContent);
+            $this->viewContent = $viewContent;
+            return $this;
         }
-        $this->metaTitle = $this->defaultTitle;
-        return false;
+        $this->metaTitle = env("APP_NAME");
+        return $this;
     }
 
-    public function setMetaTitle(string $layoutContent): string {
-        $layoutContent = str_replace('@title', $this->metaTitle, $layoutContent);
-        return $layoutContent;
+    public function setMetaTitle(): static {
+        $this->layoutContent = str_replace($this->titleTag, $this->metaTitle, $this->layoutContent);
+        return $this;
     }
 }

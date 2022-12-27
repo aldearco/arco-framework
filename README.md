@@ -2,7 +2,7 @@
 
 This framework is inspired by Laravel and in no way wants to compete against Laravel.
 
-Arco Framework has been created within an educational framework following the Mastermind course below:
+Arco Framework has been created within an educational aim following the Mastermind course below:
 
 **`Create your own Web Framework with PHP`**
 - https://www.mastermind.ac/courses/crea-tu-propio-framework-desde-cero

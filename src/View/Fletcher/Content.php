@@ -9,20 +9,22 @@ trait Content {
 
     public string $endContentTag = "@endcontent";
 
-    public function extractContent(string $file): self {
-        $start = strpos($file, "$this->startContentTag");
+    public function extractContent(): static {
+        $start = strpos($this->viewContent, $this->startContentTag);
 
         if ($start === false) {
-            throw new MissingTagException("Content start tag '$this->startContentTag' is missing in your file view.");
+            $this->viewContent = $this->viewContent;
+
+            return $this;
         }
 
-        $end = strpos($file, $this->endContentTag, $start);
+        $end = strpos($this->viewContent, $this->endContentTag, $start);
 
         if ($end === false) {
-            throw new MissingTagException("Content end tag '$this->endContentTag' is missing in your file view.");
+            throw new MissingTagException("Content end tag '$this->endContentTag' is missing in your view.");
         }
 
-        $content = substr($file, $start + strlen($this->startContentTag), $end - $start - strlen($this->startContentTag));
+        $content = substr($this->viewContent, $start + strlen($this->startContentTag), $end - $start - strlen($this->startContentTag));
         
         $this->viewContent = $content;
 
