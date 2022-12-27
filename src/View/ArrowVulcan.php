@@ -2,9 +2,13 @@
 
 namespace Arco\View;
 
+use Arco\View\Fletcher\Content;
+use Arco\View\Fletcher\Meta;
 use Arco\View\Fletcher\Spoofing;
 
 class ArrowVulcan implements View {
+    use Meta;
+    use Content;
     use Spoofing;
 
     protected string $viewsDirectory;
@@ -13,26 +17,32 @@ class ArrowVulcan implements View {
 
     protected string $contentTag = "@content";
 
+    protected string $viewContent;
+
 
     public function __construct(string $viewsDirectory) {
         $this->viewsDirectory = $viewsDirectory;
     }
 
     public function render(string $view, array $params = [], string $layout = null): string {
-        $layoutContent = $this->renderLayout($layout ?? $this->defaultLayout);
         $viewContent = $this->renderView($view, $params);
+        $layoutContent = $this->renderLayout($layout ?? $this->defaultLayout);
 
         return str_replace($this->contentTag, $viewContent, $layoutContent);
     }
 
     protected function renderView(string $view, array $params = []): string {
-        $viewContent = $this->phpFileOutput("{$this->viewsDirectory}/{$view}.php", $params);
-        $viewContent = $this->spoofingParse($viewContent);
-        return $viewContent;
+        $file = $this->phpFileOutput("{$this->viewsDirectory}/{$view}.php", $params);
+        $this->getMetaTitle($file);
+        $this->extractContent($file)
+            ->spoofingParse();
+        return $this->viewContent;
     }
 
     protected function renderLayout(string $layout) {
-        return $this->phpFileOutput("{$this->viewsDirectory}/layouts/{$layout}.php");
+        $layoutContent = $this->phpFileOutput("{$this->viewsDirectory}/layouts/{$layout}.php");
+        $layoutContent = $this->setMetaTitle($layoutContent);
+        return $layoutContent;
     }
 
     protected function phpFileOutput(string $phpFile, array $params = []): string {
