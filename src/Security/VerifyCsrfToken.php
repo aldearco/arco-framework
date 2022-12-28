@@ -10,6 +10,12 @@ use Arco\Http\HttpMethod;
 use Arco\Http\Middleware;
 
 class VerifyCsrfToken implements Middleware {
+
+    /**
+     * Array with the URIs you want to exclude from CSRF Validation
+     *
+     * @var array
+     */
     protected array $exceptions = [];
 
     private array $protectedMethods = [
@@ -46,7 +52,7 @@ class VerifyCsrfToken implements Middleware {
     }
 
     protected function inExceptions(Request $request) {
-        return in_array($request->uri(), $this->exceptions);
+        return in_array($request->route()->uri(), $this->exceptions);
     }
 
     public function handle(Request $request, Closure $next): Response {

@@ -9,7 +9,7 @@
                     </div>
                     <div class="card-body">
                         <form method="post">
-                            <input type="hidden" name="_token" class="form-control" value="<?= csrf_token() ?>">
+                            @csrf
                             <div class="mb-3">
                                 <label class="text">Text</label>
                                 <input name="text" type="text" value="<?= old("text") ?>" class="form-control">

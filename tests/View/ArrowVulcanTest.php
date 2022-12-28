@@ -12,6 +12,7 @@ class ArrowVulcanTest extends TestCase {
     protected function setUp(): void {
         Dotenv::createImmutable(__DIR__."/../../")->load();
         $this->engine = new ArrowVulcan(__DIR__."/views");
+        $this->engine->runningTests();
     }
 
     public function test_renders_template_with_all_features() {
