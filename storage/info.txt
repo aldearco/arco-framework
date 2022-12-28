@@ -1,3 +1,0 @@
-Storage folder is not available by default.
-
-If you want to access by URI, run `php arco storage:link` to make a symbolic link between directories.

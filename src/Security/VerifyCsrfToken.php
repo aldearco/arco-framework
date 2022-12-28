@@ -10,7 +10,6 @@ use Arco\Http\HttpMethod;
 use Arco\Http\Middleware;
 
 class VerifyCsrfToken implements Middleware {
-
     /**
      * Array with the URIs you want to exclude from CSRF Validation
      *
