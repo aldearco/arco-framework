@@ -41,7 +41,7 @@ trait Links {
         }
 
         $styles = substr($this->viewContent, $start + strlen($this->startStylesTag), $end - $start - strlen($this->startStylesTag));
-        
+
         $this->styles = $styles;
 
         $content = substr_replace($this->viewContent, '', $start, $end + strlen($this->endStylesTag) - $start);
@@ -81,7 +81,7 @@ trait Links {
         }
 
         $scripts = substr($this->viewContent, $start + strlen($this->startScriptsTag), $end - $start - strlen($this->startScriptsTag));
-        
+
         $this->scripts = $scripts;
 
         $content = substr_replace($this->viewContent, '', $start, $end + strlen($this->endScriptsTag) - $start);
@@ -100,6 +100,4 @@ trait Links {
         $this->layoutContent = str_replace($this->scriptsTag, $this->scripts, $this->layoutContent);
         return $this;
     }
-
-
 }

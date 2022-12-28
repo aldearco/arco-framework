@@ -1,5 +1,6 @@
 <?php
 
+use Arco\Helpers\Arrows\Cookie;
 use Arco\Http\Request;
 use Arco\Http\Response;
 
@@ -51,4 +52,11 @@ function view(string $view, array $params = [], string $layout = null): Response
  */
 function request(): Request {
     return app()->request;
+}
+
+/**
+ * Get CSRF Token if exists
+ */
+function csrf_token(): string|null {
+    return session()->token();
 }

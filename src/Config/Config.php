@@ -8,7 +8,7 @@ class Config {
      *
      * @var array
      */
-    private static array $config;
+    private static array $config = [];
 
     /**
      * Load all config from the app config directory files

@@ -4,12 +4,17 @@ namespace Arco\Tests\Routing;
 
 use Closure;
 use Arco\Http\Request;
+use Arco\Config\Config;
 use Arco\Http\Response;
 use Arco\Routing\Router;
 use Arco\Http\HttpMethod;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase {
+    protected function setUp(): void {
+        Config::load("/config");
+    }
+
     private function createMockRequest(string $uri, HttpMethod $method): Request {
         return (new Request())
             ->setUri($uri)

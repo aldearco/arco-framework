@@ -10,7 +10,7 @@ trait Meta {
     public string $title_directive_regex = '/@title->\(([^)]+)\)/';
 
     public string $delete_title_directive_regex = '/@title->\([^)]+\)/';
-    
+
 
     /**
      * If the `@title->(Page Title)` tag are set, extract their content and save it in `$this->metaTitle`

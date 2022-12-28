@@ -30,10 +30,9 @@ trait Content {
         }
 
         $content = substr($this->viewContent, $start + strlen($this->startContentTag), $end - $start - strlen($this->startContentTag));
-        
+
         $this->viewContent = $content;
 
         return $this;
     }
-
 }

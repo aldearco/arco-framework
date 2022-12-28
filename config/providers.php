@@ -15,7 +15,6 @@ return [
         Arco\Providers\AuthenticatorServiceProvider::class,
         Arco\Providers\HasherServiceProvider::class,
         Arco\Providers\FileStorageDriverServiceProvider::class,
-
         /**
          * Package service providers
          */
@@ -26,7 +25,7 @@ return [
     "runtime" => [
         App\Providers\RuleServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\AppServiceProvider::class
+        App\Providers\AppServiceProvider::class,
     ],
     "cli" => [
         Arco\Providers\DatabaseDriverServiceProvider::class,
