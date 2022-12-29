@@ -2,6 +2,8 @@
 
 namespace Arco\Session;
 
+use Arco\Crypto\Bin2hex;
+
 class PhpNativeSessionStorage implements SessionStorage {
     public function start() {
         if (!session_start()) {

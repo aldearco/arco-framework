@@ -12,6 +12,7 @@ class ArrowVulcanTest extends TestCase {
     protected function setUp(): void {
         Dotenv::createImmutable(__DIR__."/../../")->load();
         $this->engine = new ArrowVulcan(__DIR__."/views");
+        $this->engine->runningTests();
     }
 
     public function test_renders_template_with_all_features() {
@@ -34,8 +35,7 @@ class ArrowVulcanTest extends TestCase {
         ';
 
         $content = $this->engine->render("test", compact("parameter1", "parameter2"), "layout");
-        
+
         $this->assertEquals(preg_replace("/\s*/", "", $expected), preg_replace("/\s*/", "", $content));
     }
-
 }

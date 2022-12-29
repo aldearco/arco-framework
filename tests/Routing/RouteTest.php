@@ -2,10 +2,15 @@
 
 namespace Arco\Tests\Routing;
 
+use Arco\Config\Config;
 use Arco\Routing\Route;
 use PHPUnit\Framework\TestCase;
 
 class RouteTest extends TestCase {
+    protected function setUp(): void {
+        Config::load("/config");
+    }
+
     public function routesWithNoParameters() {
         return [
             ["/"],

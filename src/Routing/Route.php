@@ -55,6 +55,10 @@ class Route {
         $this->regex = preg_replace('/\{([a-zA-Z_-]+)\}/', '([a-zA-Z0-9]+)', $uri);
         preg_match_all('/\{([a-zA-Z_-]+)\}/', $uri, $parameters);
         $this->parameters = $parameters[1];
+
+        if (config("http.csrf.enabled", false)) {
+            $this->setMiddlewares([config("http.csrf.middleware")]);
+        }
     }
 
     /**
@@ -91,7 +95,8 @@ class Route {
      * @return self
      */
     public function setMiddlewares(array $middlewares): self {
-        $this->middlewares = array_map(fn ($middleware) => new $middleware(), $middlewares);
+        $middlewaresToAdd = array_map(fn ($middleware) => new $middleware(), $middlewares);
+        $this->middlewares = array_merge($this->middlewares, $middlewaresToAdd);
         return $this;
     }
 

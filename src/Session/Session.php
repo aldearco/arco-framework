@@ -2,6 +2,8 @@
 
 namespace Arco\Session;
 
+use Arco\Crypto\Bin2hex;
+
 class Session {
     protected SessionStorage $storage;
 
@@ -10,6 +12,10 @@ class Session {
     public function __construct(SessionStorage $storage) {
         $this->storage = $storage;
         $this->storage->start();
+
+        if (!$this->storage->has('_token')) {
+            $this->regenerateToken();
+        }
 
         if (!$this->storage->has(self::FLASH_KEY)) {
             $this->storage->set(self::FLASH_KEY, ["old" => [], "new" => []]);
@@ -60,5 +66,13 @@ class Session {
 
     public function destroy() {
         return $this->storage->destroy();
+    }
+
+    public function token() {
+        return $this->storage->get('_token');
+    }
+
+    public function regenerateToken() {
+        $this->storage->set('_token', Bin2hex::random());
     }
 }

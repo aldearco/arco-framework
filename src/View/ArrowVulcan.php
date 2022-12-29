@@ -5,6 +5,7 @@ namespace Arco\View;
 use Arco\View\Fletcher\Meta;
 use Arco\View\Fletcher\Links;
 use Arco\View\Fletcher\Content;
+use Arco\View\Fletcher\OtherTags;
 use Arco\View\Fletcher\Spoofing;
 
 class ArrowVulcan implements View {
@@ -12,6 +13,7 @@ class ArrowVulcan implements View {
     use Links;
     use Content;
     use Spoofing;
+    use OtherTags;
 
     protected string $viewsDirectory;
 
@@ -75,6 +77,7 @@ class ArrowVulcan implements View {
             ->getStyles()
             ->getScripts()
             ->extractContent()
+            ->csrfTagParse()
             ->spoofingParse();
         return $this->viewContent;
     }
