@@ -11,9 +11,9 @@
                         <form method="post">
                             @csrf
                             <div class="mb-3">
-                                <label class="text">Text</label>
-                                <input name="text" type="text" value="<?= old("text") ?>" class="form-control">
-                                <div class="text-danger"><?= error("text") ?></div>
+                                <label class="text">Email</label>
+                                <input name="email" type="text" value="<?= old("email") ?>" class="form-control">
+                                <div class="text-danger"><?= error("email") ?></div>
                             </div>
 
                             <button type="submit" class="btn btn-primary">Submit</button>

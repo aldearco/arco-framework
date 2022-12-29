@@ -103,11 +103,15 @@ class App {
         } catch (ValidationException $e) {
             $this->abort(back()->withErrors($e->errors(), 422));
         } catch (Throwable $e) {
-            $response = json([
-                "error" => $e::class,
-                "message" => $e->getMessage(),
-                "trace" => $e->getTrace()
-            ]);
+            if(config('app.env', 'dev') === "dev") {
+                $response = json([
+                    "error" => $e::class,
+                    "message" => $e->getMessage(),
+                    "trace" => $e->getTrace()
+                ]);
+            } else {
+                $response = Response::text("Internal Server Error");
+            }
             $this->abort($response->setStatus(500));
         }
     }

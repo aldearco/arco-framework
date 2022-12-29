@@ -2,20 +2,21 @@
 
 namespace Arco\Validation;
 
-use Arco\Validation\Exceptions\RuleParseException;
-use Arco\Validation\Exceptions\UnknownRuleException;
+use ReflectionClass;
+use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
 use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\Number;
+use Arco\Validation\Rules\Unique;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
 use Arco\Validation\Rules\GreaterThan;
-use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Rules\ValidationRule;
-use ReflectionClass;
+use Arco\Validation\Exceptions\RuleParseException;
+use Arco\Validation\Exceptions\UnknownRuleException;
 
 /**
  * Rule class manage all validation rules of this framework
@@ -43,7 +44,8 @@ class Rule {
         Number::class,
         Required::class,
         RequiredWhen::class,
-        RequiredWith::class
+        RequiredWith::class,
+        Unique::class,
     ];
 
     /**
