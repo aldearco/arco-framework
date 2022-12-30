@@ -44,3 +44,15 @@ function snake_case(string $str): string {
 
     return implode($snake_cased);
 }
+
+/**
+ * Get class basename and its returned as string
+ *
+ * @param string|object $class
+ * @return string
+ */
+function class_basename(string|object $class): string {
+    $class = is_object($class) ? get_class($class) : $class;
+
+    return basename(str_replace('\\', '/', $class));
+}
