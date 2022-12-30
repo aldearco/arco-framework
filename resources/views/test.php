@@ -1,5 +1,4 @@
 @title->(CSRF)
-
     @content
         <div class="d-flex justify-content-center align-items-center pt-4">
             <div class="col-lg-4 col-md-6 col-12">
