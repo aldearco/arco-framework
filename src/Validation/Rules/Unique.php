@@ -7,8 +7,7 @@ use Arco\Database\DB;
 class Unique implements ValidationRule {
     public function __construct(
         private string $params
-    )
-    {
+    ) {
         $this->params = $params;
     }
 

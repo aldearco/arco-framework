@@ -103,7 +103,7 @@ class App {
         } catch (ValidationException $e) {
             $this->abort(back()->withErrors($e->errors(), 422));
         } catch (Throwable $e) {
-            if(config('app.env', 'dev') === "dev") {
+            if (config('app.env', 'dev') === "dev") {
                 $response = json([
                     "error" => $e::class,
                     "message" => $e->getMessage(),
