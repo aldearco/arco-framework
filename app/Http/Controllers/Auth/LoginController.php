@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Arco\Http\Request;
 use Arco\Crypto\Hasher;
-use Arco\Http\Controller;
+use App\Http\Controllers\Controller;
 
 class LoginController extends Controller {
     public function create() {

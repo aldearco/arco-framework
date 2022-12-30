@@ -5,8 +5,10 @@ namespace Arco\Cli;
 use Dotenv\Dotenv;
 use Arco\App;
 use Arco\Cli\Commands\MakeController;
+use Arco\Cli\Commands\MakeMiddleware;
 use Arco\Cli\Commands\MakeMigration;
 use Arco\Cli\Commands\MakeModel;
+use Arco\Cli\Commands\MakePolicy;
 use Arco\Cli\Commands\Migrate;
 use Arco\Cli\Commands\MigrateRollback;
 use Arco\Cli\Commands\Serve;
@@ -58,6 +60,8 @@ class Cli {
             new MakeController(),
             new MakeModel(),
             new Serve(),
+            new MakePolicy(),
+            new MakeMiddleware(),
         ]);
 
         $cli->run();

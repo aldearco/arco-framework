@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Http\Controllers;
 
-use Arco\Http\Controller;
+use App\Http\Controllers\Controller;
 
 class ControllerName extends Controller {
     //

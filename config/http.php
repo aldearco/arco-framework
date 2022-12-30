@@ -3,6 +3,6 @@
 return [
     "csrf" => [
         "enabled" => true,
-        "middleware" => App\Middlewares\VerifyCsrfToken::class
+        "middleware" => App\Http\Middlewares\VerifyCsrfToken::class
     ]
 ];

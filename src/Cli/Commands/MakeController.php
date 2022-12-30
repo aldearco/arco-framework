@@ -18,11 +18,11 @@ class MakeController extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $controllerName = $input->getArgument("name");
+        $name = $input->getArgument("name");
         $template = file_get_contents(resourcesDirectory()."/templates/controller.php");
-        $template = str_replace("ControllerName", $controllerName, $template);
-        file_put_contents(App::$root . "/app/Controllers/$controllerName.php", $template);
-        $output->writeln("<info>Controller created => $controllerName.php</info>");
+        $template = str_replace("ControllerName", $name, $template);
+        file_put_contents(App::$root . "/app/Http/Controllers/$name.php", $template);
+        $output->writeln("<info>Controller created => $name.php</info>");
 
         return Command::SUCCESS;
     }
