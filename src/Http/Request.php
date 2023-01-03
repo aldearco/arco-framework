@@ -194,6 +194,16 @@ class Request {
     }
 
     /**
+     * Return if isset `$key` inside request data array
+     *
+     * @param string $key
+     * @return boolean
+     */
+    public function has(string $key): bool {
+        return isset($this->data[$key]);
+    }
+
+    /**
      * Get all query params as key-value or get only specific value by providing
      * a `$key`.
      *
