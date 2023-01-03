@@ -7,14 +7,13 @@
                         <h1 class="display-6">Login</h1>
                     </div>
                     <div class="card-body">
-                        <form method="post">
+                        <form method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label class="text">Email</label>
-                                <input name="email" type="text" value="<?= old("email") ?>" class="form-control">
-                                <div class="text-danger"><?= error("email") ?></div>
+                                <input name="file" type="file" value="<?= old("file") ?>" class="form-control">
+                                <div class="text-danger"><?= error("file") ?></div>
                             </div>
-
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>

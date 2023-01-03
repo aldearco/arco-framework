@@ -13,8 +13,7 @@ class FileStorageDriverServiceProvider {
                 FileStorageDriver::class,
                 fn () => new DiskFileStorage(
                     App::$root . "/storage",
-                    "storage",
-                    config("app.url")
+                    "storage"
                 )
             ),
         };
