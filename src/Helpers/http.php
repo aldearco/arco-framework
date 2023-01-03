@@ -1,6 +1,5 @@
 <?php
 
-use Arco\Helpers\Arrows\Cookie;
 use Arco\Http\Request;
 use Arco\Http\Response;
 
@@ -12,6 +11,15 @@ use Arco\Http\Response;
  */
 function json(array $data): Response {
     return Response::json($data);
+}
+
+/**
+ * Return new response
+ *
+ * @return void
+ */
+function response() {
+    return new Response();
 }
 
 /**
