@@ -11,6 +11,7 @@ return new class() implements Migration {
                 name VARCHAR(256),
                 email VARCHAR(256) UNIQUE,
                 password VARCHAR(256),
+                remember_token VARCHAR(100) NULL,
                 created_at DATETIME,
                 updated_at DATETIME NULL
             )

@@ -3,7 +3,7 @@
 namespace Arco\Helpers\Arrows;
 
 class Cookie {
-    public static function set(string $name, $value, $expire = 0, $path = '/', $domain = null, $secure = false, $httpOnly = true) {
+    public static function set(string $name, $value, $expire = 0, $path = '/', $domain = "", $secure = false, $httpOnly = true) {
         setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 
@@ -15,7 +15,11 @@ class Cookie {
         return $default;
     }
 
-    public static function delete($name, $path = '/', $domain = null) {
+    public static function exists(string $name): bool {
+        return isset($_COOKIE[$name]);
+    }
+
+    public static function delete($name, $path = '/', $domain = "") {
         setcookie($name, '', time() - 3600, $path, $domain);
     }
 }

@@ -22,6 +22,12 @@
                 <div class="text-danger"><?= error("password") ?></div>
               </div>
 
+              <div class="mb-3">
+                <input class="form-check-input" type="checkbox" name="remember" id="remember" <?php old('remember') ? 'checked' : '' ?>>
+                <label class="form-check-label" for="remember">
+                  Remember
+                </label>
+              </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>
