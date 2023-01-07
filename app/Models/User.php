@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Note;
 use Arco\Auth\Authenticatable;
 
 class User extends Authenticatable {
@@ -15,4 +16,9 @@ class User extends Authenticatable {
         "email",
         "password"
     ];
+
+    public function notes() {
+        return $this->belongsToMany(Note::class, 'notes_users');
+    }
+
 }

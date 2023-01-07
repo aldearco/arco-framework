@@ -2,6 +2,7 @@
 
 namespace Arco\Database\Archer;
 
+use Arco\Helpers\Arrows\Str;
 use Arco\Database\Archer\About\Relations;
 use Arco\Database\Drivers\DatabaseDriver;
 
@@ -117,24 +118,44 @@ abstract class Model {
     }
 
     /**
-     * Get the primary key name for this model
+     * Get table name
+     *
+     * @return string
      */
-    protected function getPrimaryKey() {
+    public function getTable(): string {
+        return $this->table;
+    }
+
+    /**
+     * Get the primary key name for this model
+     *
+     * @return string
+     */
+    public function getKeyName(): string {
         return $this->primaryKey;
     }
 
     /**
      * Set the value of the primary key in attributes
      */
-    protected function setPrimaryKeyAttribute(int|string $primaryKey) {
+    public function setPrimaryKeyAttribute(int|string $primaryKey) {
         $this->__set($this->primaryKey, $primaryKey);
     }
 
     /**
      * Get the value of the primary key in attributes
      */
-    protected function getPrimaryKeyAttribute() {
+    public function getKey() {
         return $this->__get($this->primaryKey);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getForeignKey(): string {
+        return Str::snake($this->getBasename()).'_'.$this->getKeyName();
     }
 
     /**
@@ -178,6 +199,11 @@ abstract class Model {
         );
     }
 
+    /**
+     * Create a new row in database
+     *
+     * @return static
+     */
     public function save(): static {
         if ($this->insertTimestamps) {
             $this->attributes["created_at"] = date("Y-m-d H:m:s");
@@ -197,6 +223,11 @@ abstract class Model {
         return $this;
     }
 
+    /**
+     * Update model attributes in database
+     *
+     * @return static
+     */
     public function update(): static {
         if ($this->insertTimestamps) {
             $this->attributes["updated_at"] = date("Y-m-d H:m:s");
@@ -214,6 +245,11 @@ abstract class Model {
         return $this;
     }
 
+    /**
+     * Delete the row in database
+     *
+     * @return static
+     */
     public function delete(): static {
         self::$driver->statement(
             "DELETE FROM $this->table WHERE $this->primaryKey = {$this->attributes[$this->primaryKey]}"
