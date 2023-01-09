@@ -49,8 +49,18 @@ class Cli {
         return new self();
     }
 
+    public function appText() {
+        return "<fg=#57B25F>
+   _____                       
+  /  _  \_______   _____ ____  
+ /  /_\  \_  __ \_/ ___ /  _ \ 
+/    |    \  | \/\  \__(  (_) )
+\____|____/__|    \_____\____/    </> 
+<fg=#57B25F>Arco Framework - PHP Tools</>";
+    }
+
     public function run() {
-        $cli = new Application("Arco");
+        $cli = new Application($this->appText());
 
         $cli->addCommands([
             new MakeMigration(),
