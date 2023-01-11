@@ -39,7 +39,7 @@ class FileLoader implements Loader {
 
     protected function getFileContents(string $path) {
         return match ($this->fileType) {
-            "php" => require_once $path,
+            "php" => include $path,
             "json" => json_decode(file_get_contents($path), true)
         };
     }

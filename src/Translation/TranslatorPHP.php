@@ -12,16 +12,19 @@ class TranslatorPHP implements Translator {
 
     protected array $loaded = [];
 
+    public string $globalNamespace;
+
     /**
      * Create new translator instance.
      *
      * @param Loader $loader
      * @param string $locale
+     * @param string $globalNamespace
      */
-    public function __construct(Loader $loader, string $locale) {
-        $this->loaded = $loader;
-
+    public function __construct(Loader $loader, string $locale, string $globalNamespace = '*') {
+        $this->loader = $loader;
         $this->setLocale($locale);
+        $this->globalNamespace = $globalNamespace;
     }
 
     /**
@@ -46,13 +49,13 @@ class TranslatorPHP implements Translator {
         if (str_contains($key, '/')) {
             return dirname($key);
         }
-        return null;
+        return $this->globalNamespace;
     }
 
     public function getGroup(string $key) {
         if (str_contains($key, '/')) {
             $path = $this->getNamespace($key);
-            $key = substr_replace($path.'/', '', $key);
+            $key = str_replace($path.'/', '', $key);
         }
 
         return explode('.', $key)[0];
@@ -61,7 +64,7 @@ class TranslatorPHP implements Translator {
     public function getItem(string $key) {
         if (str_contains($key, '/')) {
             $path = $this->getNamespace($key);
-            $key = substr_replace($path.'/', '', $key);
+            $key = str_replace($path.'/', '', $key);
         }
 
         return explode('.', $key)[1];
@@ -93,7 +96,7 @@ class TranslatorPHP implements Translator {
         $locale = $locale ?: $this->locale;
 
         $this->load(
-            $this->getNamespace($key) ?: '*',
+            $this->getNamespace($key),
             $this->getGroup($key),
             $locale
         );

@@ -9,7 +9,7 @@ use Arco\Translation\TranslatorPHP;
 class TranslatorPHPTest extends TestCase {
     public function test_get_text_from_translation_php() {
         $translator = new TranslatorPHP(
-            new FileLoader(__DIR__.'/languages', 'php'),
+            (new FileLoader(__DIR__.'/languages', 'php')),
             'en'
         );
 
@@ -21,12 +21,12 @@ class TranslatorPHPTest extends TestCase {
 
         $this->assertEquals($expected1, $assert1);
         $this->assertEquals($expected2, $assert2);
-    } 
+    }
 
     public function test_get_text_from_translation_json() {
         $translator = new TranslatorPHP(
             new FileLoader(__DIR__.'/languages', 'json'),
-            'en'
+            'es'
         );
 
         $assert1 = $translator->get('test.test');
@@ -37,7 +37,37 @@ class TranslatorPHPTest extends TestCase {
 
         $this->assertEquals($expected1, $assert1);
         $this->assertEquals($expected2, $assert2);
-    } 
+    }
 
-    
+    public function test_get_text_from_translation_php_with_replacements() {
+        $translator = new TranslatorPHP(
+            (new FileLoader(__DIR__.'/languages', 'php')),
+            'en'
+        );
+
+        $assert = $translator->get('replacement.test', [
+            "name" => 'Alberto',
+            "number" => 2
+        ]);
+
+        $expected = "Hello, my name is Alberto and I have 2 cats";
+
+        $this->assertEquals($expected, $assert);
+    }
+
+    public function test_get_text_from_translation_json_with_replacements() {
+        $translator = new TranslatorPHP(
+            (new FileLoader(__DIR__.'/languages', 'json')),
+            'es'
+        );
+
+        $assert = $translator->get('replacement.test', [
+            "name" => 'Alberto',
+            "number" => 2
+        ]);
+
+        $expected = "Hello, my name is Alberto and I have 2 cats";
+
+        $this->assertEquals($expected, $assert);
+    }
 }
