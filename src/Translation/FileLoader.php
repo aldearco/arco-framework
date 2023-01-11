@@ -57,6 +57,6 @@ class FileLoader implements Loader {
             return $this->loadPath("{$this->path}/{$locale}/{$group}.{$this->fileType}");
         }
 
-        return $this->loadPath("{$this->path}/{$locale}/{$group}.{$this->fileType}");
+        return $this->loadPath("{$this->path}/{$locale}/{$namespace}/{$group}.{$this->fileType}");
     }
 }
