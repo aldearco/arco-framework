@@ -14,17 +14,6 @@ interface Translator {
     public function get(string $key, array $replace = [], ?string $locale = null);
 
     /**
-     * Get a translation according to an integer value.
-     *
-     * @param string $key
-     * @param integer $number
-     * @param array $replace
-     * @param string|null $locale
-     * @return string
-     */
-    public function choice(string $key, int $number, array $replace = [], ?string $locale = null): string;
-
-    /**
      * Get the locale code being used.
      *
      * @return string

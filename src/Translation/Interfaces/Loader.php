@@ -8,8 +8,8 @@ interface Loader {
      *
      * @param  string  $locale
      * @param  string  $group
-     * @param  string|null  $namespace
+     * @param  string  $namespace
      * @return array
      */
-    public function load($locale, $group, $namespace = null);
+    public function load($locale, $group, $namespace);
 }

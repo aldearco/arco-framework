@@ -6,7 +6,7 @@ use Arco\Translation\Interfaces\Loader;
 use Arco\Translation\Interfaces\Translator;
 
 class TranslatorPHP implements Translator {
-    protected Loader $loader; 
+    protected Loader $loader;
 
     protected string $locale;
 
@@ -42,24 +42,37 @@ class TranslatorPHP implements Translator {
         return $this->locale;
     }
 
-    public function getFilePath(string $key) {
+    public function getNamespace(string $key) {
         if (str_contains($key, '/')) {
             return dirname($key);
         }
         return null;
     }
 
-    public function getKeys(string $group) {        
-        return explode('.', $group);
-    }
-
     public function getGroup(string $key) {
         if (str_contains($key, '/')) {
-            $path = $this->getFilePath($key);
+            $path = $this->getNamespace($key);
             $key = substr_replace($path.'/', '', $key);
         }
-        
-        return $key;
+
+        return explode('.', $key)[0];
+    }
+
+    public function getItem(string $key) {
+        if (str_contains($key, '/')) {
+            $path = $this->getNamespace($key);
+            $key = substr_replace($path.'/', '', $key);
+        }
+
+        return explode('.', $key)[1];
+    }
+
+    public function keyParts(string $key): array {
+        return [
+            $this->getNamespace($key),
+            $this->getGroup($key),
+            $this->getItem($key)
+        ];
     }
 
     public function load($namespace, $group, $locale) {
@@ -67,8 +80,9 @@ class TranslatorPHP implements Translator {
             return;
         }
 
-        
+        $lines = $this->loader->load($locale, $group, $namespace);
 
+        $this->loaded[$namespace][$group][$locale] = $lines;
     }
 
     protected function isLoaded($namespace, $group, $locale) {
@@ -77,17 +91,37 @@ class TranslatorPHP implements Translator {
 
     public function get(string $key, array $replace = [], ?string $locale = null) {
         $locale = $locale ?: $this->locale;
-        
+
         $this->load(
-            $this->getFilePath($key) ?: '*',
+            $this->getNamespace($key) ?: '*',
             $this->getGroup($key),
             $locale
         );
 
+        [$namespace, $group, $item] = $this->keyParts($key);
 
+        $line = $this->loaded[$namespace][$group][$locale] ?? null;
+
+        if (is_null($line)) {
+            return $key;
+        }
+
+        $text = $this->loaded[$namespace][$group][$locale][$item];
+
+        return $this->makeReplacements($text, $replace);
     }
 
-    public function choice(string $key, int $number, array $replace = [], ?string $locale = null): string {
-        return '';
+    protected function makeReplacements(string $text, array $replace) {
+        if (empty($replace)) {
+            return $text;
+        }
+
+        $replacements = [];
+
+        foreach ($replace as $key => $value) {
+            $replacements[':'.$key] = $value;
+        }
+
+        return strtr($text, $replacements);
     }
 }
