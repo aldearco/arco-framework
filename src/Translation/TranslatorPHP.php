@@ -6,12 +6,32 @@ use Arco\Translation\Interfaces\Loader;
 use Arco\Translation\Interfaces\Translator;
 
 class TranslatorPHP implements Translator {
+    /**
+     * Translation file loader
+     *
+     * @var Loader
+     */
     protected Loader $loader;
 
+    /**
+     * Current locale
+     *
+     * @var string
+     */
     protected string $locale;
 
+    /**
+     * Loaded translation files
+     *
+     * @var array
+     */
     protected array $loaded = [];
 
+    /**
+     * Global namespace for translation files
+     *
+     * @var string
+     */
     public string $globalNamespace;
 
     /**
@@ -45,6 +65,12 @@ class TranslatorPHP implements Translator {
         return $this->locale;
     }
 
+    /**
+     * Get the namespace for a translation key
+     *
+     * @param string $key
+     * @return string
+     */
     public function getNamespace(string $key) {
         if (str_contains($key, '/')) {
             return dirname($key);
@@ -52,6 +78,12 @@ class TranslatorPHP implements Translator {
         return $this->globalNamespace;
     }
 
+    /**
+     * Get the group for a translation key
+     *
+     * @param string $key
+     * @return string
+     */
     public function getGroup(string $key) {
         if (str_contains($key, '/')) {
             $path = $this->getNamespace($key);
@@ -61,6 +93,12 @@ class TranslatorPHP implements Translator {
         return explode('.', $key)[0];
     }
 
+    /**
+     * Get the item for a translation key
+     *
+     * @param string $key
+     * @return string
+     */
     public function getItem(string $key) {
         if (str_contains($key, '/')) {
             $path = $this->getNamespace($key);
@@ -70,6 +108,12 @@ class TranslatorPHP implements Translator {
         return explode('.', $key)[1];
     }
 
+    /**
+     * Get the namespace, group, and item for a translation key
+     *
+     * @param string $key
+     * @return array
+     */
     public function keyParts(string $key): array {
         return [
             $this->getNamespace($key),
@@ -78,6 +122,13 @@ class TranslatorPHP implements Translator {
         ];
     }
 
+    /**
+     * Loads a translation file, given the namespace, group and locale. If the file has already been loaded, it returns nothing.
+     *
+     * @param string $namespace The namespace of the translation file
+     * @param string $group The group of the translation file
+     * @param string $locale The locale of the translation file
+     */
     public function load($namespace, $group, $locale) {
         if ($this->isLoaded($namespace, $group, $locale)) {
             return;
@@ -88,10 +139,26 @@ class TranslatorPHP implements Translator {
         $this->loaded[$namespace][$group][$locale] = $lines;
     }
 
+    /**
+     * Check if a translation file has been loaded
+     *
+     * @param string $namespace The namespace of the translation file
+     * @param string $group The group of the translation file
+     * @param string $locale The locale of the translation file
+     * @return bool
+     */
     protected function isLoaded($namespace, $group, $locale) {
         return isset($this->loaded[$namespace][$group][$locale]);
     }
 
+    /**
+     * Get the translated string for a given key.
+     *
+     * @param string $key The key of the translation string
+     * @param array $replace The values to replace in the translation string
+     * @param string|null $locale The locale of the translation file
+     * @return string
+     */
     public function get(string $key, array $replace = [], ?string $locale = null) {
         $locale = $locale ?: $this->locale;
 
@@ -114,6 +181,13 @@ class TranslatorPHP implements Translator {
         return $this->makeReplacements($text, $replace);
     }
 
+    /**
+     * Replace placeholders (example: `:placeholder`) in a string with the given values
+     *
+     * @param string $text
+     * @param array $replace
+     * @return void
+     */
     protected function makeReplacements(string $text, array $replace) {
         if (empty($replace)) {
             return $text;
