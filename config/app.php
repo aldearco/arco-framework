@@ -2,7 +2,7 @@
 
 return [
     /**
-     * App Basic Configurations
+     * App Basic Settings
      */
     "name" => env("APP_NAME", "Arco"),
     "env" => env("APP_ENV", "dev"),
@@ -10,9 +10,10 @@ return [
     "key" => env("APP_KEY", "defaultKey"),
 
     /**
-     * Translation Configurations
+     * Translation Settings
      */
     "translator" => "TranslatorPHP",
+    "translationDirectory" => "/languages",
     "translationFileType" => "php",
     "locale" => "en"
 ];
