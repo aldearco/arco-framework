@@ -15,6 +15,7 @@ return [
         Arco\Providers\AuthenticatorServiceProvider::class,
         Arco\Providers\HasherServiceProvider::class,
         Arco\Providers\FileStorageDriverServiceProvider::class,
+        Arco\Providers\TranslationServiceProvider::class,
         /**
          * Package service providers
          */
