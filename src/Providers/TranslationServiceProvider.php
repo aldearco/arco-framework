@@ -13,8 +13,8 @@ class TranslationServiceProvider implements ServiceProvider {
                 'translator',
                 fn () => new TranslatorPHP(
                     new FileLoader(
-                        App::$root.config('app.translationDirectory', '/languages'),
-                        config('app.translationFileType', 'php')
+                        App::$root.config('app.translation_directory', '/languages'),
+                        config('app.translation_file_type', 'php')
                     ),
                     config('app.locale', 'en')
                 )

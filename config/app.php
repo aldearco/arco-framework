@@ -13,7 +13,7 @@ return [
      * Translation Settings
      */
     "translator" => "TranslatorPHP",
-    "translationDirectory" => "/languages",
-    "translationFileType" => "php",
+    "translation_directory" => "/languages",
+    "translation_file_type" => "php",
     "locale" => "en"
 ];
