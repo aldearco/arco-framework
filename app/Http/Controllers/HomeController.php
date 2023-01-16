@@ -15,11 +15,18 @@ class HomeController extends Controller {
     }
 
     public function sql() {
-        $table = new TableCrafter('users');
-        $table->id();
-        $table->string('name');
-        $table->string('email', uuid: true);
-        $table->string('password');
+        $table = new TableCrafter('methods');
+        $table->bigId();
+        $table->string('varchar_test', 100, true);
+        $table->integer('user_id');
+        $table->bigInteger('big_integer_test');
+        $table->decimal('decimal_test');
+        $table->text('text_test');
+        $table->date('date_test');
+        $table->time('time_test');
+        $table->timestamp('timestamp_test');
+        $table->foreignKey('user_id', 'users', 'id');
+        $table->column('custom_column', "VARCHAR(22) NULL UNIQUE");
         $table->rememberToken();
         $table->timestamps();
 
