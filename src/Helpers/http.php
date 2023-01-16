@@ -95,3 +95,15 @@ if (!function_exists('csrf_input')) {
         return '<input type="hidden" name="_token" value="'.csrf_token().'">';
     }
 }
+
+if (!function_exists('route')) {
+    /**
+     * Get the URL for a named route.
+     *
+     * @param string $name
+     * @return string
+     */
+    function route(string $name): string {
+        return app()->router->getRouteUriByName($name);
+    }
+}

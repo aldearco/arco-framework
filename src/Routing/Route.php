@@ -110,6 +110,16 @@ class Route {
     }
 
     /**
+     * Register route name in the router
+     *
+     * @param string $name
+     * @return Route
+     */
+    public function name(string $name): Route {
+        return app()->router->name($this, $name);
+    }
+
+    /**
      * Check if the given `$uri` matches the regex of this route.
      *
      * @param string $uri

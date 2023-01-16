@@ -8,6 +8,7 @@ use Arco\Http\Response;
 use Arco\Http\HttpMethod;
 use Arco\Http\HttpNotFoundException;
 use Arco\Container\DependencyInjection;
+use Arco\Routing\Exceptions\RouteNameNotFoundException;
 
 /**
  * HTTP router.
@@ -19,6 +20,13 @@ class Router {
      * @var array<string, Route[]>
      */
     protected array $routes = [];
+
+    /**
+     * Route URIs Stored by Route Name
+     *
+     * @var array
+     */
+    protected array $routeNames = [];
 
     /**
      * Create a new router.
@@ -106,6 +114,44 @@ class Router {
         $this->routes[$method->value][] = $route;
 
         return $route;
+    }
+
+    /**
+     * Register a named route with the router.
+     *
+     * @param Route $route
+     * @param string $name
+     * @return Route
+     */
+    protected function registerName(Route $route, string $name): Route {
+        $this->routeNames[$name] = $route->uri();
+
+        return $route;
+    }
+
+    /**
+     * Get the URI for a named route.
+     *
+     * @param string $name
+     * @return string
+     */
+    public function getRouteUriByName(string $name): string {
+        if (isset($this->routeNames[$name])) {
+            return $this->routeNames[$name];
+        }
+
+        return $name;
+    }
+
+    /**
+     * Alias for registerName method
+     *
+     * @param Route $route
+     * @param string $name
+     * @return Route
+     */
+    public function name(Route $route, string $name): Route {
+        return $this->registerName($route, $name);
     }
 
     /**

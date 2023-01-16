@@ -32,10 +32,10 @@ class Auth {
      * @return void
      */
     public static function routes() {
-        Route::get("/register", [RegisterController::class, "create"]);
+        Route::get("/register", [RegisterController::class, "create"])->name('register');
         Route::post("/register", [RegisterController::class, "store"]);
-        Route::get("/login", [LoginController::class, "create"]);
+        Route::get("/login", [LoginController::class, "create"])->name('login');
         Route::post("/login", [LoginController::class, "store"]);
-        Route::get("/logout", [LoginController::class, "destroy"]);
+        Route::get("/logout", [LoginController::class, "destroy"])->name('logout');
     }
 }
