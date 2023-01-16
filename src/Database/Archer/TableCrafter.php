@@ -2,7 +2,7 @@
 
 namespace Arco\Database\Archer;
 
-class SQLCrafter {
+class TableCrafter {
     /**
      * Table name.
      *

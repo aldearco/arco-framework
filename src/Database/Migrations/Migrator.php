@@ -4,7 +4,7 @@ namespace Arco\Database\Migrations;
 
 use Closure;
 use Arco\Database\DB;
-use Arco\Database\Archer\SQLCrafter;
+use Arco\Database\Archer\TableCrafter;
 use Arco\Database\Drivers\DatabaseDriver;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -147,20 +147,20 @@ class Migrator {
     }
 
     public static function create(string $table, Closure $crafter) {
-        $builder = new SQLCrafter($table);
+        $builder = new TableCrafter($table);
         $crafter($builder);
         DB::statement($builder->create());
     }
 
     public static function alter(string $table, Closure $crafter) {
-        $builder = new SQLCrafter($table);
+        $builder = new TableCrafter($table);
         $crafter($builder);
         DB::statement($builder->alter());
     }
 
     public static function dropIfExists(string $table) {
         DB::statement(
-            (new SQLCrafter($table))
+            (new TableCrafter($table))
                 ->dropIfExists()
         );
     }

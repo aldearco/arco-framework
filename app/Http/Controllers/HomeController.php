@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Arco\Database\Archer\SQLCrafter;
+use Arco\Database\Archer\TableCrafter;
 
 class HomeController extends Controller {
     public function show() {
@@ -15,7 +15,7 @@ class HomeController extends Controller {
     }
 
     public function sql() {
-        $table = new SQLCrafter('users');
+        $table = new TableCrafter('users');
         $table->id();
         $table->string('name');
         $table->string('email', uuid: true);
