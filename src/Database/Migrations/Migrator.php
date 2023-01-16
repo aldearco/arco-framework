@@ -2,6 +2,9 @@
 
 namespace Arco\Database\Migrations;
 
+use Closure;
+use Arco\Database\DB;
+use Arco\Database\Archer\SQLCrafter;
 use Arco\Database\Drivers\DatabaseDriver;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -111,17 +114,18 @@ class Migrator {
     public function make(string $migrationName) {
         $migrationName = snake_case($migrationName);
 
-        $template = file_get_contents("$this->templatesDirectory/migration.php");
 
         if (preg_match("/create_.*_table/", $migrationName)) {
+            $template = file_get_contents("$this->templatesDirectory/migrations/create.php");
             $table = preg_replace_callback("/create_(.*)_table/", fn ($match) => $match[1], $migrationName);
-            $template = str_replace('$UP', "CREATE TABLE $table (id INT AUTO_INCREMENT PRIMARY KEY)", $template);
-            $template = str_replace('$DOWN', "DROP TABLE $table", $template);
+            $template = str_replace('$TABLE', $table, $template);
         } elseif (preg_match("/.*(from|to)_(.*)_table/", $migrationName)) {
+            $template = file_get_contents("$this->templatesDirectory/migrations/alter.php");
             $table = preg_replace_callback("/.*(from|to)_(.*)_table/", fn ($match) => $match[2], $migrationName);
-            $template = preg_replace('/\$UP|\$DOWN/', "ALTER TABLE $table", $template);
+            $template = str_replace('$TABLE', $table, $template);
         } else {
-            $template = preg_replace_callback("/DB::statement.*/", fn ($match) => "// {$match[0]}", $template);
+            $template = file_get_contents("$this->templatesDirectory/migrations/create.php");
+            $template = str_replace('$TABLE', 'table', $template);
         }
 
         $date = date("Y_m_d");
@@ -140,5 +144,24 @@ class Migrator {
         $this->log("<info>Migration created => $fileName</info>");
 
         return $fileName;
+    }
+
+    public static function create(string $table, Closure $crafter) {
+        $builder = new SQLCrafter($table);
+        $crafter($builder);
+        DB::statement($builder->create());
+    }
+
+    public static function alter(string $table, Closure $crafter) {
+        $builder = new SQLCrafter($table);
+        $crafter($builder);
+        DB::statement($builder->alter());
+    }
+
+    public static function dropIfExists(string $table) {
+        DB::statement(
+            (new SQLCrafter($table))
+                ->dropIfExists()
+        );
     }
 }

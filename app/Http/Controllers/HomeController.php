@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Arco\Http\Request;
-use Arco\Http\Response;
+use Arco\Database\Archer\SQLCrafter;
 
 class HomeController extends Controller {
     public function show() {
@@ -15,8 +14,15 @@ class HomeController extends Controller {
         return view("test");
     }
 
-    public function store_test(Request $request){
-        $url = $request->file('file')->store('test/pictures');
-        return Response::text($url);
+    public function sql() {
+        $table = new SQLCrafter('users');
+        $table->id();
+        $table->string('name');
+        $table->string('email', uuid: true);
+        $table->string('password');
+        $table->rememberToken();
+        $table->timestamps();
+
+        return response()->text($table->create());
     }
 }

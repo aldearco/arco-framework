@@ -8,7 +8,6 @@ use Arco\Http\Response;
 use Arco\Http\HttpMethod;
 use Arco\Http\HttpNotFoundException;
 use Arco\Container\DependencyInjection;
-use Arco\Routing\Exceptions\RouteNameNotFoundException;
 
 /**
  * HTTP router.

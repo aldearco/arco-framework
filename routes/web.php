@@ -8,3 +8,4 @@ Auth::routes();
 
 Route::get("/", fn () => redirect("/home"))->name('home');
 Route::get("/home", [HomeController::class, "show"]);
+Route::get("/sql", [HomeController::class, "sql"]);
