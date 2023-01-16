@@ -1,14 +1,19 @@
 <?php
 
-use Arco\Database\DB;
+use Arco\Database\Archer\TableCrafter;
+use Arco\Database\Migrations\Migrator;
 use Arco\Database\Migrations\Migration;
 
 return new class () implements Migration {
     public function up() {
-        DB::statement('ALTER TABLE products');
+        Migrator::alter('products', function (TableCrafter $table) {
+            //
+        });
     }
 
     public function down() {
-        DB::statement('ALTER TABLE products');
+        Migrator::alter('products', function (TableCrafter $table) {
+            //
+        });
     }
 };

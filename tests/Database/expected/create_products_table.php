@@ -1,14 +1,18 @@
 <?php
 
-use Arco\Database\DB;
+use Arco\Database\Archer\TableCrafter;
+use Arco\Database\Migrations\Migrator;
 use Arco\Database\Migrations\Migration;
 
 return new class () implements Migration {
     public function up() {
-        DB::statement('CREATE TABLE products (id INT AUTO_INCREMENT PRIMARY KEY)');
+        Migrator::create('products', function (TableCrafter $table) {
+            $table->id();
+            $table->timestamps();
+        });
     }
 
     public function down() {
-        DB::statement('DROP TABLE products');
+        Migrator::dropIfExists('products');
     }
 };
