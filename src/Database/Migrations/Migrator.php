@@ -146,18 +146,38 @@ class Migrator {
         return $fileName;
     }
 
+    /**
+     * Create a Table in DB using Migrations
+     *
+     * @param string $table
+     * @param Closure $crafter
+     * @return void
+     */
     public static function create(string $table, Closure $crafter) {
         $builder = new TableCrafter($table);
         $crafter($builder);
         DB::statement($builder->create());
     }
 
+    /**
+     * Alter a Table in DB using Migrations
+     *
+     * @param string $table
+     * @param Closure $crafter
+     * @return void
+     */
     public static function alter(string $table, Closure $crafter) {
         $builder = new TableCrafter($table);
         $crafter($builder);
         DB::statement($builder->alter());
     }
 
+    /**
+     * Drop a Table if exists in DB using Migrations
+     *
+     * @param string $table
+     * @return void
+     */
     public static function dropIfExists(string $table) {
         DB::statement(
             (new TableCrafter($table))
