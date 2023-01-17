@@ -101,9 +101,18 @@ if (!function_exists('route')) {
      * Get the URL for a named route.
      *
      * @param string $name
+     * @param array $parameters
      * @return string
      */
-    function route(string $name): string {
-        return app()->router->getRouteUriByName($name);
+    function route(string $name, array $parameters = []): string {
+        $uri = app()->router->getRouteUriByName($name);
+
+        if (!empty($parameters)) {
+            foreach ($parameters as $key => $value) {
+                $uri = str_replace("{{$key}}", $value, $uri);
+            }
+        }
+
+        return $uri;
     }
 }
