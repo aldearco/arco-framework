@@ -26,7 +26,7 @@ trait RememberCookieManager {
 
         $cookie = Cipher::encrypt($model) . '.' . Cipher::encrypt($rememberToken);
 
-        Cookie::set('remember_cookie', $cookie, time() + (60 * 60 * 24 * 365));
+        Cookie::set('remember_cookie', $cookie, time() + (60 * 60 * 24 * 365), sameSite: config('session.same_site', 'lax'));
     }
 
     public function cleanRememberToken(Authenticatable $authenticatable) {
