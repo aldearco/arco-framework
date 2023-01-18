@@ -21,7 +21,7 @@ class RouteList extends Command {
             app()->router = singleton(Router::class);
             (new RouteServiceProvider())->registerServices();
 
-            $output->writeln("\n<bg=#ffffff;options=bold> ROUTE LIST </>");
+            $output->writeln("\n<fg=black;bg=#ffffff;options=bold> ROUTE LIST </>");
             $table = new Table($output);
             $table
                 ->setHeaders(["METHOD", "URI", "NAME", "ACTION"])
