@@ -123,7 +123,10 @@ class Router {
      * @return Route
      */
     protected function registerName(Route $route, string $name): Route {
-        $this->routeNames[$name] = $route->uri();
+        $this->routeNames[$name] = [
+            'uri' => $route->uri(),
+            'action' => $route->action()
+        ];
 
         return $route;
     }
@@ -135,8 +138,8 @@ class Router {
      * @return string
      */
     public function getRouteUriByName(string $name): string {
-        if (isset($this->routeNames[$name])) {
-            return $this->routeNames[$name];
+        if (isset($this->routeNames[$name]['uri'])) {
+            return $this->routeNames[$name]['uri'];
         }
 
         return $name;
@@ -145,11 +148,16 @@ class Router {
     /**
      * Get the name by route URI.
      *
-     * @param string $uri
+     * @param Route $route
      * @return string
      */
-    protected function getRouteNameByUri(string $uri): string {
-        return array_search($uri, $this->routeNames);
+    protected function getRouteNameByUri(Route $route): null|string {
+        foreach ($this->routeNames as $name => $values) {
+            if ($route->action() == $values['action'] && $route->uri() == $values['uri']) {
+                return $name;
+            }
+        }
+        return null;
     }
 
     /**
@@ -175,11 +183,15 @@ class Router {
                 array_push($routeList, [
                     "<fg=#dec084;options=bold>$method</>",
                     "<fg=#53d0db>{$route->uri()}</>",
-                    "<fg=#a2c181>{$this->getRouteNameByUri($route->uri())}</>",
+                    "<fg=#a2c181>{$this->getRouteNameByUri($route)}</>",
                     $action
                 ]);
             }
         }
+
+        usort($routeList, function ($a, $b) {
+            return strcmp($a[1], $b[1]);
+        });
 
         return $routeList;
     }

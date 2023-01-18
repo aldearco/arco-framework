@@ -14,6 +14,10 @@ class HomeController extends Controller {
         return view("test");
     }
 
+    public function index() {
+        return json(['message' => ['ok']]);
+    }
+
     public function sql() {
         $table = new TableCrafter('methods');
         $table->bigId();
