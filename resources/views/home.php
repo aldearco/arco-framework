@@ -1,4 +1,5 @@
 @title->(Home Page)
+@layout->(main2)
 
     @styles
         <!-- You can add stylesheets or others links on every view and deliver to head. -->

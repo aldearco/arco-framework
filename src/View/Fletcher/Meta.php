@@ -3,14 +3,33 @@
 namespace Arco\View\Fletcher;
 
 trait Meta {
+    /**
+     * This tag is replaced in `$this->layoutContent` with `$this->metaTitle` when `public function render()` is executed.
+     *
+     * @var string
+     */
     public string $titleTag = "@title";
 
+    /**
+     * Store the page title
+     *
+     * @var string
+     */
     public string $metaTitle;
 
-    public string $title_directive_regex = '/@title->\(([^)]+)\)/';
+    /**
+     * Regex for especified title
+     *
+     * @var string
+     */
+    public string $titleDirectiveRegex = '/@title->\(([^)]+)\)/';
 
-    public string $delete_title_directive_regex = '/@title->\([^)]+\)/';
-
+    /**
+     * Regex to remove title directive from view content
+     *
+     * @var string
+     */
+    public string $deleteTitleDirectiveRegex = '/@title->\([^)]+\)/';
 
     /**
      * If the `@title->(Page Title)` tag are set, extract their content and save it in `$this->metaTitle`
@@ -18,9 +37,9 @@ trait Meta {
      * @return static
      */
     public function getMetaTitle(): static {
-        if (preg_match($this->title_directive_regex, $this->viewContent, $matches)) {
+        if (preg_match($this->titleDirectiveRegex, $this->viewContent, $matches)) {
             $this->metaTitle = $matches[1];
-            $viewContent = preg_replace($this->delete_title_directive_regex, "", $this->viewContent);
+            $viewContent = preg_replace($this->deleteTitleDirectiveRegex, "", $this->viewContent);
             $this->viewContent = $viewContent;
             return $this;
         }
