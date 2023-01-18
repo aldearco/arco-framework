@@ -143,6 +143,48 @@ class Router {
     }
 
     /**
+     * Get the name by route URI.
+     *
+     * @param string $uri
+     * @return string
+     */
+    protected function getRouteNameByUri(string $uri): string {
+        return array_search($uri, $this->routeNames);
+    }
+
+    /**
+     * Generate an array containing all information for the routes of the route:list command in the command line interface (CLI).
+     *
+     * @return array
+     */
+    public function getRouteList(): array {
+        $routeList = [];
+
+        foreach ($this->routes as $method => $routes) {
+            foreach ($routes as $route) {
+                if (is_array($route->action())) {
+                    $classPath = str_replace(class_basename($route->action()[0]), "", $route->action()[0]);
+                    $className = class_basename($route->action()[0]);
+                    $classMethod = "<fg=#b97dd7>method</> <fg=#76aee9>{$route->action()[1]}</>";
+
+                    $action = $classPath."\033[33m<fg=#dec084>{$className}</> | {$classMethod}";
+                } else {
+                    $action = "<fg=#b97dd7>Closure</>";
+                }
+
+                array_push($routeList, [
+                    "<fg=#dec084;options=bold>$method</>",
+                    "<fg=#53d0db>{$route->uri()}</>",
+                    "<fg=#a2c181>{$this->getRouteNameByUri($route->uri())}</>",
+                    $action
+                ]);
+            }
+        }
+
+        return $routeList;
+    }
+
+    /**
      * Alias for registerName method
      *
      * @param Route $route
