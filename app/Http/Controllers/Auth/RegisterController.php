@@ -19,21 +19,22 @@ class RegisterController extends Controller {
             "password" => "required",
             "confirm_password" => "required",
         ]);
-    
-        if($data["password"] !== $data["confirm_password"]) {
-            return back()->withErrors([
+
+        if ($data["password"] !== $data["confirm_password"]) {
+            return back()->withErrors(
+                [
                 "confirm_password" => [
                     "confirm" => "Passwords do not match"]
                 ]
             );
         }
-    
+
         $data["password"] = $hasher->hash($data["password"]);
-    
+
         $user = User::create($data);
 
         $user->login();
-    
+
         return redirect("/");
     }
 }

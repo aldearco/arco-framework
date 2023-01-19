@@ -20,5 +20,4 @@ class User extends Authenticatable {
     public function notes() {
         return $this->belongsToMany(Note::class, 'notes_users');
     }
-
 }

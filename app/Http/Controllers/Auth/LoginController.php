@@ -20,21 +20,21 @@ class LoginController extends Controller {
             "email" => ["required", "email"],
             "password" => "required",
         ]);
-    
+
         $user = User::firstWhere("email", $data["email"]);
-    
+
         if (is_null($user) || !$hasher->verify($data["password"], $user->password)) {
             return back()->withErrors([
                 "email" => ["email" => "Credentials do not match"]
             ]);
         }
-    
+
         if ($request->has('remember')) {
             $this->setRememberCookie($user);
         }
 
         $user->login();
-    
+
         return redirect("/");
     }
 
