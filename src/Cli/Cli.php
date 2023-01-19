@@ -11,6 +11,7 @@ use Arco\Cli\Commands\MakeModel;
 use Arco\Cli\Commands\MakePolicy;
 use Arco\Cli\Commands\Migrate;
 use Arco\Cli\Commands\MigrateRollback;
+use Arco\Cli\Commands\RouteInfo;
 use Arco\Cli\Commands\RouteList;
 use Arco\Cli\Commands\Serve;
 use Arco\Cli\Commands\StorageLink;
@@ -73,7 +74,8 @@ class Cli {
             new Serve(),
             new MakePolicy(),
             new MakeMiddleware(),
-            new RouteList()
+            new RouteList(),
+            new RouteInfo()
         ]);
 
         $cli->run();
