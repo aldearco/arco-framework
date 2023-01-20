@@ -29,7 +29,7 @@ class ArrowVulcan implements View {
      *
      * @var string
      */
-    protected string $contentTag = "@content";
+    protected string $contentTag = "#content";
 
     /**
      * View HTML Code stored into this string

@@ -5,19 +5,19 @@ namespace Arco\View\Fletcher;
 use Arco\View\Exceptions\MissingTagException;
 
 trait Links {
-    public string $stylesTag = "@styles";
+    public string $stylesTag = "#styles";
 
-    public string $startStylesTag = "@styles";
+    public string $startStylesTag = "#styles";
 
-    public string $endStylesTag = "@endstyles";
+    public string $endStylesTag = "#endstyles";
 
     public string $styles;
 
-    public string $scriptsTag = "@scripts";
+    public string $scriptsTag = "#scripts";
 
-    public string $startScriptsTag = "@scripts";
+    public string $startScriptsTag = "#scripts";
 
-    public string $endScriptsTag = "@endscripts";
+    public string $endScriptsTag = "#endscripts";
 
     public string $scripts;
 

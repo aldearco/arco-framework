@@ -1,6 +1,6 @@
-@title->(Register)
+#title->(Register)
 
-  @content
+  #content
     <div class="d-flex justify-content-center align-items-center pt-4">
       <div class="col-lg-4 col-md-6 col-12">
         <div class="alert alert-info">Don't forget to run migrations before try to register. Without users table you can't register users</div>
@@ -10,7 +10,7 @@
           </div>
           <div class="card-body">
             <form method="post">
-              @csrf
+              #csrf
               <div class="mb-3">
                 <label class="email">Email</label>
                 <input name="email" type="text" value="<?= old("email") ?>" class="form-control">
@@ -41,4 +41,4 @@
         </div>
       </div>
     </div>
-  @endcontent
+  #endcontent

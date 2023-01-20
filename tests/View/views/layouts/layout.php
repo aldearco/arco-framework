@@ -1,10 +1,10 @@
 <html>
     <head>
-        <title>@title</title>
-        @styles
+        <title>#title</title>
+        #styles
     </head>
     <body>
-        @content
-        @scripts
+        #content
+        #scripts
     </body>
 </html>

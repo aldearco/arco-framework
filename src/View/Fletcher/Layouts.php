@@ -15,14 +15,14 @@ trait Layouts {
      *
      * @var string
      */
-    public string $layoutDirectiveRegex = '/@layout->\(([^)]+)\)/';
+    public string $layoutDirectiveRegex = '/#layout->\(([^)]+)\)/';
 
     /**
      * Regex to remove layout directive from view content
      *
      * @var string
      */
-    public string $deleteLayoutDirectiveRegex = '/@layout->\([^)]+\)/';
+    public string $deleteLayoutDirectiveRegex = '/#layout->\([^)]+\)/';
 
     /**
      * Extract specified layout from view content

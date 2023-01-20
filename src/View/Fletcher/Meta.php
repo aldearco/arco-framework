@@ -8,7 +8,7 @@ trait Meta {
      *
      * @var string
      */
-    public string $titleTag = "@title";
+    public string $titleTag = "#title";
 
     /**
      * Store the page title
@@ -22,14 +22,14 @@ trait Meta {
      *
      * @var string
      */
-    public string $titleDirectiveRegex = '/@title->\(([^)]+)\)/';
+    public string $titleDirectiveRegex = '/#title->\(([^)]+)\)/';
 
     /**
      * Regex to remove title directive from view content
      *
      * @var string
      */
-    public string $deleteTitleDirectiveRegex = '/@title->\([^)]+\)/';
+    public string $deleteTitleDirectiveRegex = '/#title->\([^)]+\)/';
 
     /**
      * If the `@title->(Page Title)` tag are set, extract their content and save it in `$this->metaTitle`
