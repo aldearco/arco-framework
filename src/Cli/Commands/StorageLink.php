@@ -15,11 +15,11 @@ class StorageLink extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         try {
             (new Storage())->link();
-            $output->writeln("<info>Created symbolic link between public/ and storage/.</info>");
+            $output->writeln("\n<question> SUCCESS </question> Created symbolic link between <fg=#a2c181>\public</> and <fg=#a2c181>\storage</>.");
             return Command::SUCCESS;
         } catch (\Exception $e) {
-            $output->writeln("<error>Could not create symbolic link between 'public/' and 'storage/'</error>");
-            $output->writeln("<error>{$e->getMessage()}</error>");
+            $output->writeln("<error> ERROR </error> Could not create symbolic link between <fg=#a2c181>\public</> and <fg=#a2c181>\storage</>.");
+            $output->writeln("<comment>Reason:</comment> {$e->getMessage()}");
             return Command::FAILURE;
         }
     }

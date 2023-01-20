@@ -22,7 +22,7 @@ class MigrateRollback extends Command {
             app(Migrator::class)->rollback($input->getArgument("steps") ?? null);
             return Command::SUCCESS;
         } catch (\PDOException $e) {
-            $output->writeln("<error>Could not reverse migrations: {$e->getMessage()}</error>");
+            $output->writeln("<error> ERROR </error>Could not reverse migrations: {$e->getMessage()}");
             $output->writeln($e->getTraceAsString());
             return Command::FAILURE;
         }

@@ -21,8 +21,14 @@ class MakeMiddleware extends Command {
         $name = $input->getArgument("name");
         $template = file_get_contents(resourcesDirectory()."/templates/middleware.php");
         $template = str_replace("MiddlewareName", $name, $template);
+
+        if (file_exists(App::$root . "/app/Http/Middlewares/$name.php")) {
+            $output->writeln("\n<error> ERROR </error> Middleware already exists: <fg=#a2c181;options=bold>$name.php</>");
+            return Command::FAILURE;
+        }
+
         file_put_contents(App::$root . "/app/Http/Middlewares/$name.php", $template);
-        $output->writeln("<info>Middleware created => $name.php</info>");
+        $output->writeln("\n<question> SUCCESS </question> Controller created: <fg=#a2c181;options=bold>$name.php</>");
 
         return Command::SUCCESS;
     }

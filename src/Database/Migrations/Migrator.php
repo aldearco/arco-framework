@@ -57,7 +57,7 @@ class Migrator {
         $migrations = glob("$this->migrationsDirectory/*.php");
 
         if (count($migrated) >= count($migrations)) {
-            $this->log("<comment>Nothing to migrate</comment>");
+            $this->log("\n<fg=white;bg=white> INFO </> Nothing to migrate.");
             return;
         }
 
@@ -66,7 +66,7 @@ class Migrator {
             $migration->up();
             $name = basename($file);
             $this->driver->statement("INSERT INTO migrations (name) VALUES (?)", [$name]);
-            $this->log("<info>Migrated => $name</info>");
+            $this->log("\n<question> MIGRATED </question> <fg=#a2c181;options=bold>$name</>");
         }
     }
 
@@ -98,7 +98,7 @@ class Migrator {
             $migration->down();
             $name = basename($file);
             $this->driver->statement("DELETE FROM migrations WHERE name = ?", [$name]);
-            $this->log("<info>Rollback => $name</info>");
+            $this->log("\n<question> ROLLBACK </question> <fg=#a2c181;options=bold>$name</>");
             if (--$steps == 0) {
                 break;
             }
@@ -141,7 +141,7 @@ class Migrator {
 
         file_put_contents("$this->migrationsDirectory/$fileName", $template);
 
-        $this->log("<info>Migration created => $fileName</info>");
+        $this->log("\n<question> SUCCESS </question> Migration created: <fg=#a2c181;options=bold>$fileName</>");
 
         return $fileName;
     }

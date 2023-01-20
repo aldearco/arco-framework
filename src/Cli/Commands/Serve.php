@@ -25,7 +25,7 @@ class Serve extends Command {
         $port = $input->getOption("port");
         $publicDirectory = App::$root . "/" . $input->getOption("public");
 
-        $output->writeln("<info>Starting PHP development server on $host:$port</info>");
+        $output->writeln("\n<question> SUCCESS </question> PHP development server on <fg=#a2c181;options=bold>$host:$port</>\n");
         shell_exec("cd $publicDirectory/; php -S $host:$port");
 
         return Command::SUCCESS;

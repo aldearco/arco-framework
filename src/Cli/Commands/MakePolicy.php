@@ -21,8 +21,14 @@ class MakePolicy extends Command {
         $name = $input->getArgument("name");
         $template = file_get_contents(resourcesDirectory()."/templates/policy.php");
         $template = str_replace("PolicyName", $name, $template);
+
+        if (file_exists(App::$root . "/app/Policies/$name.php")) {
+            $output->writeln("\n<error> ERROR </error> Policy already exists: <fg=#a2c181;options=bold>$name.php</>");
+            return Command::FAILURE;
+        }
+
         file_put_contents(App::$root . "/app/Policies/$name.php", $template);
-        $output->writeln("<info>Policy created => $name.php</info>");
+        $output->writeln("\n<question> SUCCESS </question> Policy created: <fg=#a2c181;options=bold>$name.php</>");
 
         return Command::SUCCESS;
     }
