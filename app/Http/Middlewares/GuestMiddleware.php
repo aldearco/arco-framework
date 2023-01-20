@@ -8,7 +8,7 @@ use Arco\Http\Response;
 use Arco\Http\Middleware;
 use Arco\Auth\Access\NotAllowedResponse;
 
-class AuthMiddleware implements Middleware {
+class GuestMiddleware implements Middleware {
     use NotAllowedResponse;
 
     /**
@@ -19,8 +19,8 @@ class AuthMiddleware implements Middleware {
      * @return Response The HTTP response.
      */
     public function handle(Request $request, Closure $next): Response {
-        if (isGuest()) {
-            return redirect(route('login'));
+        if (!isGuest()) {
+            return redirect(route('home'));
         }
 
         return $next($request);

@@ -8,7 +8,7 @@
         <h1 class="display-6"><?= __('login.title') ?></h1>
       </div>
       <div class="card-body">
-        <form method="post">
+        <form method="post" action="<?= route('login.store') ?>">
           #csrf
           <div class="mb-3">
             <label class="email"><?= __('login.email') ?></label>
