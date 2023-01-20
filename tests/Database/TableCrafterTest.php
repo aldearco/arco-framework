@@ -64,11 +64,12 @@ class TableCrafterTest extends TestCase {
         $table->time('time_test');
         $table->timestamp('timestamp_test');
         $table->foreignKey('user_id', 'users', 'id');
+        $table->foreignIdFor('users');
         $table->column('custom_column', "VARCHAR(22) NULL UNIQUE");
         $table->rememberToken();
         $table->timestamps();
 
-        $expected = "CREATE TABLE methods (id BIGINT AUTO_INCREMENT,varchar_test VARCHAR(100) NULL,user_id INT,big_integer_test BIGINT,decimal_test DECIMAL(8, 2),text_test TEXT,date_test DATE,time_test TIME,timestamp_test TIMESTAMP,custom_column VARCHAR(22) NULL UNIQUE,remember_token VARCHAR(100) NULL UNIQUE,created_at TIMESTAMP NULL,updated_at TIMESTAMP NULL,FOREIGN KEY (user_id) REFERENCES users(id),PRIMARY KEY (id))";
+        $expected = "CREATE TABLE methods (id BIGINT AUTO_INCREMENT,varchar_test VARCHAR(100) NULL,user_id INT,big_integer_test BIGINT,decimal_test DECIMAL(8, 2),text_test TEXT,date_test DATE,time_test TIME,timestamp_test TIMESTAMP,user_id INT,custom_column VARCHAR(22) NULL UNIQUE,remember_token VARCHAR(100) NULL UNIQUE,created_at TIMESTAMP NULL,updated_at TIMESTAMP NULL,FOREIGN KEY (user_id) REFERENCES users(id),FOREIGN KEY (user_id) REFERENCES users(id),PRIMARY KEY (id))";
         $actual = $table->create();
 
         $this->assertEquals($expected, $actual);

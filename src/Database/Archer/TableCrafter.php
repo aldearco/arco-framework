@@ -2,6 +2,8 @@
 
 namespace Arco\Database\Archer;
 
+use Arco\Database\Archer\Model;
+
 class TableCrafter {
     /**
      * Table name.
@@ -208,6 +210,25 @@ class TableCrafter {
      */
     public function foreignKey(string $column, string $referencedTable, string $referencedColumn) {
         $this->foreignKeys[] = "FOREIGN KEY ($column) REFERENCES $referencedTable($referencedColumn)";
+    }
+
+    /**
+     * Create a foreign key for the model/table given
+     *
+     * @param string $class Class name of a model
+     * @param string $type Column type
+     * @return void
+     */
+    public function foreignIdFor(string $table, string $type = 'INT') {
+        if (is_subclass_of($table, Model::class)) {
+            $model = new $table();
+            $this->addColumn($model->getForeignKey(), $type);
+            $this->foreignKeys[] = "FOREIGN KEY ({$model->getForeignKey()}) REFERENCES {$model->getTable()}({$model->getKeyName()})";
+        } else {
+            $model = substr($table, 0, -1);
+            $this->addColumn($model.'_id', $type);
+            $this->foreignKeys[] = "FOREIGN KEY ({$model}_id) REFERENCES {$table}(id)";
+        }
     }
 
     /**

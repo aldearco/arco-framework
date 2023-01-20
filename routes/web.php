@@ -8,4 +8,3 @@ Auth::routes();
 
 Route::get("/", fn () => redirect(route('home')));
 Route::get("/home", [HomeController::class, "show"])->name('home');
-
