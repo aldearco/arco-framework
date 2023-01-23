@@ -42,7 +42,7 @@ class DiskFileStorageTest extends TestCase {
         $this->assertDirectoryExists($this->storageDirectory);
         $this->assertFileExists($path);
         $this->assertEquals($content, file_get_contents($path));
-        $this->assertEquals("/$storageUri/$file", $url);
+        $this->assertEquals("$storageUri/$file", $url);
     }
 
     public function testStoresMultipleFiles() {

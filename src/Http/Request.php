@@ -55,7 +55,7 @@ class Request {
     /**
      * Uploaded files.
      *
-     * @var array<string, \Lune\Storage\File>
+     * @var array<string, \Arco\Storage\File>
      */
     protected array $files = [];
 

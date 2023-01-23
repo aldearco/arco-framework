@@ -4,14 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Arco\Database\Archer\TableCrafter;
+use Arco\Http\Request;
+use Arco\Http\Response;
 
 class HomeController extends Controller {
     public function show() {
         return view("home");
     }
 
-    public function test() {
+    public function storage() {
         return view("test");
+    }
+
+    public function testStorage(Request $request) {
+        $url = $request->file('file')->store('test');
+        return Response::text($url);
     }
 
     public function index() {
@@ -36,4 +43,6 @@ class HomeController extends Controller {
 
         return response()->text($table->create());
     }
+
+
 }

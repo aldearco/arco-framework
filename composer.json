@@ -14,7 +14,8 @@
             "src/Helpers/string.php",
             "src/Helpers/session.php",
             "src/Helpers/auth.php",
-            "src/Helpers/translator.php"
+            "src/Helpers/translator.php",
+            "src/Helpers/storage.php"
         ]
     },
     "autoload-dev": {

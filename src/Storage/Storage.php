@@ -19,6 +19,10 @@ class Storage {
         return app(FileStorageDriver::class)->put($path, $content);
     }
 
+    public static function url(string $path) {
+        return config('app.url').'/'.$path;
+    }
+
     /**
      * Create a symbolic link between the public folder and the storage folder.
      */

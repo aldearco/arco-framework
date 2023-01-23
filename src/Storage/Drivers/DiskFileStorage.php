@@ -46,6 +46,6 @@ class DiskFileStorage implements FileStorageDriver {
 
         file_put_contents("$dir/$file", $content);
 
-        return "/$this->storageUri/$path";
+        return "$this->storageUri/$path";
     }
 }
