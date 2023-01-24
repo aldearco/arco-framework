@@ -24,6 +24,7 @@ class PhpNativeServer implements Server {
                     file_get_contents($file["tmp_name"]),
                     $file["type"],
                     $file["name"],
+                    filesize($file["tmp_name"]),
                 );
             }
         }

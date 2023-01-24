@@ -17,10 +17,12 @@ class File {
         private mixed $content,
         private string $type,
         private string $originalName,
+        private string $size,
     ) {
         $this->content = $content;
         $this->type = $type;
         $this->originalName = $originalName;
+        $this->size = $size;
     }
 
     /**
@@ -30,6 +32,15 @@ class File {
      */
     public function isImage(): bool {
         return str_starts_with($this->type, "image");
+    }
+
+    /**
+     * Get file size (bytes).
+     *
+     * @return int
+     */
+    public function size(): int {
+        return intval($this->size);
     }
 
     /**
