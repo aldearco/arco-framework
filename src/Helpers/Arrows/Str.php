@@ -2,6 +2,8 @@
 
 namespace Arco\Helpers\Arrows;
 
+use Arco\Exceptions\ArrowRejected;
+
 class Str {
     /**
     * Turn any string into snake_case format
@@ -46,5 +48,18 @@ class Str {
         }
 
         return implode($snake_cased);
+    }
+
+    public static function toBytes(string $size): int {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        $number = substr($size, 0, -2);
+        $unit = strtoupper(substr($size,-2));
+    
+        $exponent = array_flip($units)[$unit] ?? null;
+        if($exponent === null) {
+            throw new ArrowRejected("Invalid size format: '{$size}'");
+        }
+    
+        return $number * (1024 ** $exponent);
     }
 }
