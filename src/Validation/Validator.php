@@ -35,6 +35,13 @@ class Validator {
             }
             $fieldUnderValidationError = [];
             foreach ($rules as $rule) {
+                if (is_string($rule) && $rule === 'nullable') {
+                    if (Rule::nullable($field, $this->data)) {
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
                 if (is_string($rule)) {
                     $rule = Rule::from($rule);
                 }

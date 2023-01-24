@@ -251,4 +251,8 @@ class Rule {
 
         return self::parseRuleWithParameters($ruleName, $params);
     }
+
+    public static function nullable(string $field, array $data) {
+        return !isset($data[$field]) || is_null($data[$field]);
+    }
 }

@@ -264,7 +264,7 @@ class Request {
      * @return array
      */
     public function validate(array $rules, array $messages = []): array {
-        $validator = new Validator($this->data);
+        $validator = new Validator(array_merge($this->data, $this->query, $this->files));
 
         return $validator->validate($rules, $messages);
     }
