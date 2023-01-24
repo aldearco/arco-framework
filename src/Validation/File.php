@@ -162,7 +162,7 @@ class File implements ValidationRule {
     }
 
     protected function minValidation(string $field, array $data) {
-        return $data[$field]->size() >= $this->min['bytes'];
+        return $data[$field]->size() > $this->min['bytes'];
     }
 
     protected function withinValidation(string $field, array $data) {
