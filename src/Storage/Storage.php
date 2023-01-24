@@ -19,8 +19,16 @@ class Storage {
         return app(FileStorageDriver::class)->put($path, $content);
     }
 
-    public static function url(string $path) {
-        return config('app.url').'/'.$path;
+    /**
+     * Return an URL for stored files.
+     *
+     * @param string $path
+     * @return string
+     */
+    public static function url(string $path): string {
+        return app()->server->protocol()
+            .'://'.config('app.url')
+            .'/'.$path;
     }
 
     /**
@@ -29,9 +37,9 @@ class Storage {
     public function link() {
         if (!file_exists('public/storage')) {
             if (PHP_OS === "WINNT") {
-                return exec('mklink /J "public\storage" "..\storage"', $output, $return_var);
+                return exec('mklink /J "public\storage" "..\storage\public"', $output, $return_var);
             } else {
-                return symlink('../storage', 'public/storage');
+                return symlink('../storage/public', 'public/storage');
             }
         }
         throw new \Exception("Link already exists.");

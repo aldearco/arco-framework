@@ -24,4 +24,11 @@ interface Server {
      * @return void
      */
     public function sendResponse(Response $response);
+
+    /**
+     * Return if protocol is HTTP or HTTPS
+     *
+     * @return string
+     */
+    public function protocol(): string;
 }

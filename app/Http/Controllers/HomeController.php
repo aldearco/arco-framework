@@ -17,7 +17,7 @@ class HomeController extends Controller {
     }
 
     public function testStorage(Request $request) {
-        $url = $request->file('file')->store('test');
+        $url = $request->file('file')->store('public/testfiles');
         return Response::text($url);
     }
 
@@ -43,6 +43,4 @@ class HomeController extends Controller {
 
         return response()->text($table->create());
     }
-
-
 }

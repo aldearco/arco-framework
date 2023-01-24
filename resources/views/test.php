@@ -7,7 +7,6 @@
       <div class="card-header">
         <h1 class="display-6">Test varios</h1>
       </div>
-      <img src="<?= stored('storage/test/63ceeafda2adf.png') ?>" alt="">
       <div class="card-body">
         <form method="post" action="<?= route('storage.store') ?>" enctype="multipart/form-data">
           #csrf

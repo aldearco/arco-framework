@@ -28,6 +28,16 @@ class DiskFileStorage implements FileStorageDriver {
     }
 
     /**
+     * Clean the path for public URIs
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function parsePath(string $path): string {
+        return str_replace('public/', '', $path);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function put(string $path, mixed $content): string {
@@ -46,6 +56,6 @@ class DiskFileStorage implements FileStorageDriver {
 
         file_put_contents("$dir/$file", $content);
 
-        return "$this->storageUri/$path";
+        return "$this->storageUri/{$this->parsePath($path)}";
     }
 }

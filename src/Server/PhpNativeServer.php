@@ -78,4 +78,11 @@ class PhpNativeServer implements Server {
         }
         print($response->content());
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function protocol(): string {
+        return $_SERVER['HTTPS'] ?? 'http';
+    }
 }
