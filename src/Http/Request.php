@@ -158,6 +158,16 @@ class Request {
     }
 
     /**
+     * Get all files from request.
+     *
+     * @param string $name
+     * @return array<string, \Arco\Storage\File>
+     */
+    public function files(): array {
+        return $this->files ?? [];
+    }
+
+    /**
      * Set uploaded files.
      *
      * @param array<string, File> $files

@@ -8,7 +8,7 @@
         <h1 class="display-6">Test varios</h1>
       </div>
       <div class="card-body">
-        <form method="post" action="<?= route('storage.store') ?>" enctype="multipart/form-data">
+        <form method="post" action="<?= route('storage.store') ?>?id=1" enctype="multipart/form-data">
           #csrf
           <div class="mb-3">
             <label class="file"><?= __('login.email') ?></label>

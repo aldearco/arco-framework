@@ -232,29 +232,4 @@ class Route {
             isset($options['middlewares']) ? $options['middlewares'] : []
         );
     }
-
-    // protected static function generateResourceRoutes(string $name, string $controller, array $methods, array $middlewares) {
-    //     $singular = substr($name, 0, -1);
-    //     if (in_array('index', $methods)) {
-    //         app()->router->get("/{$name}", [$controller, 'index'])->name($name.".index")->setMiddlewares($middlewares);
-    //     }
-    //     if (in_array('create', $methods)) {
-    //         app()->router->get("/{$name}/create", [$controller, 'create'])->name($name.".create")->setMiddlewares($middlewares);
-    //     }
-    //     if (in_array('store', $methods)) {
-    //         app()->router->post("/{$name}", [$controller, 'store'])->name($name.".store")->setMiddlewares($middlewares);
-    //     }
-    //     if (in_array('show', $methods)) {
-    //         app()->router->get("/{$name}/{{$singular}}", [$controller, 'show'])->name($name.".show")->setMiddlewares($middlewares);
-    //     }
-    //     if (in_array('edit', $methods)) {
-    //         app()->router->get("/{$name}/{{$singular}}/edit", [$controller, 'edit'])->name($name.".edit")->setMiddlewares($middlewares);
-    //     }
-    //     if (in_array('update', $methods)) {
-    //         app()->router->put("/{$name}/{{$singular}}", [$controller, 'update'])->name($name.".update")->setMiddlewares($middlewares);
-    //     }
-    //     if (in_array('destroy', $methods)) {
-    //         app()->router->delete("/{$name}/{{$singular}}", [$controller, 'destroy'])->name($name.".destroy")->setMiddlewares($middlewares);
-    //     }
-    // }
 }
