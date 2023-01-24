@@ -53,13 +53,13 @@ class Str {
     public static function toBytes(string $size): int {
         $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
         $number = substr($size, 0, -2);
-        $unit = strtoupper(substr($size,-2));
-    
+        $unit = strtoupper(substr($size, -2));
+
         $exponent = array_flip($units)[$unit] ?? null;
-        if($exponent === null) {
+        if ($exponent === null) {
             throw new ArrowRejected("Invalid size format: '{$size}'");
         }
-    
+
         return $number * (1024 ** $exponent);
     }
 }

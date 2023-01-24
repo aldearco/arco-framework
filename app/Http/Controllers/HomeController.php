@@ -6,6 +6,7 @@ use Arco\Http\Request;
 use Arco\Validation\File;
 use App\Http\Controllers\Controller;
 use Arco\Database\Archer\TableCrafter;
+use Arco\Helpers\Arrows\Str;
 
 class HomeController extends Controller {
     public function show() {
@@ -18,16 +19,21 @@ class HomeController extends Controller {
 
     public function testStorage(Request $request) {
         $request->validate([
-            "file" => ['nullable', File::image()]
+            "file" => ['nullable', File::image(), File::within('11.5MB', '12MB')]
         ]);
 
-        $url = is_null($request->file('file'))
-                    ? 'Se envió vacío'
-                    : $request->file('file')->store('public/testfiles');
+        $test = Str::toBytes('2.5MB');
 
-        return back()->withErrors([
-            "file" => ['nullable' => $url]
-        ]);
+        var_dump($request->file('file')->size() < $test);
+        die;
+
+        // $url = is_null($request->file('file'))
+        //             ? 'Se envió vacío'
+        //             : $request->file('file')->store('public/testfiles');
+
+        // return back()->withErrors([
+        //     "file" => ['nullable' => $url]
+        // ]);
     }
 
     public function index() {
