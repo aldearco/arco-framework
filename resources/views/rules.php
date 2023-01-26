@@ -12,8 +12,14 @@
           #csrf
           <div class="mb-3">
             <label class="rule"><?= __('Rules tests') ?></label>
-            <input name="rule" type="rule" class="form-control">
+            <input name="rule" type="rule" class="form-control" value="<?= old('rule') ?>">
             <div class="text-danger"><?= error("rule") ?></div>
+          </div>
+          <div class="mb-3">
+            <input type="checkbox" value="España" name="arreglo[]" /><label>España</label><br />
+            <input type="checkbox" value="Portugal" name="arreglo[]" /><label>Portugal</label><br />
+            <input type="checkbox" value="Francia" name="arreglo[]" /><label>Francia</label><br />
+            <div class="text-danger"><?= error("arreglo") ?></div>
           </div>
           <button type="submit" class="btn btn-primary"><?= __('Submit') ?></button>
         </form>

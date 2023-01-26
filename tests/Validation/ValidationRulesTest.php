@@ -16,6 +16,7 @@ use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Exceptions\RuleParseException;
+use Arco\Validation\Rules\Size;
 
 class ValidationRulesTest extends TestCase {
     public function emails() {
@@ -231,6 +232,27 @@ class ValidationRulesTest extends TestCase {
      */
     public function test_not_in($value, $array, $expected) {
         $rule = new NotIn($array);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function sizeData() {
+        return [
+            ['test', 4, true],
+            ['tests', 4, false],
+            [['test', 'unit', 'testing'], 3, true],
+            [['hello', 'world'], 3, false],
+            ['', 1, false],
+            [null, 50, false],
+            [[], 0, true]
+        ];
+    }
+
+    /**
+     * @dataProvider sizeData
+     */
+    public function test_size($value, $size, $expected) {
+        $rule = new Size($size);
         $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }

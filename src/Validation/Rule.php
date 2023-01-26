@@ -6,6 +6,7 @@ use ReflectionClass;
 use Arco\Validation\Rules\In;
 use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
+use Arco\Validation\Rules\Size;
 use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
@@ -50,6 +51,7 @@ class Rule {
         Unique::class,
         In::class,
         NotIn::class,
+        Size::class,
     ];
 
     /**
@@ -210,6 +212,27 @@ class Rule {
     }
 
     /**
+     * Create a new `Size()` validation rule
+     *
+     * @param integer $size Expected size, valid for `array` and `string` values
+     * @return ValidationRule
+     */
+    public static function size(int $size): ValidationRule {
+        return new Size($size);
+    }
+
+    /**
+     * Nullable rule
+     *
+     * @param string $field
+     * @param array $data
+     * @return bool
+     */
+    public static function nullable(string $field, array $data): bool {
+        return !isset($data[$field]) || empty($data[$field]);
+    }
+
+    /**
      * Parse basic rules (without parameters) in `snake_case` format to creat a new instance the rule
      *
      * @param string $ruleName
@@ -293,9 +316,5 @@ class Rule {
         [$ruleName, $params] = $ruleParts;
 
         return self::parseRuleWithParameters($ruleName, $params);
-    }
-
-    public static function nullable(string $field, array $data) {
-        return !isset($data[$field]) || is_null($data[$field]);
     }
 }
