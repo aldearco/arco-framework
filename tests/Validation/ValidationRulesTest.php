@@ -16,6 +16,7 @@ use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Exceptions\RuleParseException;
+use Arco\Validation\Rules\Between;
 use Arco\Validation\Rules\Size;
 
 class ValidationRulesTest extends TestCase {
@@ -253,6 +254,25 @@ class ValidationRulesTest extends TestCase {
      */
     public function test_size($value, $size, $expected) {
         $rule = new Size($size);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function betweenData() {
+        return [
+            ['test', 2, 5, true],
+            ['test is required', 2, 8, false],
+            ['test test', 6, 9, true],
+            [['one', 'two', 'three'], 1, 4, true],
+            [['one', 'two', 'three', 'four'], 1, 3, false],
+        ];
+    }
+
+    /**
+     * @dataProvider betweenData
+     */
+    public function test_between($value, $min, $max, $expected) {
+        $rule = new Between($min, $max);
         $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }

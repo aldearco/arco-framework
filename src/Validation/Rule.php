@@ -11,6 +11,7 @@ use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\Unique;
+use Arco\Validation\Rules\Between;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
@@ -52,6 +53,7 @@ class Rule {
         In::class,
         NotIn::class,
         Size::class,
+        Between::class,
     ];
 
     /**
@@ -219,6 +221,17 @@ class Rule {
      */
     public static function size(int $size): ValidationRule {
         return new Size($size);
+    }
+
+    /**
+     * Create a new `Size()` validation rule
+     *
+     * @param integer $min Minimum size
+     * @param integer $max Maximum size
+     * @return ValidationRule
+     */
+    public function between(int $min, int $max): ValidationRule {
+        return new Between($min, $max);
     }
 
     /**
