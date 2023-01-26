@@ -3,9 +3,11 @@
 namespace Arco\Validation;
 
 use ReflectionClass;
+use Arco\Validation\Rules\In;
 use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
 use Arco\Validation\Rules\Email;
+use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\Unique;
 use Arco\Validation\Rules\LessThan;
@@ -46,6 +48,8 @@ class Rule {
         RequiredWhen::class,
         RequiredWith::class,
         Unique::class,
+        In::class,
+        NotIn::class,
     ];
 
     /**
@@ -170,7 +174,7 @@ class Rule {
     }
 
     /**
-     * Create a new `Max()` validation rule
+     * Create a new `RequiredWhen()` validation rule
      *
      * @param string $otherField The `name` value of complementary field
      * @param string $operator Options: `=`, `>`, `<`, `>=`, `<=`. Other options will throw `RuleParseException()`
@@ -183,6 +187,26 @@ class Rule {
         int|float $value
     ): ValidationRule {
         return new RequiredWhen($otherField, $operator, $value);
+    }
+
+    /**
+     * Create a new `In()` validation rule
+     *
+     * @param array $array Array of allowed values
+     * @return ValidationRule
+     */
+    public static function in(array $array): ValidationRule {
+        return new In($array);
+    }
+
+    /**
+     * Create a new `NotIn()` validation rule
+     *
+     * @param array $array Array of forbbiden values
+     * @return ValidationRule
+     */
+    public static function notIn(array $array): ValidationRule {
+        return new NotIn($array);
     }
 
     /**
@@ -202,6 +226,21 @@ class Rule {
     }
 
     /**
+     * Converts the given parameters to an array
+     *
+     * @param array $constructorParameters Parameters in the constructor rule class
+     * @param string $params Required params from original string
+     * @return array
+     */
+    protected static function getGivenParameters(array $constructorParameters, string $params): array {
+        if (count($constructorParameters) && $constructorParameters[0]->name === 'array') {
+            return [explode(',', $params)];
+        }
+
+        return array_filter(explode(",", $params), fn ($p) => !empty($p));
+    }
+
+    /**
      * Parse complex rules (with parameters) in `snake_case` format to creat a new instance the rule
      *
      * @param string $ruleName Rule name in snake_case format
@@ -211,7 +250,11 @@ class Rule {
     public static function parseRuleWithParameters(string $ruleName, string $params): ValidationRule {
         $class = new ReflectionClass(self::$rules[$ruleName]);
         $constructorParameters = $class->getConstructor()?->getParameters() ?? [];
-        $givenParameters = array_filter(explode(",", $params), fn ($p) => !empty($p));
+
+        // var_dump(self::getGivenParameters($constructorParameters, $params)); die;
+
+        // $givenParameters = array_filter(explode(",", $params), fn ($p) => !empty($p));
+        $givenParameters = self::getGivenParameters($constructorParameters, $params);
 
         if (count($givenParameters) !== count($constructorParameters)) {
             throw new RuleParseException(sprintf(

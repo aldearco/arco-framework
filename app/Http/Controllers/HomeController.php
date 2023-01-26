@@ -7,6 +7,7 @@ use Arco\Validation\File;
 use App\Http\Controllers\Controller;
 use Arco\Database\Archer\TableCrafter;
 use Arco\Helpers\Arrows\Str;
+use Arco\Validation\Rule;
 
 class HomeController extends Controller {
     public function show() {
@@ -34,6 +35,18 @@ class HomeController extends Controller {
         // return back()->withErrors([
         //     "file" => ['nullable' => $url]
         // ]);
+    }
+
+    public function rules() {
+        return view("rules");
+    }
+
+    public function storeRules(Request $request) {
+        $request->validate([
+            "rule" => ['required', 'not_in:hello,world,today,is,gonabe,a,good,day']
+        ]);
+
+        return view("rules");
     }
 
     public function index() {

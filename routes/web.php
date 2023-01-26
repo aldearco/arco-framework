@@ -11,3 +11,6 @@ Route::get("/home", [HomeController::class, "show"])->name('home');
 
 Route::get('/test', [HomeController::class, "storage"])->name('storage.create');
 Route::post('/test', [HomeController::class, "testStorage"])->name('storage.store');
+
+Route::get('/rules', [HomeController::class, "rules"])->name('rules.create');
+Route::post('/rules', [HomeController::class, "storeRules"])->name('rules.store');
