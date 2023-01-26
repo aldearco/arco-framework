@@ -3,8 +3,10 @@
 namespace Arco\Tests\Validation;
 
 use Arco\Validation\Rule;
+use Arco\Validation\Rules\In;
 use PHPUnit\Framework\TestCase;
 use Arco\Validation\Rules\Email;
+use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
@@ -45,6 +47,8 @@ class RuleParseTest extends TestCase {
             [new LessThan(5), "less_than:5"],
             [new RequiredWith("other"), "required_with:other"],
             [new RequiredWhen("other", "=", "test"), "required_when:other,=,test"],
+            [new In(['hello', 'world', 'is', 'a', 'test']), "in:hello,world,is,a,test"],
+            [new NotIn(['hello', 'world', 'is', 'a', 'test']), "not_in:hello,world,is,a,test"],
         ];
     }
 

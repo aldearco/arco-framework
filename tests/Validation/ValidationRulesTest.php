@@ -2,10 +2,12 @@
 
 namespace Arco\Tests\Validation;
 
+use Arco\Validation\Rules\In;
 use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
 use PHPUnit\Framework\TestCase;
 use Arco\Validation\Rules\Email;
+use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
@@ -195,6 +197,40 @@ class ValidationRulesTest extends TestCase {
      */
     public function test_max($value, $max, $expected) {
         $rule = new Max($max);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function inData() {
+        return [
+            ['test', ['test', 'string', 'hello'], true],
+            ['testing', ['test', 'world', 'hello'], false],
+            ['inside', ['not_in', 'world', 'outside'], false],
+        ];
+    }
+
+    /**
+     * @dataProvider inData
+     */
+    public function test_in($value, $array, $expected) {
+        $rule = new In($array);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function notInData() {
+        return [
+            ['test', ['test', 'string', 'hello'], false],
+            ['testing', ['test', 'world', 'hello'], true],
+            ['inside', ['not_in', 'world', 'outside'], true],
+        ];
+    }
+
+    /**
+     * @dataProvider notInData
+     */
+    public function test_not_in($value, $array, $expected) {
+        $rule = new NotIn($array);
         $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
