@@ -43,8 +43,9 @@ class HomeController extends Controller {
 
     public function storeRules(Request $request) {
         $request->validate([
-            "rule" => ['nullable', 'boolean'],
-            "arreglo" => ["nullable", 'size:2']
+            "rule" => ['nullable', 'size:3'],
+            "rule2" => ['nullable', 'different:rule'],
+            "arreglo" => ["nullable", 'size:2'],
         ]);
 
         return view("rules");

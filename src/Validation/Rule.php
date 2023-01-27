@@ -16,6 +16,7 @@ use Arco\Validation\Rules\Boolean;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
+use Arco\Validation\Rules\Different;
 use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
@@ -56,6 +57,7 @@ class Rule {
         Size::class,
         Between::class,
         Boolean::class,
+        Different::class,
     ];
 
     /**
@@ -243,6 +245,16 @@ class Rule {
      */
     public static function boolean(): ValidationRule {
         return new Boolean();
+    }
+
+    /**
+     * Create a new `Different()` validation rule
+     *
+     * @param integer|float $field Other request data field to compare with
+     * @return ValidationRule
+     */
+    public static function different(string $field): ValidationRule {
+        return new Different($field);
     }
 
     /**

@@ -19,6 +19,7 @@ use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Exceptions\RuleParseException;
+use Arco\Validation\Rules\Different;
 
 class ValidationRulesTest extends TestCase {
     public function emails() {
@@ -298,6 +299,25 @@ class ValidationRulesTest extends TestCase {
     public function test_boolean($value, $expected) {
         $rule = new Boolean();
         $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function differentData() {
+        return [
+            ['test', 'test 2', true],
+            ['test', 'test', false],
+            ['test', 'test is required', true],
+            [123, 123, false],
+            [321, "123", true],
+        ];
+    }
+
+    /**
+     * @dataProvider differentData
+     */
+    public function test_different($value, $value2, $expected) {
+        $rule = new Different('test2');
+        $data = ["test" => $value, "test2" => $value2 ];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
 
