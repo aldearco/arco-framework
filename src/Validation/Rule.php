@@ -23,6 +23,7 @@ use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Rules\ValidationRule;
 use Arco\Validation\Exceptions\RuleParseException;
 use Arco\Validation\Exceptions\UnknownRuleException;
+use Arco\Validation\Rules\Present;
 
 /**
  * Rule class manage all validation rules of this framework
@@ -49,6 +50,7 @@ class Rule {
         Min::class,
         Number::class,
         Required::class,
+        Present::class,
         RequiredWhen::class,
         RequiredWith::class,
         Unique::class,
@@ -111,6 +113,15 @@ class Rule {
      */
     public static function required(): ValidationRule {
         return new Required();
+    }
+
+    /**
+     * Create a new `Present()` validation rule
+     *
+     * @return ValidationRule
+     */
+    public static function present(): ValidationRule {
+        return new Present();
     }
 
     /**

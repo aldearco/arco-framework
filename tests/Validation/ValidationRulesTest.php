@@ -20,6 +20,7 @@ use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Exceptions\RuleParseException;
 use Arco\Validation\Rules\Different;
+use Arco\Validation\Rules\Present;
 
 class ValidationRulesTest extends TestCase {
     public function emails() {
@@ -63,6 +64,31 @@ class ValidationRulesTest extends TestCase {
         $data = ['test' => $value];
         $rule = new Required();
         $this->assertEquals($expected, $rule->isValid('test', $data));
+    }
+
+    public function presentData() {
+        return [
+            ["", true],
+            [null, true],
+            [5, true],
+            ["test", true],
+        ];
+    }
+
+    /**
+     * @dataProvider presentData
+     */
+    public function test_present($value, $expected) {
+        $data = ['test' => $value];
+        $rule = new Present();
+        $this->assertEquals($expected, $rule->isValid('test', $data));
+    }
+
+    public function test_present_with_missing_data_field() {
+        $data = ['test' => ""];
+        $rule = new Present();
+        $this->assertEquals(true, $rule->isValid('test', $data));
+        $this->assertEquals(false, $rule->isValid('test2', $data));
     }
 
     public function test_required_with() {
