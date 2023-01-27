@@ -5,10 +5,13 @@ namespace Arco\Tests\Validation;
 use Arco\Validation\Rules\In;
 use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
+use Arco\Validation\Rules\Size;
 use PHPUnit\Framework\TestCase;
 use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
+use Arco\Validation\Rules\Between;
+use Arco\Validation\Rules\Boolean;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
@@ -16,8 +19,6 @@ use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Exceptions\RuleParseException;
-use Arco\Validation\Rules\Between;
-use Arco\Validation\Rules\Size;
 
 class ValidationRulesTest extends TestCase {
     public function emails() {
@@ -273,6 +274,29 @@ class ValidationRulesTest extends TestCase {
      */
     public function test_between($value, $min, $max, $expected) {
         $rule = new Between($min, $max);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function booleanData() {
+        return [
+            ['test', false],
+            ['1', true],
+            ['0', true],
+            ['true false', false],
+            ['false', true],
+            ['true', true],
+            [true, true],
+            [false, true],
+            [null, false],
+        ];
+    }
+
+    /**
+     * @dataProvider booleanData
+     */
+    public function test_boolean($value, $expected) {
+        $rule = new Boolean();
         $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }

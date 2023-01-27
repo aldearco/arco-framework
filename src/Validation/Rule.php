@@ -12,6 +12,7 @@ use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\Unique;
 use Arco\Validation\Rules\Between;
+use Arco\Validation\Rules\Boolean;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
@@ -54,6 +55,7 @@ class Rule {
         NotIn::class,
         Size::class,
         Between::class,
+        Boolean::class,
     ];
 
     /**
@@ -232,6 +234,15 @@ class Rule {
      */
     public function between(int $min, int $max): ValidationRule {
         return new Between($min, $max);
+    }
+
+    /**
+     * Create a new `Boolean()` validation rule
+     *
+     * @return ValidationRule
+     */
+    public static function boolean(): ValidationRule {
+        return new Boolean();
     }
 
     /**
