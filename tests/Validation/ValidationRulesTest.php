@@ -20,6 +20,7 @@ use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Exceptions\RuleParseException;
 use Arco\Validation\Rules\Different;
+use Arco\Validation\Rules\Json;
 use Arco\Validation\Rules\Present;
 
 class ValidationRulesTest extends TestCase {
@@ -344,6 +345,26 @@ class ValidationRulesTest extends TestCase {
     public function test_different($value, $value2, $expected) {
         $rule = new Different('test2');
         $data = ["test" => $value, "test2" => $value2 ];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function jsonData() {
+        return [
+            ['{"Test": "Is a test"}', true],
+            ['{"Test" => "Is a test"}', false],
+            ['{Test: "Is a test"}', false],
+            ['', false],
+            ['{"Primary": "Primary Value", "Secondary": "Secondary Value"}', true],
+            ['{"Primary": "Primary Value", "Secondary": "Secondary Value",}', false],
+        ];
+    }
+
+    /**
+     * @dataProvider jsonData
+     */
+    public function test_json($value, $expected) {
+        $rule = new Json();
+        $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
 

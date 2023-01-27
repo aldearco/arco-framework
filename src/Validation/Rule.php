@@ -6,6 +6,7 @@ use ReflectionClass;
 use Arco\Validation\Rules\In;
 use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
+use Arco\Validation\Rules\Json;
 use Arco\Validation\Rules\Size;
 use Arco\Validation\Rules\Email;
 use Arco\Validation\Rules\NotIn;
@@ -13,6 +14,7 @@ use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\Unique;
 use Arco\Validation\Rules\Between;
 use Arco\Validation\Rules\Boolean;
+use Arco\Validation\Rules\Present;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
@@ -23,7 +25,6 @@ use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Rules\ValidationRule;
 use Arco\Validation\Exceptions\RuleParseException;
 use Arco\Validation\Exceptions\UnknownRuleException;
-use Arco\Validation\Rules\Present;
 
 /**
  * Rule class manage all validation rules of this framework
@@ -60,6 +61,7 @@ class Rule {
         Between::class,
         Boolean::class,
         Different::class,
+        Json::class,
     ];
 
     /**
@@ -277,6 +279,15 @@ class Rule {
      */
     public static function nullable(string $field, array $data): bool {
         return !isset($data[$field]) || empty($data[$field]);
+    }
+
+    /**
+     * Create a new `Json()` validation rule
+     *
+     * @return ValidationRule
+     */
+    public static function json(): ValidationRule {
+        return new Json();
     }
 
     /**
