@@ -197,7 +197,8 @@ class ValidationRulesTest extends TestCase {
             ["hol", 5, false],
             ["holasoyalberto", 6, true],
             ["", 3, false],
-            ["5", 5, false],
+            [['test1', 'test2', 'test3'], 2, true],
+            [['test1', 'test2', 'test3'], 5, false],
             ["0123456789", 9, true],
             [5, 5, false],
         ];
@@ -217,7 +218,8 @@ class ValidationRulesTest extends TestCase {
             ["test", 5, true],
             ["holasoyalberto", 6, false],
             ["", 3, true],
-            ["5", 5, true],
+            [['test1', 'test2', 'test3'], 2, false],
+            [['test1', 'test2', 'test3'], 5, true],
             ["0123456789", 9, false],
             [5, 5, true],
         ];

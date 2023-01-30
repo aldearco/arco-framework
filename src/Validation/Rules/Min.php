@@ -12,7 +12,13 @@ class Min implements ValidationRule {
     }
 
     public function isValid($field, $data): bool {
+        if (!isset($data[$field])) {
+            return false;
+        }
+
+        $fieldSize = is_array($data[$field]) ? count($data[$field]) : strlen($data[$field]);
+
         return isset($data[$field])
-            && strlen($data[$field]) >= $this->min;
+            && $fieldSize >= $this->min;
     }
 }
