@@ -14,6 +14,7 @@ use Arco\Validation\Rules\Number;
 use Arco\Validation\Rules\Unique;
 use Arco\Validation\Rules\Between;
 use Arco\Validation\Rules\Boolean;
+use Arco\Validation\Rules\IsArray;
 use Arco\Validation\Rules\Present;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
@@ -62,6 +63,7 @@ class Rule {
         Boolean::class,
         Different::class,
         Json::class,
+        IsArray::class,
     ];
 
     /**

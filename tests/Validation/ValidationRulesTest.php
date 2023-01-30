@@ -20,6 +20,7 @@ use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Exceptions\RuleParseException;
 use Arco\Validation\Rules\Different;
+use Arco\Validation\Rules\isArray;
 use Arco\Validation\Rules\Json;
 use Arco\Validation\Rules\Present;
 
@@ -372,6 +373,24 @@ class ValidationRulesTest extends TestCase {
      */
     public function test_json($value, $expected) {
         $rule = new Json();
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function isArrayData() {
+        return [
+            [[], true],
+            [['test', 'test-2'], true],
+            [['key' => 'test', 'key2' => 'test-2'], true],
+            ["I'm not an array", false]
+        ];
+    }
+
+    /**
+     * @dataProvider isArrayData
+     */
+    public function test_is_array($value, $expected) {
+        $rule = new isArray();
         $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }
