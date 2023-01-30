@@ -13,6 +13,15 @@ class In implements ValidationRule {
     }
 
     public function isValid($field, $data): bool {
+        if (is_array($data[$field])) {
+            foreach ($data[$field] as $value) {
+                if (in_array($value, $this->array)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         return in_array($data[$field], $this->array);
     }
 }

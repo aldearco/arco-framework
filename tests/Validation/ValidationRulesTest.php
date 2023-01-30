@@ -239,6 +239,9 @@ class ValidationRulesTest extends TestCase {
             ['test', ['test', 'string', 'hello'], true],
             ['testing', ['test', 'world', 'hello'], false],
             ['inside', ['not_in', 'world', 'outside'], false],
+            [['test', 'for', 'arrays'], ['test', 'for'], true],
+            [['expected', 'not expected'], ['expected'], true],
+            [['no match'], ['match'], false],
         ];
     }
 
@@ -256,6 +259,9 @@ class ValidationRulesTest extends TestCase {
             ['test', ['test', 'string', 'hello'], false],
             ['testing', ['test', 'world', 'hello'], true],
             ['inside', ['not_in', 'world', 'outside'], true],
+            [['test', 'for', 'arrays'], ['test', 'for'], false],
+            [['expected', 'not expected'], ['expected'], false],
+            [['no match'], ['match'], true],
         ];
     }
 
