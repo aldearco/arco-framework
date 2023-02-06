@@ -3,10 +3,10 @@
 namespace Arco\Database\Archer;
 
 use Arco\Database\Archer\About\Arrayable;
-use Arco\Database\Archer\About\Pagination;
+use Arco\Database\Archer\About\Pagination\Paginable;
 
 class Collection {
-    use Pagination;
+    use Paginable;
     use Arrayable;
 
     public function __construct(protected $items) {

@@ -32,8 +32,8 @@ trait Arrayable {
         foreach ($this->items as $item) {
             array_push(
                 $array,
-                $this->showHidden 
-                    ? $item->getAttributes() 
+                $this->showHidden
+                    ? $item->getAttributes()
                     : $item->getPublicAttributes()
             );
         }

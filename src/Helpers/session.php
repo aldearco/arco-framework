@@ -1,5 +1,6 @@
 <?php
 
+use Arco\Database\Archer\About\Pagination\Paginator;
 use Arco\Session\Session;
 
 if (!function_exists('session')) {
@@ -40,5 +41,16 @@ if (!function_exists('old')) {
      */
     function old(string $field) {
         return session()->get("_old", [])[$field] ?? null;
+    }
+}
+
+if (!function_exists('pagination')) {
+    /**
+     * Create a new Paginator object
+     *
+     * @return Paginator
+     */
+    function pagination(): Paginator {
+        return new Paginator();
     }
 }

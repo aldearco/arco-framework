@@ -5,18 +5,17 @@
   <div class="col-lg-4 col-md-6 col-12">
     <div class="card">
       <div class="card-header">
-        <h1 class="display-6">Test varios</h1>
+        <h1 class="display-6">Test paginacion</h1>
       </div>
       <div class="card-body">
-        <form method="post" action="<?= route('storage.store') ?>?id=1" enctype="multipart/form-data">
-          #csrf
-          <div class="mb-3">
-            <label class="file"><?= __('login.email') ?></label>
-            <input name="file" type="file" class="form-control">
-            <div class="text-danger"><?= error("file") ?></div>
-          </div>
-          <button type="submit" class="btn btn-primary"><?= __('Submit') ?></button>
-        </form>
+        <pre>
+          <?php foreach ($users as $user) {
+            var_dump($user->toArray());
+          } ?>
+        </pre>
+        <pre>
+          <?php var_dump(pagination()->links()) ?>
+        </pre>
       </div>
     </div>
   </div>

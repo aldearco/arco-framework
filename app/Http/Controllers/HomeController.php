@@ -42,17 +42,9 @@ class HomeController extends Controller {
     }
 
     public function testing() {
-        $users = User::collection()->paginate(2);
+        $users = User::collection()->paginate(1);
 
-        foreach ($users as $user) {
-            echo "<pre>";
-            print_r($user);
-            echo "</pre>";
-        }
-
-        die;
-
-        return json([]);
+        return view('test', compact('users'));
     }
 
     public function storeRules(Request $request) {
