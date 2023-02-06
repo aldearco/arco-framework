@@ -2,12 +2,14 @@
 
 namespace Arco\Database\Archer;
 
+use Arco\Database\Archer\About\Arrayable;
 use Arco\Helpers\Arrows\Str;
 use Arco\Database\Archer\About\Relations;
 use Arco\Database\Drivers\DatabaseDriver;
 
 abstract class Model {
     use Relations;
+    use Arrayable;
 
     /**
      * Name of the table
@@ -118,6 +120,18 @@ abstract class Model {
     }
 
     /**
+     * Get all public attributes
+     *
+     * @return array
+     */
+    public function getPublicAttributes(): array {
+        return array_filter(
+            $this->attributes,
+            fn ($attr) => !in_array($attr, $this->hidden)
+        );
+    }
+
+    /**
      * Get table name
      *
      * @return string
@@ -150,7 +164,7 @@ abstract class Model {
     }
 
     /**
-     * Undocumented function
+     * Get Foreign Key for this Model in string format
      *
      * @return string
      */
@@ -188,16 +202,16 @@ abstract class Model {
     /**
      * Turn object models into array
      */
-    public function toArray() {
-        if (count($this->attributes) == 0) {
-            return [];
-        }
+    // public function toArray() {
+    //     if (count($this->attributes) == 0) {
+    //         return [];
+    //     }
 
-        return array_filter(
-            $this->attributes,
-            fn ($attr) => !in_array($attr, $this->hidden)
-        );
-    }
+    //     return array_filter(
+    //         $this->attributes,
+    //         fn ($attr) => !in_array($attr, $this->hidden)
+    //     );
+    // }
 
     /**
      * Create a new row in database
