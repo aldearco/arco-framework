@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Arco\Http\Request;
 use Arco\Validation\File;
+use Arco\Helpers\Arrows\Str;
 use App\Http\Controllers\Controller;
 use Arco\Database\Archer\TableCrafter;
-use Arco\Helpers\Arrows\Str;
-use Arco\Validation\Rule;
 
 class HomeController extends Controller {
     public function show() {
@@ -39,6 +39,20 @@ class HomeController extends Controller {
 
     public function rules() {
         return view("rules");
+    }
+
+    public function testing() {
+        $users = User::collection()->paginate(2);
+
+        foreach ($users as $user) {
+            echo "<pre>";
+            print_r($user);
+            echo "</pre>";
+        }
+
+        die;
+
+        return json([]);
     }
 
     public function storeRules(Request $request) {

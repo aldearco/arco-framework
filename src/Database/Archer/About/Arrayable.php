@@ -6,6 +6,8 @@ use Arco\Database\Archer\Collection;
 use Arco\Database\Archer\Model;
 
 trait Arrayable {
+    protected bool $showHidden = false;
+
     /**
      * Turn an Model Object into an array with their attributes.
      *
@@ -16,7 +18,7 @@ trait Arrayable {
             return [];
         }
 
-        return $this->getPublicAttributes();
+        return $this->showHidden ? $this->getAttributes() : $this->getPublicAttributes();
     }
 
     /**
@@ -30,11 +32,23 @@ trait Arrayable {
         foreach ($this->items as $item) {
             array_push(
                 $array,
-                $item->getPublicAttributes()
+                $this->showHidden 
+                    ? $item->getAttributes() 
+                    : $item->getPublicAttributes()
             );
         }
 
         return $array;
+    }
+
+    /**
+     * Show hidden attibutes in array items.
+     *
+     * @return static
+     */
+    public function showHiddenAttributes(): static {
+        $this->showHidden = true;
+        return $this;
     }
 
     /**
@@ -45,7 +59,7 @@ trait Arrayable {
     public function toArray(): array {
         if (is_subclass_of($this, Model::class)) {
             return $this->modelToArray();
-        } elseif (class_basename($this) === Collection::class) {
+        } elseif (get_class($this) === Collection::class) {
             return $this->collectionToArray();
         } else {
             return [];

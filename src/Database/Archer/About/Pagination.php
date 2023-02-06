@@ -23,12 +23,13 @@ trait Pagination {
      * Get a paginated array
      *
      * @param integer $size Number of items by page
-     * @return array
      */
-    public function paginate(int $size): array {
+    public function paginate(int $size) {
         $this->size = $size;
         $offset = ($this->getPageNumber() - 1) * $this->size;
-        return array_slice($this->items, $offset, $this->size);
+        $this->items = array_slice($this->items, $offset, $this->size);
+
+        return $this;
     }
 
     /**

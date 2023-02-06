@@ -120,15 +120,25 @@ abstract class Model {
     }
 
     /**
-     * Get all public attributes
+     * Get all attributes.
+     *
+     * @return array
+     */
+    public function getAttributes(): array {
+        return $this->attributes;
+    }
+
+    /**
+     * Get all public attributes.
      *
      * @return array
      */
     public function getPublicAttributes(): array {
-        return array_filter(
-            $this->attributes,
-            fn ($attr) => !in_array($attr, $this->hidden)
-        );
+        foreach ($this->hidden as $hide) {
+            unset($this->attributes[$hide]);
+        }
+
+        return $this->attributes;
     }
 
     /**
@@ -328,7 +338,7 @@ abstract class Model {
         $rows = self::$driver->statement("SELECT * FROM $model->table");
 
         if (count($rows) == 0) {
-            return [];
+            return (new Collection([]))->get();
         }
 
         $models = [];
@@ -337,7 +347,29 @@ abstract class Model {
             $models[] = (new static())->setAttributes($rows[$i]);
         }
 
-        return $models;
+        return (new Collection($models))->get();
+    }
+
+    /**
+     * Create a collection with all Model objects stored in the database.
+     *
+     * @return Collection
+     */
+    public static function collection(): Collection {
+        $model = new static();
+        $rows = self::$driver->statement("SELECT * FROM $model->table");
+
+        if (count($rows) == 0) {
+            return (new Collection([]))->get();
+        }
+
+        $models = [];
+
+        for ($i = 0; $i < count($rows); $i++) {
+            $models[] = (new static())->setAttributes($rows[$i]);
+        }
+
+        return new Collection($models);
     }
 
     /**
@@ -345,9 +377,9 @@ abstract class Model {
      *
      * @param string $column
      * @param mixed $value
-     * @return array
+     * @return Collection
      */
-    public static function where(string $column, mixed $value): array {
+    public static function where(string $column, mixed $value): Collection {
         $model = new static();
         $rows = self::$driver->statement(
             "SELECT * FROM $model->table WHERE $column = ?",
@@ -355,7 +387,7 @@ abstract class Model {
         );
 
         if (count($rows) == 0) {
-            return [];
+            return new Collection([]);
         }
 
         $models = [];
@@ -364,7 +396,7 @@ abstract class Model {
             $models[] = (new static())->setAttributes($rows[$i]);
         }
 
-        return $models;
+        return new Collection($models);
     }
 
     /**

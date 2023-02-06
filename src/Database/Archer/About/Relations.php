@@ -4,6 +4,7 @@ namespace Arco\Database\Archer\About;
 
 use Arco\Helpers\Arrows\Str;
 use Arco\Database\Archer\Model;
+use Arco\Database\Archer\Collection;
 
 trait Relations {
     protected static array $relatedInstances = [];
@@ -107,7 +108,7 @@ trait Relations {
             $models[] = (new $related())->setAttributes($rows[$i]);
         }
 
-        return $models;
+        return new Collection($models);
     }
 
     /**
