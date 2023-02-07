@@ -2,9 +2,9 @@
     <ul class="pagination justify-content-center">
         <li class="page-item <?= $pagination->onFirstPage() ? 'disabled' : '' ?>">
             <?php if ($pagination->onFirstPage()): ?>
-            <span class="page-link">Previous</span>
+            <span class="page-link"><?= __('pagination.previous') ?></span>
             <?php else: ?>
-            <a href="<?= $pagination->previousPageUrl() ?>" class="page-link">Previous</a>
+            <a href="<?= $pagination->previousPageUrl() ?>" class="page-link"><?= __('pagination.previous') ?></a>
             <?php endif ?>
         </li>
         <?php $showDots = false; ?>
@@ -23,9 +23,9 @@
         <?php endforeach ?>
         <li class="page-item <?= $pagination->onLastPage() ? 'disabled' : '' ?>">
             <?php if ($pagination->onLastPage()): ?>
-            <span class="page-link">Next</span>
+            <span class="page-link"><?= __('pagination.next') ?></span>
             <?php else: ?>
-            <a href="<?= $pagination->nextPageUrl() ?>" class="page-link">Next</a>
+            <a href="<?= $pagination->nextPageUrl() ?>" class="page-link"><?= __('pagination.next') ?></a>
             <?php endif ?>
         </li>
     </ul>
