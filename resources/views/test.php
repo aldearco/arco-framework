@@ -13,9 +13,7 @@
             var_dump($user->toArray());
           } ?>
         </pre>
-        <pre>
-          <?php var_dump(pagination()->links()) ?>
-        </pre>
+        <?php pagination()->links() ?>
       </div>
     </div>
   </div>

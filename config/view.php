@@ -2,5 +2,6 @@
 
 return [
     "engine" => "arrow-vulcan",
-    "path" => resourcesDirectory() . "/views"
+    "path" => resourcesDirectory() . "/views",
+    "pagination" => "bootstrap",
 ];

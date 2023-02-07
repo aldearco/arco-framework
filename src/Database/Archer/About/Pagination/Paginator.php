@@ -4,11 +4,11 @@ namespace Arco\Database\Archer\About\Pagination;
 
 class Paginator {
     /**
-     * Number of actual page for this query.
+     * Number of current page for this query.
      *
      * @var integer
      */
-    protected int $actual;
+    protected int $current;
 
     /**
      * Number of pages for this query.
@@ -32,27 +32,27 @@ class Paginator {
     protected int $pageItems;
 
     public function __construct() {
-        $this->actual = session()->get('_pagination')['actual'];
+        $this->current = session()->get('_pagination')['current'];
         $this->pages = intval(session()->get('_pagination')['pages']);
         $this->totalItems = session()->get('_pagination')['total-items'];
         $this->pageItems = session()->get('_pagination')['page-items'];
     }
 
     /**
-     * Get the number of actual page for this query.
+     * Get the number of current page for this query.
      *
      * @return integer
      */
-    public function actual(): int {
-        return $this->actual;
+    public function currentPage(): int {
+        return $this->current;
     }
 
     /**
-     * Get the number of pages for this query.
+     * Get the number of the last page.
      *
      * @return integer
      */
-    public function pages(): int {
+    public function lastPage(): int {
         return $this->pages;
     }
 
@@ -61,7 +61,7 @@ class Paginator {
      *
      * @return integer
      */
-    public function totalItems(): int {
+    public function total(): int {
         return $this->totalItems;
     }
 
@@ -70,26 +70,99 @@ class Paginator {
      *
      * @return integer
      */
-    public function pageItems(): int {
+    public function perPage(): int {
         return $this->pageItems;
     }
 
     /**
-     * Get an array with information that can be used to display pagination links
+     * Get an array with information that can be used to display pagination links.
      *
      * @return array
      */
-    public function links(): array {
+    public function pagesData(): array {
         $currentUri = request()->uri();
         $links = [];
 
         for ($i = 1; $this->pages >= $i; $i++) {
             $links[$i] = [
-                'uri' => "$currentUri?page=$i",
-                'active' => $this->actual() === $i
+                'url' => "$currentUri?page=$i",
+                'active' => $this->currentPage() === $i
             ];
         }
 
         return $links;
+    }
+
+    /**
+     * Get next page URL.
+     *
+     * @return string|null
+     */
+    public function nextPageUrl(): string|null {
+        $currentUri = request()->uri();
+        $nextPage = $this->current + 1;
+
+        if ($nextPage > $this->pages) {
+            return null;
+        }
+
+        return "$currentUri?page=$nextPage";
+    }
+
+    /**
+     * Get previous page URL.
+     *
+     * @return string|null
+     */
+    public function previousPageUrl(): string|null {
+        $currentUri = request()->uri();
+        $previousPage = $this->current - 1;
+
+        if ($previousPage <= 0) {
+            return null;
+        }
+
+        return "$currentUri?page=$previousPage";
+    }
+
+    /**
+     * Check if current page is the first page.
+     *
+     * @return boolean
+     */
+    public function onFirstPage(): bool {
+        return $this->current === 1;
+    }
+
+    /**
+     * Check if current page is the last page.
+     *
+     * @return boolean
+     */
+    public function onLastPage() {
+        return $this->current == $this->pages;
+    }
+
+    protected function parseTemplate(string $template): string {
+        return str_replace('.', '/', $template);
+    }
+
+    protected function renderPaginationTemplate(string $template) {
+        $file = config('view.path')."/layouts/components/pagination/".$this->parseTemplate($template).'.php';
+        $pagination = $this;
+
+        if (file_exists($file)) {
+            include $file;
+        } else {
+            include config('view.path')."/layouts/components/pagination/".$this->parseTemplate(config('view.pagination')).'.php';
+        }
+    }
+
+    public function links(?string $template = null) {
+        if (is_null($template)) {
+            return $this->renderPaginationTemplate(config('view.pagination'));
+        }
+
+        return $this->renderPaginationTemplate($template);
     }
 }

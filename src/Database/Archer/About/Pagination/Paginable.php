@@ -32,7 +32,7 @@ trait Paginable {
         session()->flash(
             '_pagination',
             [
-                'actual' => $this->getPageNumber(),
+                'current' => $this->getPageNumber(),
                 'pages' => ceil(count($this->items) / $this->size),
                 'total-items' => count($this->items),
                 'page-items' => $this->size,
