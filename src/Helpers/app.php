@@ -61,3 +61,17 @@ if (!function_exists('resourcesDirectory')) {
         return App::$root . "/resources";
     }
 }
+
+if (!function_exists('asset')) {
+    /**
+     * Get app's assets directory
+     *
+     * @return string
+     */
+    function asset(string $path): string {
+        return app()->server->protocol()
+        .'://'.config('app.url')
+        .config('app.asset_url')
+        .'/'.$path;
+    }
+}

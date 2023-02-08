@@ -15,5 +15,10 @@ return [
     "translator" => "TranslatorPHP",
     "translation_directory" => "/languages",
     "translation_file_type" => "php",
-    "locale" => "en"
+    "locale" => "en",
+
+    /**
+     * Assets
+     */
+    "asset_url" => "/assets"
 ];

@@ -12,13 +12,13 @@
           #csrf
           <div class="mb-3">
             <label class="email"><?= __('login.email') ?></label>
-            <input name="email" type="text" value="<?= old("email") ?>" class="form-control">
+            <input name="email" type="text" value="<?= old("email") ?>" class="form-control <?= error("email") ? 'is-invalid' : '' ?>">
             <div class="text-danger"><?= error("email") ?></div>
           </div>
 
           <div class="mb-3">
             <label class="password"><?= __('login.password') ?></label>
-            <input name="password" type="password" class="form-control">
+            <input name="password" type="password" class="form-control <?= error("password") ? 'is-invalid' : '' ?>">
             <div class="text-danger"><?= error("password") ?></div>
           </div>
 
