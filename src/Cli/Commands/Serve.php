@@ -17,7 +17,7 @@ class Serve extends Command {
         $this
             ->addOption("host", null, InputOption::VALUE_OPTIONAL, "Host address", "127.0.0.1")
             ->addOption("port", null, InputOption::VALUE_OPTIONAL, "Port", "8080")
-            ->addOption("public", null, InputOption::VALUE_OPTIONAL, "Public directory name in the project root", "public");
+            ->addOption("public", null, InputOption::VALUE_OPTIONAL, "Public directory name in the project root", config('app.public'));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {

@@ -35,11 +35,12 @@ class Storage {
      * Create a symbolic link between the public folder and the storage folder.
      */
     public function link() {
-        if (!file_exists('public/storage')) {
+        $publicFolder = config('app.public');
+        if (!file_exists($publicFolder.'/storage')) {
             if (PHP_OS === "WINNT") {
-                return exec('mklink /J "public\storage" "..\storage\public"', $output, $return_var);
+                return exec('mklink /J "'.$publicFolder.'\storage" "..\storage\public"', $output, $return_var);
             } else {
-                return symlink('../storage/public', 'public/storage');
+                return symlink('../storage/public', $publicFolder.'/storage');
             }
         }
         throw new \Exception("Link already exists.");
