@@ -5,31 +5,31 @@ namespace Arco\View;
 use Arco\View\Fletcher\Meta;
 use Arco\View\Fletcher\Links;
 use Arco\View\Fletcher\Content;
+use Arco\View\Fletcher\Layouts;
 use Arco\View\Fletcher\OtherTags;
 use Arco\View\Fletcher\Spoofing;
 
 class ArrowVulcan implements View {
     use Meta;
     use Links;
+    use Layouts;
     use Content;
     use Spoofing;
     use OtherTags;
 
-    protected string $viewsDirectory;
-
     /**
-     * Default Layout name file
+     * View file path
      *
      * @var string
      */
-    protected string $defaultLayout = "main";
+    protected string $viewPath;
 
     /**
      * This tag is replaced in `$this->layoutContent` with `$this->viewContent` when `public function render()` is executed.
      *
      * @var string
      */
-    protected string $contentTag = "@content";
+    protected string $contentTag = "#content";
 
     /**
      * View HTML Code stored into this string
@@ -46,8 +46,8 @@ class ArrowVulcan implements View {
     protected string $layoutContent;
 
 
-    public function __construct(string $viewsDirectory) {
-        $this->viewsDirectory = $viewsDirectory;
+    public function __construct(string $viewPath) {
+        $this->viewPath = $viewPath;
     }
 
     /**
@@ -59,7 +59,7 @@ class ArrowVulcan implements View {
      */
     public function render(string $view, array $params = [], string $layout = null): string {
         $viewContent = $this->renderView($view, $params);
-        $layoutContent = $this->renderLayout($layout ?? $this->defaultLayout);
+        $layoutContent = $this->renderLayout($layout ?? $this->layout);
 
         return str_replace($this->contentTag, $viewContent, $layoutContent);
     }
@@ -72,8 +72,9 @@ class ArrowVulcan implements View {
      * @return string
      */
     protected function renderView(string $view, array $params = []): string {
-        $this->viewContent = $this->phpFileOutput("{$this->viewsDirectory}/{$view}.php", $params);
-        $this->getMetaTitle()
+        $this->viewContent = $this->phpFileOutput("{$this->viewPath}/{$view}.php", $params);
+        $this->getLayout()
+            ->getMetaTitle()
             ->getStyles()
             ->getScripts()
             ->extractContent()
@@ -89,7 +90,7 @@ class ArrowVulcan implements View {
      * @return string
      */
     protected function renderLayout(string $layout): string {
-        $this->layoutContent = $this->phpFileOutput("{$this->viewsDirectory}/layouts/{$layout}.php");
+        $this->layoutContent = $this->phpFileOutput("{$this->viewPath}/layouts/{$layout}.php");
         $this->setMetaTitle()
             ->setStlyes()
             ->setScripts();

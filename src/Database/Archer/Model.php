@@ -2,11 +2,14 @@
 
 namespace Arco\Database\Archer;
 
+use Arco\Database\Archer\About\Arrayable;
+use Arco\Helpers\Arrows\Str;
 use Arco\Database\Archer\About\Relations;
 use Arco\Database\Drivers\DatabaseDriver;
 
 abstract class Model {
     use Relations;
+    use Arrayable;
 
     /**
      * Name of the table
@@ -117,24 +120,66 @@ abstract class Model {
     }
 
     /**
-     * Get the primary key name for this model
+     * Get all attributes.
+     *
+     * @return array
      */
-    protected function getPrimaryKey() {
+    public function getAttributes(): array {
+        return $this->attributes;
+    }
+
+    /**
+     * Get all public attributes.
+     *
+     * @return array
+     */
+    public function getPublicAttributes(): array {
+        foreach ($this->hidden as $hide) {
+            unset($this->attributes[$hide]);
+        }
+
+        return $this->attributes;
+    }
+
+    /**
+     * Get table name
+     *
+     * @return string
+     */
+    public function getTable(): string {
+        return $this->table;
+    }
+
+    /**
+     * Get the primary key name for this model
+     *
+     * @return string
+     */
+    public function getKeyName(): string {
         return $this->primaryKey;
     }
 
     /**
      * Set the value of the primary key in attributes
      */
-    protected function setPrimaryKeyAttribute(int|string $primaryKey) {
+    public function setPrimaryKeyAttribute(int|string $primaryKey) {
         $this->__set($this->primaryKey, $primaryKey);
     }
 
     /**
      * Get the value of the primary key in attributes
      */
-    protected function getPrimaryKeyAttribute() {
+    public function getKey() {
         return $this->__get($this->primaryKey);
+    }
+
+    /**
+     * Get Foreign Key for this Model in string format
+     *
+     * @return string
+     */
+    public function getForeignKey(): string {
+        return Str::snake($this->getBasename()).'_'.$this->getKeyName();
     }
 
     /**
@@ -167,17 +212,22 @@ abstract class Model {
     /**
      * Turn object models into array
      */
-    public function toArray() {
-        if (count($this->attributes) == 0) {
-            return [];
-        }
+    // public function toArray() {
+    //     if (count($this->attributes) == 0) {
+    //         return [];
+    //     }
 
-        return array_filter(
-            $this->attributes,
-            fn ($attr) => !in_array($attr, $this->hidden)
-        );
-    }
+    //     return array_filter(
+    //         $this->attributes,
+    //         fn ($attr) => !in_array($attr, $this->hidden)
+    //     );
+    // }
 
+    /**
+     * Create a new row in database
+     *
+     * @return static
+     */
     public function save(): static {
         if ($this->insertTimestamps) {
             $this->attributes["created_at"] = date("Y-m-d H:m:s");
@@ -197,6 +247,11 @@ abstract class Model {
         return $this;
     }
 
+    /**
+     * Update model attributes in database
+     *
+     * @return static
+     */
     public function update(): static {
         if ($this->insertTimestamps) {
             $this->attributes["updated_at"] = date("Y-m-d H:m:s");
@@ -214,6 +269,11 @@ abstract class Model {
         return $this;
     }
 
+    /**
+     * Delete the row in database
+     *
+     * @return static
+     */
     public function delete(): static {
         self::$driver->statement(
             "DELETE FROM $this->table WHERE $this->primaryKey = {$this->attributes[$this->primaryKey]}"
@@ -278,7 +338,7 @@ abstract class Model {
         $rows = self::$driver->statement("SELECT * FROM $model->table");
 
         if (count($rows) == 0) {
-            return [];
+            return (new Collection([]))->get();
         }
 
         $models = [];
@@ -287,7 +347,29 @@ abstract class Model {
             $models[] = (new static())->setAttributes($rows[$i]);
         }
 
-        return $models;
+        return (new Collection($models))->get();
+    }
+
+    /**
+     * Create a collection with all Model objects stored in the database.
+     *
+     * @return Collection
+     */
+    public static function collection(): Collection {
+        $model = new static();
+        $rows = self::$driver->statement("SELECT * FROM $model->table");
+
+        if (count($rows) == 0) {
+            return (new Collection([]))->get();
+        }
+
+        $models = [];
+
+        for ($i = 0; $i < count($rows); $i++) {
+            $models[] = (new static())->setAttributes($rows[$i]);
+        }
+
+        return new Collection($models);
     }
 
     /**
@@ -295,9 +377,9 @@ abstract class Model {
      *
      * @param string $column
      * @param mixed $value
-     * @return array
+     * @return Collection
      */
-    public static function where(string $column, mixed $value): array {
+    public static function where(string $column, mixed $value): Collection {
         $model = new static();
         $rows = self::$driver->statement(
             "SELECT * FROM $model->table WHERE $column = ?",
@@ -305,7 +387,7 @@ abstract class Model {
         );
 
         if (count($rows) == 0) {
-            return [];
+            return new Collection([]);
         }
 
         $models = [];
@@ -314,7 +396,7 @@ abstract class Model {
             $models[] = (new static())->setAttributes($rows[$i]);
         }
 
-        return $models;
+        return new Collection($models);
     }
 
     /**

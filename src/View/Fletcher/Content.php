@@ -5,9 +5,9 @@ namespace Arco\View\Fletcher;
 use Arco\View\Exceptions\MissingTagException;
 
 trait Content {
-    public string $startContentTag = "@content";
+    public string $startContentTag = "#content";
 
-    public string $endContentTag = "@endcontent";
+    public string $endContentTag = "#endcontent";
 
     /**
      * If the `$this->startContentTag` and `$this->endContentTag` tags are set, extract their content and save it in `$this->viewContent`

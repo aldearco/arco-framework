@@ -55,7 +55,7 @@ class Request {
     /**
      * Uploaded files.
      *
-     * @var array<string, \Lune\Storage\File>
+     * @var array<string, \Arco\Storage\File>
      */
     protected array $files = [];
 
@@ -158,6 +158,16 @@ class Request {
     }
 
     /**
+     * Get all files from request.
+     *
+     * @param string $name
+     * @return array<string, \Arco\Storage\File>
+     */
+    public function files(): array {
+        return $this->files ?? [];
+    }
+
+    /**
      * Set uploaded files.
      *
      * @param array<string, File> $files
@@ -191,6 +201,16 @@ class Request {
     public function setPostData(array $data): self {
         $this->data = $data;
         return $this;
+    }
+
+    /**
+     * Return if isset `$key` inside request data array
+     *
+     * @param string $key
+     * @return boolean
+     */
+    public function has(string $key): bool {
+        return isset($this->data[$key]);
     }
 
     /**
@@ -244,7 +264,7 @@ class Request {
      * @return array
      */
     public function validate(array $rules, array $messages = []): array {
-        $validator = new Validator($this->data);
+        $validator = new Validator(array_merge($this->data, $this->query, $this->files));
 
         return $validator->validate($rules, $messages);
     }

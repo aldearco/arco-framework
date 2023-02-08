@@ -34,23 +34,22 @@ class DiskFileStorageTest extends TestCase {
      * @dataProvider files
      */
     public function testStoresSingleFileAndCreatesParentDirectories($file, $content) {
-        $appUrl = "localhost:8080";
         $storageUri = "storage";
-        $storage = new DiskFileStorage($this->storageDirectory, $storageUri, $appUrl);
+        $storage = new DiskFileStorage($this->storageDirectory, $storageUri);
         $url = $storage->put($file, $content);
         $path = "$this->storageDirectory/$file";
 
         $this->assertDirectoryExists($this->storageDirectory);
         $this->assertFileExists($path);
         $this->assertEquals($content, file_get_contents($path));
-        $this->assertEquals("$appUrl/$storageUri/$file", $url);
+        $this->assertEquals("$storageUri/$file", $url);
     }
 
     public function testStoresMultipleFiles() {
         $f1 = "test.txt";
         $f2 = "f2.txt";
         $f3 = "foo/bar/f3.txt";
-        $storage = new DiskFileStorage($this->storageDirectory, "test", "test");
+        $storage = new DiskFileStorage($this->storageDirectory, "test");
 
         foreach ([$f1, $f2, $f3] as $f) {
             $storage->put($f, $f);

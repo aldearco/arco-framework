@@ -25,7 +25,7 @@ class VerifyCsrfToken implements Middleware {
     ];
 
     protected function newCookie() {
-        Cookie::set('csrf_token', session()->token(), 0, '/', "", false, true);
+        Cookie::set('csrf_token', session()->token(), 0, '/', sameSite: config('session.same_site', 'lax'));
     }
 
     protected function tokensMatch(Request $request) {

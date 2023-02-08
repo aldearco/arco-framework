@@ -20,14 +20,27 @@ class Storage {
     }
 
     /**
+     * Return an URL for stored files.
+     *
+     * @param string $path
+     * @return string
+     */
+    public static function url(string $path): string {
+        return app()->server->protocol()
+            .'://'.config('app.url')
+            .'/'.$path;
+    }
+
+    /**
      * Create a symbolic link between the public folder and the storage folder.
      */
     public function link() {
-        if (!file_exists('public/storage')) {
+        $publicFolder = config('app.public');
+        if (!file_exists($publicFolder.'/storage')) {
             if (PHP_OS === "WINNT") {
-                return exec('mklink /J "public\storage" "..\storage"', $output, $return_var);
+                return exec('mklink /J "'.$publicFolder.'\storage" "..\storage\public"', $output, $return_var);
             } else {
-                return symlink('../storage', 'public/storage');
+                return symlink('../storage/public', $publicFolder.'/storage');
             }
         }
         throw new \Exception("Link already exists.");

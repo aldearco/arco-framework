@@ -17,7 +17,7 @@ class Serve extends Command {
         $this
             ->addOption("host", null, InputOption::VALUE_OPTIONAL, "Host address", "127.0.0.1")
             ->addOption("port", null, InputOption::VALUE_OPTIONAL, "Port", "8080")
-            ->addOption("public", null, InputOption::VALUE_OPTIONAL, "Public directory name in the project root", "public");
+            ->addOption("public", null, InputOption::VALUE_OPTIONAL, "Public directory name in the project root", config('app.public'));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -25,7 +25,7 @@ class Serve extends Command {
         $port = $input->getOption("port");
         $publicDirectory = App::$root . "/" . $input->getOption("public");
 
-        $output->writeln("<info>Starting PHP development server on $host:$port</info>");
+        $output->writeln("\n<question> SUCCESS </question> PHP development server on <fg=#a2c181;options=bold>$host:$port</>\n");
         shell_exec("cd $publicDirectory/; php -S $host:$port");
 
         return Command::SUCCESS;

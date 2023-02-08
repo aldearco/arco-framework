@@ -2,11 +2,16 @@
 
 namespace Arco\Tests\Validation;
 
+use Arco\Validation\Rules\In;
 use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
+use Arco\Validation\Rules\Size;
 use PHPUnit\Framework\TestCase;
 use Arco\Validation\Rules\Email;
+use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
+use Arco\Validation\Rules\Between;
+use Arco\Validation\Rules\Boolean;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
@@ -14,6 +19,10 @@ use Arco\Validation\Rules\GreaterThan;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Exceptions\RuleParseException;
+use Arco\Validation\Rules\Different;
+use Arco\Validation\Rules\isArray;
+use Arco\Validation\Rules\Json;
+use Arco\Validation\Rules\Present;
 
 class ValidationRulesTest extends TestCase {
     public function emails() {
@@ -57,6 +66,31 @@ class ValidationRulesTest extends TestCase {
         $data = ['test' => $value];
         $rule = new Required();
         $this->assertEquals($expected, $rule->isValid('test', $data));
+    }
+
+    public function presentData() {
+        return [
+            ["", true],
+            [null, true],
+            [5, true],
+            ["test", true],
+        ];
+    }
+
+    /**
+     * @dataProvider presentData
+     */
+    public function test_present($value, $expected) {
+        $data = ['test' => $value];
+        $rule = new Present();
+        $this->assertEquals($expected, $rule->isValid('test', $data));
+    }
+
+    public function test_present_with_missing_data_field() {
+        $data = ['test' => ""];
+        $rule = new Present();
+        $this->assertEquals(true, $rule->isValid('test', $data));
+        $this->assertEquals(false, $rule->isValid('test2', $data));
     }
 
     public function test_required_with() {
@@ -164,7 +198,8 @@ class ValidationRulesTest extends TestCase {
             ["hol", 5, false],
             ["holasoyalberto", 6, true],
             ["", 3, false],
-            ["5", 5, false],
+            [['test1', 'test2', 'test3'], 2, true],
+            [['test1', 'test2', 'test3'], 5, false],
             ["0123456789", 9, true],
             [5, 5, false],
         ];
@@ -184,7 +219,8 @@ class ValidationRulesTest extends TestCase {
             ["test", 5, true],
             ["holasoyalberto", 6, false],
             ["", 3, true],
-            ["5", 5, true],
+            [['test1', 'test2', 'test3'], 2, false],
+            [['test1', 'test2', 'test3'], 5, true],
             ["0123456789", 9, false],
             [5, 5, true],
         ];
@@ -195,6 +231,166 @@ class ValidationRulesTest extends TestCase {
      */
     public function test_max($value, $max, $expected) {
         $rule = new Max($max);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function inData() {
+        return [
+            ['test', ['test', 'string', 'hello'], true],
+            ['testing', ['test', 'world', 'hello'], false],
+            ['inside', ['not_in', 'world', 'outside'], false],
+            [['test', 'for', 'arrays'], ['test', 'for'], true],
+            [['expected', 'not expected'], ['expected'], true],
+            [['no match'], ['match'], false],
+        ];
+    }
+
+    /**
+     * @dataProvider inData
+     */
+    public function test_in($value, $array, $expected) {
+        $rule = new In($array);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function notInData() {
+        return [
+            ['test', ['test', 'string', 'hello'], false],
+            ['testing', ['test', 'world', 'hello'], true],
+            ['inside', ['not_in', 'world', 'outside'], true],
+            [['test', 'for', 'arrays'], ['test', 'for'], false],
+            [['expected', 'not expected'], ['expected'], false],
+            [['no match'], ['match'], true],
+        ];
+    }
+
+    /**
+     * @dataProvider notInData
+     */
+    public function test_not_in($value, $array, $expected) {
+        $rule = new NotIn($array);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function sizeData() {
+        return [
+            ['test', 4, true],
+            ['tests', 4, false],
+            [['test', 'unit', 'testing'], 3, true],
+            [['hello', 'world'], 3, false],
+            ['', 1, false],
+            [null, 50, false],
+            [[], 0, true]
+        ];
+    }
+
+    /**
+     * @dataProvider sizeData
+     */
+    public function test_size($value, $size, $expected) {
+        $rule = new Size($size);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function betweenData() {
+        return [
+            ['test', 2, 5, true],
+            ['test is required', 2, 8, false],
+            ['test test', 6, 9, true],
+            [['one', 'two', 'three'], 1, 4, true],
+            [['one', 'two', 'three', 'four'], 1, 3, false],
+        ];
+    }
+
+    /**
+     * @dataProvider betweenData
+     */
+    public function test_between($value, $min, $max, $expected) {
+        $rule = new Between($min, $max);
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function booleanData() {
+        return [
+            ['test', false],
+            ['1', true],
+            ['0', true],
+            ['true false', false],
+            ['false', true],
+            ['true', true],
+            [true, true],
+            [false, true],
+            [null, false],
+        ];
+    }
+
+    /**
+     * @dataProvider booleanData
+     */
+    public function test_boolean($value, $expected) {
+        $rule = new Boolean();
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function differentData() {
+        return [
+            ['test', 'test 2', true],
+            ['test', 'test', false],
+            ['test', 'test is required', true],
+            [123, 123, false],
+            [321, "123", true],
+        ];
+    }
+
+    /**
+     * @dataProvider differentData
+     */
+    public function test_different($value, $value2, $expected) {
+        $rule = new Different('test2');
+        $data = ["test" => $value, "test2" => $value2 ];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function jsonData() {
+        return [
+            ['{"Test": "Is a test"}', true],
+            ['{"Test" => "Is a test"}', false],
+            ['{Test: "Is a test"}', false],
+            ['', false],
+            ['{"Primary": "Primary Value", "Secondary": "Secondary Value"}', true],
+            ['{"Primary": "Primary Value", "Secondary": "Secondary Value",}', false],
+        ];
+    }
+
+    /**
+     * @dataProvider jsonData
+     */
+    public function test_json($value, $expected) {
+        $rule = new Json();
+        $data = ["test" => $value];
+        $this->assertEquals($expected, $rule->isValid("test", $data));
+    }
+
+    public function isArrayData() {
+        return [
+            [[], true],
+            [['test', 'test-2'], true],
+            [['key' => 'test', 'key2' => 'test-2'], true],
+            ["I'm not an array", false]
+        ];
+    }
+
+    /**
+     * @dataProvider isArrayData
+     */
+    public function test_is_array($value, $expected) {
+        $rule = new isArray();
         $data = ["test" => $value];
         $this->assertEquals($expected, $rule->isValid("test", $data));
     }

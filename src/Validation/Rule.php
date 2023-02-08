@@ -2,20 +2,30 @@
 
 namespace Arco\Validation;
 
-use Arco\Validation\Exceptions\RuleParseException;
-use Arco\Validation\Exceptions\UnknownRuleException;
+use ReflectionClass;
+use Arco\Validation\Rules\In;
+use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\Min;
+use Arco\Validation\Rules\Json;
+use Arco\Validation\Rules\Size;
 use Arco\Validation\Rules\Email;
+use Arco\Validation\Rules\NotIn;
 use Arco\Validation\Rules\Number;
+use Arco\Validation\Rules\Unique;
+use Arco\Validation\Rules\Between;
+use Arco\Validation\Rules\Boolean;
+use Arco\Validation\Rules\IsArray;
+use Arco\Validation\Rules\Present;
 use Arco\Validation\Rules\LessThan;
 use Arco\Validation\Rules\Required;
 use Arco\Validation\Rules\Confirmed;
+use Arco\Validation\Rules\Different;
 use Arco\Validation\Rules\GreaterThan;
-use Arco\Validation\Rules\Max;
 use Arco\Validation\Rules\RequiredWhen;
 use Arco\Validation\Rules\RequiredWith;
 use Arco\Validation\Rules\ValidationRule;
-use ReflectionClass;
+use Arco\Validation\Exceptions\RuleParseException;
+use Arco\Validation\Exceptions\UnknownRuleException;
 
 /**
  * Rule class manage all validation rules of this framework
@@ -42,8 +52,18 @@ class Rule {
         Min::class,
         Number::class,
         Required::class,
+        Present::class,
         RequiredWhen::class,
-        RequiredWith::class
+        RequiredWith::class,
+        Unique::class,
+        In::class,
+        NotIn::class,
+        Size::class,
+        Between::class,
+        Boolean::class,
+        Different::class,
+        Json::class,
+        IsArray::class,
     ];
 
     /**
@@ -97,6 +117,15 @@ class Rule {
      */
     public static function required(): ValidationRule {
         return new Required();
+    }
+
+    /**
+     * Create a new `Present()` validation rule
+     *
+     * @return ValidationRule
+     */
+    public static function present(): ValidationRule {
+        return new Present();
     }
 
     /**
@@ -168,7 +197,7 @@ class Rule {
     }
 
     /**
-     * Create a new `Max()` validation rule
+     * Create a new `RequiredWhen()` validation rule
      *
      * @param string $otherField The `name` value of complementary field
      * @param string $operator Options: `=`, `>`, `<`, `>=`, `<=`. Other options will throw `RuleParseException()`
@@ -181,6 +210,86 @@ class Rule {
         int|float $value
     ): ValidationRule {
         return new RequiredWhen($otherField, $operator, $value);
+    }
+
+    /**
+     * Create a new `In()` validation rule
+     *
+     * @param array $array Array of allowed values
+     * @return ValidationRule
+     */
+    public static function in(array $array): ValidationRule {
+        return new In($array);
+    }
+
+    /**
+     * Create a new `NotIn()` validation rule
+     *
+     * @param array $array Array of forbbiden values
+     * @return ValidationRule
+     */
+    public static function notIn(array $array): ValidationRule {
+        return new NotIn($array);
+    }
+
+    /**
+     * Create a new `Size()` validation rule
+     *
+     * @param integer $size Expected size, valid for `array` and `string` values
+     * @return ValidationRule
+     */
+    public static function size(int $size): ValidationRule {
+        return new Size($size);
+    }
+
+    /**
+     * Create a new `Size()` validation rule
+     *
+     * @param integer $min Minimum size
+     * @param integer $max Maximum size
+     * @return ValidationRule
+     */
+    public function between(int $min, int $max): ValidationRule {
+        return new Between($min, $max);
+    }
+
+    /**
+     * Create a new `Boolean()` validation rule
+     *
+     * @return ValidationRule
+     */
+    public static function boolean(): ValidationRule {
+        return new Boolean();
+    }
+
+    /**
+     * Create a new `Different()` validation rule
+     *
+     * @param integer|float $field Other request data field to compare with
+     * @return ValidationRule
+     */
+    public static function different(string $field): ValidationRule {
+        return new Different($field);
+    }
+
+    /**
+     * Nullable rule
+     *
+     * @param string $field
+     * @param array $data
+     * @return bool
+     */
+    public static function nullable(string $field, array $data): bool {
+        return !isset($data[$field]) || empty($data[$field]);
+    }
+
+    /**
+     * Create a new `Json()` validation rule
+     *
+     * @return ValidationRule
+     */
+    public static function json(): ValidationRule {
+        return new Json();
     }
 
     /**
@@ -200,6 +309,21 @@ class Rule {
     }
 
     /**
+     * Converts the given parameters to an array
+     *
+     * @param array $constructorParameters Parameters in the constructor rule class
+     * @param string $params Required params from original string
+     * @return array
+     */
+    protected static function getGivenParameters(array $constructorParameters, string $params): array {
+        if (count($constructorParameters) && $constructorParameters[0]->name === 'array') {
+            return [explode(',', $params)];
+        }
+
+        return array_filter(explode(",", $params), fn ($p) => !empty($p));
+    }
+
+    /**
      * Parse complex rules (with parameters) in `snake_case` format to creat a new instance the rule
      *
      * @param string $ruleName Rule name in snake_case format
@@ -209,7 +333,11 @@ class Rule {
     public static function parseRuleWithParameters(string $ruleName, string $params): ValidationRule {
         $class = new ReflectionClass(self::$rules[$ruleName]);
         $constructorParameters = $class->getConstructor()?->getParameters() ?? [];
-        $givenParameters = array_filter(explode(",", $params), fn ($p) => !empty($p));
+
+        // var_dump(self::getGivenParameters($constructorParameters, $params)); die;
+
+        // $givenParameters = array_filter(explode(",", $params), fn ($p) => !empty($p));
+        $givenParameters = self::getGivenParameters($constructorParameters, $params);
 
         if (count($givenParameters) !== count($constructorParameters)) {
             throw new RuleParseException(sprintf(

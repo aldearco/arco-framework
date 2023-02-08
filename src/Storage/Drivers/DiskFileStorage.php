@@ -11,13 +11,6 @@ class DiskFileStorage implements FileStorageDriver {
     protected string $storageDirectory;
 
     /**
-     * URL of the application.
-     *
-     * @var string
-     */
-    protected string $appUrl;
-
-    /**
      * URI of the public storage directory
      *
      * @var string
@@ -29,10 +22,19 @@ class DiskFileStorage implements FileStorageDriver {
      *
      * @param string $storageDirectory
      */
-    public function __construct(string $storageDirectory, string $storageUri, string $appUrl) {
+    public function __construct(string $storageDirectory, string $storageUri) {
         $this->storageDirectory = $storageDirectory;
         $this->storageUri = $storageUri;
-        $this->appUrl = $appUrl;
+    }
+
+    /**
+     * Clean the path for public URIs
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function parsePath(string $path): string {
+        return str_replace('public/', '', $path);
     }
 
     /**
@@ -54,6 +56,6 @@ class DiskFileStorage implements FileStorageDriver {
 
         file_put_contents("$dir/$file", $content);
 
-        return "$this->appUrl/$this->storageUri/$path";
+        return "$this->storageUri/{$this->parsePath($path)}";
     }
 }

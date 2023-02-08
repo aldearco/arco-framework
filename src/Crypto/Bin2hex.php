@@ -11,7 +11,7 @@ class Bin2hex implements Hasher {
         return $hash === bin2hex($input);
     }
 
-    public static function random() {
-        return bin2hex(random_bytes(32));
+    public static function random($lenght = 32) {
+        return bin2hex(random_bytes($lenght));
     }
 }

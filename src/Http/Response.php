@@ -165,6 +165,16 @@ class Response {
     }
 
     /**
+     * Change dots for forward slashes
+     *
+     * @param string $view
+     * @return string
+     */
+    protected static function parseView(string $view): string {
+        return str_replace('.', '/', $view);
+    }
+
+    /**
      * Return an HTML view
      *
      * @param string $view
@@ -173,7 +183,7 @@ class Response {
      * @return self
      */
     public static function view(string $view, array $params = [], string $layout = null): self {
-        $content = app(View::class)->render($view, $params, $layout);
+        $content = app(View::class)->render(self::parseView($view), $params, $layout);
 
         return (new self())
             ->setContentType("text/html")

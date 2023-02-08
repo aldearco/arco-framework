@@ -32,6 +32,19 @@ class RouterTest extends TestCase {
         $this->assertEquals($action, $route->action());
     }
 
+    public function test_get_route_uri_by_name() {
+        $uri = "/test";
+        $action = fn () => "test";
+        $name = 'test.name';
+        $router = new Router();
+        $router->get($uri, $action);
+
+        $route = $router->resolveRoute($this->createMockRequest($uri, HttpMethod::GET));
+        $router->name($route, $name);
+
+        $this->assertEquals($uri, $router->getRouteUriByName($name));
+    }
+
     public function test_resolve_multiple_basic_routes_with_callback_action() {
         $routes = [
             "/test" => fn () => "test",

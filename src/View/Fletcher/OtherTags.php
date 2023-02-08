@@ -7,7 +7,7 @@ use Arco\Container\Utilities\Testable;
 trait OtherTags {
     use Testable;
 
-    public string $csrfTag = '@csrf';
+    public string $csrfTag = '#csrf';
 
     public function csrfTagParse(): static {
         if (!$this->isTest()) {

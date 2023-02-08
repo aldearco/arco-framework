@@ -24,6 +24,7 @@ class PhpNativeServer implements Server {
                     file_get_contents($file["tmp_name"]),
                     $file["type"],
                     $file["name"],
+                    filesize($file["tmp_name"]),
                 );
             }
         }
@@ -77,5 +78,12 @@ class PhpNativeServer implements Server {
             header("$header: $value");
         }
         print($response->content());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function protocol(): string {
+        return $_SERVER['HTTPS'] ?? 'http';
     }
 }

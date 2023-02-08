@@ -110,6 +110,16 @@ class Route {
     }
 
     /**
+     * Register route name in the router
+     *
+     * @param string $name
+     * @return Route
+     */
+    public function name(string $name): Route {
+        return app()->router->name($this, $name);
+    }
+
+    /**
      * Check if the given `$uri` matches the regex of this route.
      *
      * @param string $uri
@@ -205,5 +215,21 @@ class Route {
      */
     public static function delete(string $uri, Closure|array $action): Route {
         return app()->router->delete($uri, $action);
+    }
+
+    /**
+     * Store all resource routes for a Model by specifying their corresponding controller.
+     *
+     * @param string $name
+     * @param string $controller
+     * @return void
+     */
+    public static function quiver(string $name, string $controller, array $options = []) {
+        return RouteService::generateResourceRoutes(
+            $name,
+            $controller,
+            isset($options['methods']) ? $options['methods'] : [],
+            isset($options['middlewares']) ? $options['middlewares'] : []
+        );
     }
 }

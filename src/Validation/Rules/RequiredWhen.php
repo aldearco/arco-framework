@@ -26,7 +26,7 @@ class RequiredWhen implements ValidationRule {
         return "This field is required when $this->otherField $this->operator $this->compareWith";
     }
 
-    public function isValid($field, $data): bool {
+    public function isValid(string $field, array $data): bool {
         if (!array_key_exists($this->otherField, $data)) {
             return false;
         }

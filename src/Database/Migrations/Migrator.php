@@ -2,6 +2,9 @@
 
 namespace Arco\Database\Migrations;
 
+use Closure;
+use Arco\Database\DB;
+use Arco\Database\Archer\TableCrafter;
 use Arco\Database\Drivers\DatabaseDriver;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -54,7 +57,7 @@ class Migrator {
         $migrations = glob("$this->migrationsDirectory/*.php");
 
         if (count($migrated) >= count($migrations)) {
-            $this->log("<comment>Nothing to migrate</comment>");
+            $this->log("\n<fg=white;bg=white> INFO </> Nothing to migrate.");
             return;
         }
 
@@ -63,7 +66,7 @@ class Migrator {
             $migration->up();
             $name = basename($file);
             $this->driver->statement("INSERT INTO migrations (name) VALUES (?)", [$name]);
-            $this->log("<info>Migrated => $name</info>");
+            $this->log("\n<question> MIGRATED </question> <fg=#a2c181;options=bold>$name</>");
         }
     }
 
@@ -95,7 +98,7 @@ class Migrator {
             $migration->down();
             $name = basename($file);
             $this->driver->statement("DELETE FROM migrations WHERE name = ?", [$name]);
-            $this->log("<info>Rollback => $name</info>");
+            $this->log("\n<question> ROLLBACK </question> <fg=#a2c181;options=bold>$name</>");
             if (--$steps == 0) {
                 break;
             }
@@ -111,17 +114,18 @@ class Migrator {
     public function make(string $migrationName) {
         $migrationName = snake_case($migrationName);
 
-        $template = file_get_contents("$this->templatesDirectory/migration.php");
 
         if (preg_match("/create_.*_table/", $migrationName)) {
+            $template = file_get_contents("$this->templatesDirectory/migrations/create.php");
             $table = preg_replace_callback("/create_(.*)_table/", fn ($match) => $match[1], $migrationName);
-            $template = str_replace('$UP', "CREATE TABLE $table (id INT AUTO_INCREMENT PRIMARY KEY)", $template);
-            $template = str_replace('$DOWN', "DROP TABLE $table", $template);
+            $template = str_replace('$TABLE', $table, $template);
         } elseif (preg_match("/.*(from|to)_(.*)_table/", $migrationName)) {
+            $template = file_get_contents("$this->templatesDirectory/migrations/alter.php");
             $table = preg_replace_callback("/.*(from|to)_(.*)_table/", fn ($match) => $match[2], $migrationName);
-            $template = preg_replace('/\$UP|\$DOWN/', "ALTER TABLE $table", $template);
+            $template = str_replace('$TABLE', $table, $template);
         } else {
-            $template = preg_replace_callback("/DB::statement.*/", fn ($match) => "// {$match[0]}", $template);
+            $template = file_get_contents("$this->templatesDirectory/migrations/create.php");
+            $template = str_replace('$TABLE', 'table', $template);
         }
 
         $date = date("Y_m_d");
@@ -137,8 +141,47 @@ class Migrator {
 
         file_put_contents("$this->migrationsDirectory/$fileName", $template);
 
-        $this->log("<info>Migration created => $fileName</info>");
+        $this->log("\n<question> SUCCESS </question> Migration created: <fg=#a2c181;options=bold>$fileName</>");
 
         return $fileName;
+    }
+
+    /**
+     * Create a Table in DB using Migrations
+     *
+     * @param string $table
+     * @param Closure $crafter
+     * @return void
+     */
+    public static function create(string $table, Closure $crafter) {
+        $builder = new TableCrafter($table);
+        $crafter($builder);
+        DB::statement($builder->create());
+    }
+
+    /**
+     * Alter a Table in DB using Migrations
+     *
+     * @param string $table
+     * @param Closure $crafter
+     * @return void
+     */
+    public static function alter(string $table, Closure $crafter) {
+        $builder = new TableCrafter($table);
+        $crafter($builder);
+        DB::statement($builder->alter());
+    }
+
+    /**
+     * Drop a Table if exists in DB using Migrations
+     *
+     * @param string $table
+     * @return void
+     */
+    public static function dropIfExists(string $table) {
+        DB::statement(
+            (new TableCrafter($table))
+                ->dropIfExists()
+        );
     }
 }

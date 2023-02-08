@@ -141,6 +141,26 @@ class ModelTest extends TestCase {
     /**
      * @depends test_create_model
      */
+    public function test_collection() {
+        $this->createTestTable("mock_models", ["test", "name"]);
+
+        MockModelFillable::create(["test" => "Test", "name" => "Name"]);
+        MockModelFillable::create(["test" => "Test", "name" => "Name"]);
+        MockModelFillable::create(["test" => "Test", "name" => "Name"]);
+
+        $models = MockModelFillable::collection()->get();
+
+        $this->assertEquals(3, count($models));
+
+        foreach ($models as $model) {
+            $this->assertEquals("Test", $model->test);
+            $this->assertEquals("Name", $model->name);
+        }
+    }
+
+    /**
+     * @depends test_create_model
+     */
     public function test_where_and_first_where() {
         $this->createTestTable("mock_models", ["test", "name"]);
 
@@ -148,7 +168,7 @@ class ModelTest extends TestCase {
         MockModelFillable::create(["test" => "Where", "name" => "Foo"]);
         MockModelFillable::create(["test" => "Where", "name" => "Foo"]);
 
-        $where = MockModelFillable::where("test", "Where");
+        $where = MockModelFillable::where("test", "Where")->get();
         $this->assertEquals(2, count($where));
         $this->assertEquals("Where", $where[0]->test);
         $this->assertEquals("Where", $where[1]->test);
