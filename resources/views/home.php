@@ -7,13 +7,16 @@
 
 #content
 <div class="text-center mt-4 mb-4">
-    <h1>Arco Framework</h1>
-    <?php if (isGuest()): ?>
-    <h2 class="h4">Welcome guest</h2>
-    <?php else: ?>
-    <h2 class="h4">Welcome <?php echo auth()->name ?></h2>
-    <p>You are logged in!</p>
-    <?php endif; ?>
+    <img src="<?= asset('img/arco-logo-color.svg') ?>" alt="Arco Framework" class="navbar-brand" width="60" height="60">
+    <div class="mt-2">
+        <h1 class="fw-bold">Arco Framework</h1>
+        <?php if (isGuest()): ?>
+        <h2 class="h4">Welcome guest</h2>
+        <?php else: ?>
+        <h2 class="h4">Welcome <?php echo auth()->name ?></h2>
+        <p>You are logged in!</p>
+        <?php endif; ?>
+    </div>
 </div>
 <div class="row">
     <div class="col-md-6 col-12 mb-4">
@@ -26,7 +29,7 @@
                 <p class="card-text">
                     Arco Framework has been created within aim educational aim following the Mastermind course below:
                 </p>
-                <a href="https://www.mastermind.ac/courses/crea-tu-propio-framework-desde-cero" target="_blank" class="btn btn-outline btn-primary">
+                <a href="https://www.mastermind.ac/courses/crea-tu-propio-framework-desde-cero" target="_blank" class="card-link">
                     Create your own Web Framework with PHP - <b>Mastermind.ac</b>
                 </a>
             </div>

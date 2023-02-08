@@ -116,3 +116,24 @@ if (!function_exists('route')) {
         return $uri;
     }
 }
+
+if (!function_exists('isRoute')) {
+    /**
+     * Check if specified route URI is the same URI of the request.
+     *
+     * @param string $name
+     * @param array $parameters
+     * @return boolean
+     */
+    function isRoute(string $name, array $parameters = []): bool {
+        $uri = app()->router->getRouteUriByName($name);
+
+        if (!empty($parameters)) {
+            foreach ($parameters as $key => $value) {
+                $uri = str_replace("{{$key}}", $value, $uri);
+            }
+        }
+
+        return app()->request->uri() === $uri;
+    }
+}

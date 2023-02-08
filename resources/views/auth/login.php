@@ -5,7 +5,7 @@
   <div class="col-lg-4 col-md-6 col-12">
     <div class="card">
       <div class="card-header">
-        <h1 class="display-6"><?= __('login.title') ?></h1>
+        <h5 class="card-title mb-0"><?= __('login.title') ?></h5>
       </div>
       <div class="card-body">
         <form method="post" action="<?= route('login.store') ?>">

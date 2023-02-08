@@ -34,7 +34,7 @@
       <div class="collapse navbar-collapse mt-2 mt-sm-0" id="navbar">
         <ul class="navbar-nav me-auto mb-2 mb-sm-0">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="<?= route('home') ?>">
+            <a class="nav-link <?= isRoute('home') ? 'active' : '' ?>" aria-current="page" href="<?= route('home') ?>">
               <i class="fa-solid fa-home me-2"></i>
               Home
             </a>
