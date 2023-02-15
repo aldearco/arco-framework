@@ -5,9 +5,10 @@ namespace Arco\Security;
 use Closure;
 use Arco\Http\Request;
 use Arco\Http\Response;
-use Arco\Helpers\Arrows\Cookie;
+use Arco\Crypto\Bcrypt;
 use Arco\Http\HttpMethod;
 use Arco\Http\Middleware;
+use Arco\Helpers\Arrows\Cookie;
 
 class VerifyCsrfToken implements Middleware {
     /**
@@ -24,12 +25,30 @@ class VerifyCsrfToken implements Middleware {
         HttpMethod::DELETE,
     ];
 
-    protected function newCookie() {
-        Cookie::set('csrf_token', session()->token(), 0, '/', sameSite: config('session.same_site', 'lax'));
+    protected function generateCookie() {
+        $hasher = new Bcrypt();
+        $token = $hasher->hash(session()->token());
+        Cookie::set('csrf_token', $token, 0, '/', sameSite: config('session.same_site', 'lax'));
+    }
+
+    protected function verifyCookie(): bool {
+        $hasher = new Bcrypt();
+
+        return $hasher->verify(
+            session()->token(),
+            Cookie::get('csrf_token')
+        );
     }
 
     protected function tokensMatch(Request $request) {
         $token = $this->getTokenFromRequest($request);
+
+        if (Cookie::exists('csrf_token')) {
+            return is_string($token) &&
+                is_string(session()->token()) &&
+                session()->token() === $request->data('_token') &&
+                $this->verifyCookie();
+        }
 
         return is_string($token) &&
             is_string(session()->token()) &&
@@ -59,13 +78,18 @@ class VerifyCsrfToken implements Middleware {
             $this->notSecuredMethod($request) ||
             $this->inExceptions($request)
         ) {
-            session()->regenerateToken();
-            $this->newCookie();
+            if (
+                !Cookie::exists('csrf_token') ||
+                !$this->verifyCookie()
+            ) {
+                $this->generateCookie();
+            }
             return $next($request);
         }
 
         if ($this->tokensMatch($request)) {
             session()->regenerateToken();
+            $this->generateCookie();
             return $next($request);
         }
 
