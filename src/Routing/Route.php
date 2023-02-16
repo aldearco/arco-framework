@@ -130,7 +130,7 @@ class Route {
     /**
      * Get route name.
      *
-     * @return Route
+     * @return null|string
      */
     public function getName(): ?string {
         return $this->name;
