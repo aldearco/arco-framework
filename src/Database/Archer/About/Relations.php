@@ -157,7 +157,7 @@ trait Relations {
         }
 
         if (is_null($localKey)) {
-            $localKey = $this->getForeignKey();
+            $localKey = $instance->getKeyName();
         }
 
         return $instance::firstWhere($localKey, $foreignKey);
