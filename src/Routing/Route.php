@@ -23,6 +23,13 @@ class Route {
     protected Closure|array $action;
 
     /**
+     * Route name.
+     *
+     * @var null|string
+     */
+    protected ?string $name = null;
+
+    /**
      * Regular expression used to match incoming requests URIs.
      *
      * @var string
@@ -110,13 +117,23 @@ class Route {
     }
 
     /**
-     * Register route name in the router
+     * Set route name and register in the router.
      *
      * @param string $name
      * @return Route
      */
     public function name(string $name): Route {
+        $this->name = $name;
         return app()->router->name($this, $name);
+    }
+
+    /**
+     * Get route name.
+     *
+     * @return Route
+     */
+    public function getName(): ?string {
+        return $this->name;
     }
 
     /**
