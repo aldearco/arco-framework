@@ -250,9 +250,14 @@ abstract class Model {
     /**
      * Update model attributes in database
      *
+     * @param array $attributes You can give attributes to be set and updated.
      * @return static
      */
-    public function update(): static {
+    public function update(array $attributes = []): static {
+        if (!empty($attributes)) {
+            $this->massAssign($attributes);
+        }
+
         if ($this->insertTimestamps) {
             $this->attributes["updated_at"] = date("Y-m-d H:m:s");
         }
