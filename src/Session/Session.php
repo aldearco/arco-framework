@@ -74,5 +74,7 @@ class Session {
 
     public function regenerateToken() {
         $this->storage->set('_token', Bin2hex::random());
+
+        return $this->token();
     }
 }

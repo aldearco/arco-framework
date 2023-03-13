@@ -84,6 +84,6 @@ class PhpNativeServer implements Server {
      * @inheritDoc
      */
     public function protocol(): string {
-        return $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+        return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
     }
 }

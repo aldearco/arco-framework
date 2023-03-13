@@ -25,12 +25,24 @@ class VerifyCsrfToken implements Middleware {
         HttpMethod::DELETE,
     ];
 
+    /**
+     * Generate CSRF cookie.
+     *
+     * @return void
+     */
     protected function generateCookie() {
+        $sessionToken = session()->token() ?: session()->regenerateToken();
+
         $hasher = new Bcrypt();
-        $token = $hasher->hash(session()->token());
-        Cookie::set('csrf_token', $token, 0, '/', sameSite: config('session.same_site', 'lax'));
+        $cookieToken = $hasher->hash($sessionToken);
+        Cookie::set('csrf_token', $cookieToken, 0, '/', sameSite: config('session.same_site', 'lax'));
     }
 
+    /**
+     * Verify cookie CSRF.
+     *
+     * @return boolean
+     */
     protected function verifyCookie(): bool {
         $hasher = new Bcrypt();
 
@@ -40,7 +52,13 @@ class VerifyCsrfToken implements Middleware {
         );
     }
 
-    protected function tokensMatch(Request $request) {
+    /**
+     * Verify if token match with token stored in session.
+     *
+     * @param Request $request
+     * @return boolean
+     */
+    protected function tokensMatch(Request $request): bool {
         $token = $this->getTokenFromRequest($request);
 
         if (Cookie::exists('csrf_token')) {
@@ -55,44 +73,64 @@ class VerifyCsrfToken implements Middleware {
             session()->token() === $request->data('_token');
     }
 
-    protected function getTokenFromRequest(Request $request) {
+    /**
+     * Get CSRF token from request.
+     *
+     * @param Request $request
+     * @return string|null
+     */
+    protected function getTokenFromRequest(Request $request): string|null {
         $token = $request->data('_token') ?: $request->headers('X-CSRF-TOKEN');
 
         if (is_null($token)) {
-            $token = '';
+            return null;
         }
 
         return $token;
     }
 
+    /**
+     * Check if request method is not secured by CSRF.
+     *
+     * @param Request $request
+     * @return boolean
+     */
     protected function notSecuredMethod(Request $request): bool {
         return !in_array($request->method(), $this->protectedMethods);
     }
 
-    protected function inExceptions(Request $request) {
+    /**
+     * Check if current request route URI is in CSRF exceptions.
+     *
+     * @param Request $request
+     * @return boolean
+     */
+    protected function inExceptions(Request $request): bool {
         return in_array($request->route()->uri(), $this->exceptions);
     }
 
+    /**
+     * Handle CSRF middleware.
+     *
+     * @param Request $request
+     * @param Closure $next
+     * @return Response
+     */
     public function handle(Request $request, Closure $next): Response {
         if (
             $this->notSecuredMethod($request) ||
-            $this->inExceptions($request)
+            $this->inExceptions($request) ||
+            $this->tokensMatch($request) ||
+            $this->verifyCookie()
         ) {
-            if (
-                !Cookie::exists('csrf_token') ||
-                !$this->verifyCookie()
-            ) {
+            if (!Cookie::exists('csrf_token')) {
                 $this->generateCookie();
             }
             return $next($request);
         }
 
-        if ($this->tokensMatch($request)) {
-            session()->regenerateToken();
-            $this->generateCookie();
-            return $next($request);
-        }
-
+        $this->generateCookie();
+        
         return Response::text("CSRF No Válido")->setStatus(403);
     }
 }
