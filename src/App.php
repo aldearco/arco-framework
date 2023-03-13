@@ -99,7 +99,7 @@ class App {
         try {
             $this->terminate($this->router->resolve($this->request));
         } catch (HttpNotFoundException $e) {
-            $this->abort(Response::text("Not found")->setStatus(404));
+            $this->abort(config('http.errors.404', Response::text("Not found")->setStatus(404)));
         } catch (ValidationException $e) {
             $this->abort(back()->withErrors($e->errors(), 422));
         } catch (Throwable $e) {
@@ -109,10 +109,10 @@ class App {
                     "message" => $e->getMessage(),
                     "trace" => $e->getTrace()
                 ]);
+                $this->abort($response->setStatus(500));
             } else {
-                $response = Response::text("Internal Server Error");
+                $this->abort(config('http.errors.500', Response::text("Internal Server Error")->setStatus(500)));
             }
-            $this->abort($response->setStatus(500));
         }
     }
 
