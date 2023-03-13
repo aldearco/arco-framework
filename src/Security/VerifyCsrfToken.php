@@ -130,7 +130,7 @@ class VerifyCsrfToken implements Middleware {
         }
 
         $this->generateCookie();
-        
+
         return Response::text("CSRF No Válido")->setStatus(403);
     }
 }

@@ -249,4 +249,17 @@ class Route {
             isset($options['middlewares']) ? $options['middlewares'] : []
         );
     }
+
+    /**
+     * Add middleware to a bundle of routes.
+     *
+     * @param array $middlewares
+     * @param array<Route> $routes
+     * @return void
+     */
+    public static function middleware(array $middlewares, array $routes) {
+        foreach ($routes as $route) {
+            $route->setMiddlewares($middlewares);
+        }
+    }
 }
