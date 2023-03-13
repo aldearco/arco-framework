@@ -45,7 +45,7 @@ if (!function_exists('back')) {
      * @return Response
      */
     function back(): Response {
-        return redirect(session()->get("_previous", "/"));
+        return redirect(request()->headers('referer') ?? session()->get("_previous", "/"));
     }
 }
 
