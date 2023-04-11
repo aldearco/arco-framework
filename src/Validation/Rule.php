@@ -273,6 +273,15 @@ class Rule {
     }
 
     /**
+     * Create a new `IsArray()` validation rule
+     *
+     * @return ValidationRule
+     */
+    public static function isArray(): ValidationRule {
+        return new IsArray();
+    }
+
+    /**
      * Nullable rule
      *
      * @param string $field
