@@ -2,9 +2,9 @@
 
 namespace Arco\Validation\Rules;
 
-class isArray implements ValidationRule {
+class IsArray implements ValidationRule {
     public function message(): string {
-        return "Must be an array of data";
+        return "Must be an array of data.";
     }
 
     public function isValid($field, $data): bool {
