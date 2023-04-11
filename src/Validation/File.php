@@ -199,6 +199,10 @@ class File implements ValidationRule {
      * @return boolean
      */
     public function isValid(string $field, array $data): bool {
-        return $this->{$this->rule.'Validation'}($field, $data);
+        if ($data[$field] instanceof StorageFile) {
+            return $this->{$this->rule.'Validation'}($field, $data);
+        }
+
+        return false;
     }
 }
