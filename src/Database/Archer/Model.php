@@ -230,7 +230,7 @@ abstract class Model {
      */
     public function save(): static {
         if ($this->insertTimestamps) {
-            $this->attributes["created_at"] = date("Y-m-d H:m:s");
+            $this->attributes["created_at"] = date("Y-m-d H:i:s");
             $this->attributes["updated_at"] = null;
         }
         $databaseColumns = implode(",", array_keys($this->attributes));
@@ -259,7 +259,7 @@ abstract class Model {
         }
 
         if ($this->insertTimestamps) {
-            $this->attributes["updated_at"] = date("Y-m-d H:m:s");
+            $this->attributes["updated_at"] = date("Y-m-d H:i:s");
         }
 
         $databaseColumns = array_keys($this->attributes);

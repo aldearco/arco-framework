@@ -48,7 +48,7 @@ class ModelTest extends TestCase {
             "id" => 1,
             "name" => "Name",
             "test" => "Test",
-            "created_at" => date("Y-m-d H:m:s"),
+            "created_at" => date("Y-m-d H:i:s"),
             "updated_at" => null,
         ];
 
@@ -67,14 +67,14 @@ class ModelTest extends TestCase {
                 "id" => 1,
                 "test" => "Test",
                 "name" => "Name",
-                "created_at" => date("Y-m-d H:m:s"),
+                "created_at" => date("Y-m-d H:i:s"),
                 "updated_at" => null,
             ],
             [
                 "id" => 2,
                 "test" => "Foo",
                 "name" => "Bar",
-                "created_at" => date("Y-m-d H:m:s"),
+                "created_at" => date("Y-m-d H:i:s"),
                 "updated_at" => null,
             ],
         ];
