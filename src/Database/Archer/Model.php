@@ -94,7 +94,7 @@ abstract class Model {
      * Get attribute
      */
     public function __get($name) {
-        return $this->attributes[$name];
+        return $this->attributes[$name] ?? null;
     }
 
     public function __sleep() {
