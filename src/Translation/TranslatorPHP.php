@@ -176,7 +176,7 @@ class TranslatorPHP implements Translator {
             return $key;
         }
 
-        $text = $this->loaded[$namespace][$group][$locale][$item];
+        $text = $this->loaded[$namespace][$group][$locale][$item] ?? '';
 
         return $this->makeReplacements($text, $replace);
     }
