@@ -56,6 +56,7 @@ class File {
             "image/tiff" => "tiff",
             "image/webp" => "webp",
             "image/avif" => "avif",
+            "image/svg+xml" => "svg",
             "image/svg-xml" => "svg",
             "video/webm" => "webm",
             "video/mp4" => "mp4",
