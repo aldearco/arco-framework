@@ -58,6 +58,8 @@ class File {
             "image/avif" => "avif",
             "image/svg+xml" => "svg",
             "image/svg-xml" => "svg",
+            "image/heic" => "heic",
+            "image/heif" => "heif",
             "video/webm" => "webm",
             "video/mp4" => "mp4",
             "application/pdf" => "pdf",
