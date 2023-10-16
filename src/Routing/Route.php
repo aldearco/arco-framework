@@ -59,7 +59,7 @@ class Route {
     public function __construct(string $uri, Closure|array $action) {
         $this->uri = $uri;
         $this->action = $action;
-        $this->regex = preg_replace('/\{([a-zA-Z_-]+)\}/', '([a-zA-Z0-9]+)', $uri);
+        $this->regex = preg_replace('/\{([a-zA-Z_-]+)\}/', '([a-zA-Z0-9\-]+)', $uri);
         preg_match_all('/\{([a-zA-Z_-]+)\}/', $uri, $parameters);
         $this->parameters = $parameters[1];
 
