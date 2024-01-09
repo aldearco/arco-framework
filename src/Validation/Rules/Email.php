@@ -22,16 +22,18 @@ class Email implements ValidationRule {
 
         [$username, $domain] = $split;
 
-        $split = explode(".", $domain);
+        $domainParts = explode(".", $domain);
 
-        if (count($split) != 2) {
+        if (count($domainParts) < 2) {
             return false;
         }
 
-        [$label, $topLevelDomain] = $split;
+        foreach ($domainParts as $part) {
+            if (strlen($part) < 1) {
+                return false;
+            }
+        }
 
-        return strlen($username) >= 1
-            && strlen($label) >= 1
-            && strlen($topLevelDomain) >= 1;
+        return strlen($username) >= 1;
     }
 }
